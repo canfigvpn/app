@@ -80,11 +80,12 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void toast(String message) {
             runOnUiThread(() -> Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show());
         }
-        @JavascriptInterface public void setReminder(boolean enabled, String time) {
+        @JavascriptInterface public void setReminder(boolean enabled, String time, String details) {
             runOnUiThread(() -> {
                 SharedPreferences prefs = getSharedPreferences("car_care", MODE_PRIVATE);
                 prefs.edit().putBoolean("reminder_enabled", enabled)
-                    .putString("reminder_time", time == null ? "09:00" : time).apply();
+                    .putString("reminder_time", time == null ? "09:00" : time)
+                    .putString("reminder_details", details == null ? "" : details).apply();
                 if (enabled) {
                     if (Build.VERSION.SDK_INT >= 33 &&
                         checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
