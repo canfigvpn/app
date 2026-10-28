@@ -61,11 +61,15 @@ public class ReminderReceiver extends BroadcastReceiver {
         open.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent content = PendingIntent.getActivity(context, 207, open,
             PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0));
+        String details = prefs.getString("reminder_details", "");
+        String defaultText = "موعد سرویس‌ها و کیلومتر خودروی پژو ۲۰۶ را بررسی کن.";
+        String contentText = details == null || details.trim().isEmpty() ? defaultText : details;
+        if (contentText.length() > 180) contentText = contentText.substring(0, 177) + "...";
         Notification notification = new NotificationCompat.Builder(context, "car_care_reminders")
             .setSmallIcon(android.R.drawable.ic_menu_my_calendar)
             .setContentTitle("یادآوری خودرو من")
-            .setContentText("موعد سرویس‌ها و کیلومتر خودروی پژو ۲۰۶ را بررسی کن.")
-            .setStyle(new NotificationCompat.BigTextStyle().bigText("وارد خودرو من شو و موعد تعویض روغن، فیلترها و سرویس‌های بعدی را بررسی کن."))
+            .setContentText(contentText)
+            .setStyle(new NotificationCompat.BigTextStyle().bigText(contentText))
             .setContentIntent(content).setAutoCancel(true).setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager != null) manager.notify(206, notification);
