@@ -92,10 +92,10 @@ public class MainActivity extends Activity {
                         requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_PERMISSION);
                     }
                     ReminderReceiver.schedule(MainActivity.this, time);
-                    Toast.makeText(MainActivity.this, "یادآوری روزانه فعال شد", Toast.LENGTH_SHORT).show();
+
                 } else {
                     ReminderReceiver.cancel(MainActivity.this);
-                    Toast.makeText(MainActivity.this, "یادآوری روزانه غیرفعال شد", Toast.LENGTH_SHORT).show();
+
                 }
             });
         }
