@@ -1,9 +1,19 @@
 package ir.ef3.carcare;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -14,15 +24,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
 
 public class MainActivity extends Activity {
     private static final int CREATE_BACKUP = 4101;
     private static final int OPEN_BACKUP = 4102;
+    private static final int NOTIFICATION_PERMISSION = 4103;
     private WebView webView;
     private String pendingBackup = "{}";
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createNotificationChannel();
         webView = new WebView(this);
         setContentView(webView);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -35,6 +48,16 @@ public class MainActivity extends Activity {
         webView.loadUrl("file:///android_asset/index.html");
     }
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                "car_care_reminders", "یادآوری‌های خودرو", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("یادآوری روزانه بررسی سرویس و کارکرد خودرو");
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) manager.createNotificationChannel(channel);
+        }
+    }
+
     private class AppBridge {
         @JavascriptInterface public void exportBackup(String json) {
             runOnUiThread(() -> {
@@ -42,7 +65,7 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("application/json");
-                intent.putExtra(Intent.EXTRA_TITLE, "Peugeot206Care-backup.json");
+                intent.putExtra(Intent.EXTRA_TITLE, "khodro-man-backup.json");
                 startActivityForResult(intent, CREATE_BACKUP);
             });
         }
@@ -56,6 +79,24 @@ public class MainActivity extends Activity {
         }
         @JavascriptInterface public void toast(String message) {
             runOnUiThread(() -> Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show());
+        }
+        @JavascriptInterface public void setReminder(boolean enabled, String time) {
+            runOnUiThread(() -> {
+                SharedPreferences prefs = getSharedPreferences("car_care", MODE_PRIVATE);
+                prefs.edit().putBoolean("reminder_enabled", enabled)
+                    .putString("reminder_time", time == null ? "09:00" : time).apply();
+                if (enabled) {
+                    if (Build.VERSION.SDK_INT >= 33 &&
+                        checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_PERMISSION);
+                    }
+                    ReminderReceiver.schedule(MainActivity.this, time);
+                    Toast.makeText(MainActivity.this, "یادآوری روزانه فعال شد", Toast.LENGTH_SHORT).show();
+                } else {
+                    ReminderReceiver.cancel(MainActivity.this);
+                    Toast.makeText(MainActivity.this, "یادآوری روزانه غیرفعال شد", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
@@ -76,7 +117,8 @@ public class MainActivity extends Activity {
                     String line;
                     while ((line = reader.readLine()) != null) sb.append(line);
                 }
-                String encoded = android.util.Base64.encodeToString(sb.toString().getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
+                String encoded = android.util.Base64.encodeToString(
+                    sb.toString().getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
                 webView.evaluateJavascript("window.receiveBackupFromAndroid('" + encoded + "')", null);
             }
         } catch (Exception e) {
