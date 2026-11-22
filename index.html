@@ -1424,11 +1424,10 @@ function renderModelOptions(){
 function renderTopbar(){
   const plateEl = $('#plateInput');
   const kmEl = $('#kmInput');
-  const modelEl = $('#modelSelect');
+  const plateParts = String(state.plate || '').split('|');
+  ['plateA','plateLetter','plateB','plateC'].forEach((id,i)=>{const el=$('#'+id);if(document.activeElement!==el)el.value=plateParts[i]||'';});
 
-  if (document.activeElement !== plateEl) plateEl.value = state.plate || '';
   if (document.activeElement !== kmEl)    kmEl.value    = state.km ? fa(state.km) : '';
-  modelEl.value = state.model;
 }
 
 /* ================================================================
