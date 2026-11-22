@@ -987,12 +987,12 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 .sc-head{align-items:center}
 .service-panel-backdrop{position:fixed;inset:0;z-index:500;background:rgba(2,6,23,.62);display:none;align-items:center;justify-content:center;padding:12px;overscroll-behavior:contain}
 .service-panel-backdrop.show{display:flex}
-.service-panel{width:min(720px,100%);max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow-lg);padding:17px}
-.service-panel-head{display:flex;align-items:center;gap:12px;padding-bottom:13px;border-bottom:1px solid var(--border)}
+.service-panel{width:min(720px,100%);height:auto;max-height:calc(100dvh - 24px);overflow:hidden;display:flex;flex-direction:column;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow-lg);padding:17px}
+.service-panel-head{display:flex;align-items:center;gap:12px;padding-bottom:13px;border-bottom:1px solid var(--border);flex:0 0 auto}
 .service-panel-head h2{font-size:16px;margin:0;font-weight:800;flex:1;min-width:0}
 .panel-back{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--border-strong);border-radius:10px;background:var(--surface-2);color:var(--text);padding:8px 11px;font:700 12px Vazirmatn;white-space:nowrap}
 .panel-back .material-symbols-rounded{font-size:18px}
-.service-panel-content{padding-top:15px;overflow:visible;max-height:none}
+.service-panel-content{padding:15px 2px 8px 0;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;max-height:none;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
 .panel-status{padding:10px 12px;border:1px solid var(--sc-bd);border-radius:12px;background:var(--sc-bg);color:var(--sc-fg);font-size:12px;font-weight:800;margin-bottom:12px}
 .panel-data-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
 .panel-data-grid>div{padding:12px;border:1px solid var(--border);border-radius:13px;background:var(--surface-2);min-width:0}
@@ -1019,7 +1019,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
   .s-due{font-size:11px}
   .panel-data-grid{grid-template-columns:1fr}
   .service-panel-backdrop{padding:7px}
-  .service-panel{padding:14px;border-radius:19px 19px 12px 12px}
+  .service-panel{padding:14px;border-radius:19px;max-height:calc(100dvh - 14px)}
 }
 @media(max-width:340px){
   .topbar{gap:4px}
@@ -1097,15 +1097,30 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
   .service-search-box{max-height:82dvh;padding:13px;border-radius:20px}
   .s-item-heading{gap:9px}.s-name{font-size:15px}
 }
+
+/* یکپارچه‌سازی ردیف سرویس */
+.home-service-tools{justify-content:flex-start;gap:9px;margin:0 0 13px}.home-service-tools .btn{flex:0 1 auto;min-width:135px;height:42px}.home-service-tools .btn .material-symbols-rounded{font-size:19px}
+.s-item-main{display:grid;grid-template-columns:42px minmax(0,1fr);align-items:center;column-gap:11px;row-gap:0}.s-icon{grid-column:1;grid-row:1;width:42px;height:42px;border-radius:13px}.s-icon .material-symbols-rounded{font-size:23px}.s-name{grid-column:2;grid-row:1;align-self:center;font-size:16px;line-height:1.65;font-weight:850;min-width:0}.s-info{grid-column:1/-1;min-width:0;margin-top:7px}.s-last{font-size:11.5px;line-height:1.9}.s-due{margin-top:4px;font-size:12px}.s-progress{margin-top:8px}.s-status-line{display:none!important}
+body.panel-open{overflow:hidden}.service-panel-content{touch-action:pan-y}
+@media(max-width:520px){.home-service-tools .btn{min-width:0;flex:1 1 0}.s-name{font-size:15px}.s-item-main{grid-template-columns:39px minmax(0,1fr);column-gap:9px}.s-icon{width:39px;height:39px}}
+/* جستجوی زنده سرویس‌ها */
+.search-modal-backdrop{position:fixed;inset:0;z-index:650;background:rgba(2,6,23,.68);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);display:none;align-items:center;justify-content:center;padding:14px}.search-modal-backdrop.show{display:flex}.search-modal{width:min(620px,100%);max-height:min(82dvh,760px);display:flex;flex-direction:column;overflow:hidden;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:23px;box-shadow:var(--shadow-lg);padding:16px}.search-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.search-modal-head>div{display:flex;align-items:center;gap:10px;min-width:0}.search-modal-head>div>.material-symbols-rounded{font-size:27px;color:var(--primary)}.search-modal-head h2{margin:0;font-size:16px;font-weight:850}.search-modal-head p{margin:3px 0 0;color:var(--text-2);font-size:11px}.search-close{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--border);border-radius:11px;background:var(--surface-2);color:var(--text)}.search-input-wrap{height:48px;display:flex;align-items:center;gap:9px;padding:0 13px;border:1.5px solid var(--border-strong);border-radius:14px;background:var(--surface-2);flex:0 0 auto}.search-input-wrap:focus-within{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-soft)}.search-input-wrap>.material-symbols-rounded{color:var(--text-3);font-size:21px}.search-input-wrap input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--text);font:600 13px Vazirmatn}.search-results{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;min-height:0;padding-top:10px}.search-result{display:flex;align-items:center;gap:10px;padding:11px 2px;border-bottom:1px solid var(--border);min-width:0}.search-result:last-child{border-bottom:0}.search-result-icon{width:38px;height:38px;display:grid;place-items:center;flex:0 0 auto;border-radius:12px;background:var(--primary-soft);color:var(--primary)}.search-result-icon .material-symbols-rounded{font-size:21px}.search-result-info{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}.search-result-info strong{font-size:13px;font-weight:800;overflow-wrap:anywhere}.search-result-info span{font-size:10.5px;color:var(--text-2)}.search-result-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.search-result-actions .detail-btn{height:31px;padding:0 9px}.search-result-actions .s-btn{width:31px;height:31px}
+@media(max-width:390px){.search-modal{padding:12px;border-radius:19px}.search-result{gap:7px}.search-result-icon{width:33px;height:33px}.search-result-info strong{font-size:11.5px}.search-result-info span{font-size:9.5px}.search-result-actions .detail-btn{padding:0 6px;font-size:9px}}
+/* تقویم شمسی با ظاهر یکپارچه */
+.datepicker-plot-area{z-index:1200!important;width:310px!important;max-width:calc(100vw - 24px)!important;padding:13px!important;border:1px solid var(--border)!important;border-radius:20px!important;background:var(--surface)!important;color:var(--text)!important;box-shadow:0 20px 60px rgba(2,6,23,.25)!important;font-family:Vazirmatn,sans-serif!important;overflow:hidden!important}.datepicker-plot-area .datepicker-navigator{height:42px!important;margin-bottom:9px!important;background:var(--surface-2)!important;border:1px solid var(--border)!important;border-radius:12px!important}.datepicker-plot-area .datepicker-navigator .pwt-btn-next,.datepicker-plot-area .datepicker-navigator .pwt-btn-prev{color:var(--primary)!important}.datepicker-plot-area .datepicker-navigator .pwt-btn-switch{color:var(--text)!important;font:800 12px Vazirmatn!important}.datepicker-plot-area .datepicker-day-view .table-days{width:100%!important}.datepicker-plot-area .datepicker-day-view .table-days td{height:37px!important}.datepicker-plot-area .datepicker-day-view .table-days td span{width:32px!important;height:32px!important;line-height:32px!important;border-radius:10px!important;color:var(--text)!important;font:500 11px Vazirmatn!important;transition:background .15s,color .15s!important}.datepicker-plot-area .datepicker-day-view .table-days td span:hover{background:var(--primary-soft)!important;color:var(--primary-text)!important}.datepicker-plot-area .datepicker-day-view .table-days td span.today{border:1px solid var(--primary)!important;color:var(--primary)!important}.datepicker-plot-area .datepicker-day-view .table-days td span.selected{background:var(--primary)!important;color:#fff!important;box-shadow:0 4px 12px rgba(37,99,235,.25)!important}.datepicker-plot-area .datepicker-day-view .table-days th{height:30px!important;color:var(--text-3)!important;font:700 10px Vazirmatn!important}.datepicker-plot-area .datepicker-footer{border-color:var(--border)!important}.datepicker-plot-area .datepicker-footer .pwt-btn-today{background:var(--primary-soft)!important;color:var(--primary-text)!important;border-radius:9px!important;font:700 11px Vazirmatn!important}.datepicker-plot-area .datepicker-year-view .year-item,.datepicker-plot-area .datepicker-month-view .month-item{color:var(--text)!important;border-radius:10px!important;font:600 11px Vazirmatn!important}.datepicker-plot-area .datepicker-year-view .year-item:hover,.datepicker-plot-area .datepicker-month-view .month-item:hover{background:var(--primary-soft)!important}[data-theme="dark"] .datepicker-plot-area{background:#0b1422!important;border-color:#26364e!important}[data-theme="dark"] .datepicker-plot-area .datepicker-navigator{background:#111e30!important;border-color:#26364e!important}[data-theme="dark"] .datepicker-plot-area .datepicker-day-view .table-days td span{color:#e6edf7!important}
+/* تکمیل هویت بصری لودینگ */
+.loader-brand{width:104px;height:104px;border-radius:32px}.loader-brand .material-symbols-rounded{font-size:51px}.loader-orbit{inset:-11px;border-radius:38px}.app-loader:before{width:245px;height:245px;border-color:rgba(96,165,250,.22)}.app-loader:after{width:330px;height:330px;border-color:rgba(214,168,79,.18)}.loader-progress i{width:0;animation:loaderProgressFive 5s cubic-bezier(.2,.7,.2,1) forwards}.loader-footnote{font-size:10px;color:var(--text-3);margin-top:2px;letter-spacing:.2px}@keyframes loaderProgressFive{0%{width:3%}25%{width:30%}60%{width:68%}85%{width:88%}100%{width:100%}}
+
+.loader-scene{position:relative;width:180px;height:180px;display:grid;place-items:center;margin-bottom:18px;z-index:1}.loader-scene .loader-brand{z-index:2}.loader-scene .loader-orbit{position:absolute;inset:5px;width:auto;height:auto;border:1px solid rgba(96,165,250,.28);border-radius:50%;animation:loaderOrbit 7s linear infinite}.loader-scene .orbit-b{inset:22px;border-style:dashed;border-color:rgba(214,168,79,.42);animation-direction:reverse;animation-duration:11s}.loader-scene .orbit-c{inset:39px;border:2px solid transparent;border-top-color:var(--primary);border-bottom-color:#d6a84f;animation:loaderSpin 2.5s linear infinite}.loader-spark{position:absolute;width:6px;height:6px;border-radius:50%;background:#d6a84f;box-shadow:0 0 14px #d6a84f;animation:loaderDot 1.5s ease-in-out infinite}.spark-a{top:19px;right:31px}.spark-b{bottom:27px;left:24px;animation-delay:.5s}.spark-c{top:84px;left:0;animation-delay:1s}.loader-copy,.loader-progress,.loader-footnote{position:relative;z-index:2}.loader-progress{margin-top:20px}.loader-footnote{margin-top:11px}.loader-brand{margin-bottom:0}
+
 </style>
 </head>
 
 <body>
 <div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه">
-  <div class="loader-brand"><span class="material-symbols-rounded">directions_car</span><i class="loader-orbit"></i></div>
-  <div class="loader-copy"><div class="loader-caption">خودرو من</div><div class="loader-subtitle">در حال آماده‌سازی دفترچه هوشمند خودرو</div></div>
-  <div class="loader-progress"><i></i></div>
-  <div class="loader-dots"><i></i><i></i><i></i></div>
+  <div class="loader-scene"><i class="loader-orbit orbit-a"></i><i class="loader-orbit orbit-b"></i><i class="loader-orbit orbit-c"></i><div class="loader-brand"><span class="material-symbols-rounded">directions_car</span></div><b class="loader-spark spark-a"></b><b class="loader-spark spark-b"></b><b class="loader-spark spark-c"></b></div>
+  <div class="loader-copy"><div class="loader-caption">خودرو من</div><div class="loader-subtitle">دفترچه هوشمند نگهداری و سرویس خودرو</div></div>
+  <div class="loader-progress"><i></i></div><div class="loader-footnote">در حال آماده‌سازی اطلاعات و محیط برنامه</div>
 </div>
 
 <!-- ══════════════════════════════════════════════
@@ -1134,7 +1149,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
       <h1>وضعیت سرویس‌ها</h1>
       <p>بر اساس کیلومتر فعلی خودرو و دوره‌های نگهداری</p>
     </div>
-    <div class="status-grid" id="statusGrid"></div>
+    <div class="custom-service-row home-service-tools"><button class="btn btn-outline" id="btnServiceSearch" type="button"><span class="material-symbols-rounded">search</span> جستجوی سرویس</button><button class="btn btn-primary" id="btnAddCustomService" type="button"><span class="material-symbols-rounded">add</span> افزودن سرویس</button></div><div class="status-grid" id="statusGrid"></div>
   </section>
 
   <!-- ───────── صفحه تاریخچه ───────── -->
@@ -1431,76 +1446,28 @@ const CAR_MODELS = [
 ];
 
 const SERVICES = [
-  { id:'oil',          name:'تعویض روغن موتور',        icon:'oil_barrel',               interval:5000,   modelAware:true, intervalDays:180 },
-  { id:'oil_filter',   name:'تعویض فیلتر روغن',        icon:'filter_alt',               interval:5000,   modelAware:true, intervalDays:180 },
-  { id:'air_filter',   name:'تعویض فیلتر هوا',         icon:'air',                      interval:15000, intervalDays:365 },
-  { id:'cabin_filter', name:'تعویض فیلتر کابین',       icon:'ac_unit',                  interval:15000, intervalDays:365 },
-  { id:'fuel_filter',  name:'تعویض فیلتر بنزین',       icon:'local_gas_station',        interval:30000, intervalDays:365 },
-  { id:'spark_plug',   name:'تعویض شمع‌ها',             icon:'bolt',                     interval:30000, intervalDays:365 },
-  { id:'plug_wire',    name:'تعویض وایر شمع',          icon:'cable',                    interval:60000, intervalDays:1095 },
-  { id:'timing_belt',  name:'تعویض تسمه تایم',         icon:'settings',                 interval:70000, intervalDays:1095 },
-  { id:'alt_belt',     name:'تعویض تسمه دینام',        icon:'sync',                     interval:40000, intervalDays:730 },
-  { id:'brake_front',  name:'تعویض لنت ترمز جلو',      icon:'directions_car',           interval:30000, intervalDays:365 },
-  { id:'brake_rear',   name:'تعویض لنت ترمز عقب',      icon:'album',                    interval:40000, intervalDays:730 },
-  { id:'brake_disc',   name:'تعویض دیسک ترمز',         icon:'radio_button_unchecked',   interval:60000, intervalDays:1095 },
-  { id:'brake_fluid',  name:'تعویض روغن ترمز',         icon:'water_drop',               interval:40000, intervalDays:730 },
-  { id:'coolant',      name:'تعویض مایع خنک‌کننده',     icon:'thermostat',               interval:50000, intervalDays:730 },
-  { id:'gearbox_oil',  name:'تعویض روغن گیربکس',       icon:'settings_input_component', interval:60000, intervalDays:1095 },
-  { id:'battery',      name:'تعویض باتری',             icon:'battery_charging_full',    interval:60000, intervalDays:1095 },
-  { id:'tires',        name:'تعویض لاستیک‌ها',          icon:'tire_repair',              interval:50000, intervalDays:730 },
-  { id:'shock',        name:'تعویض کمک فنر',           icon:'vertical_align_center',    interval:80000, intervalDays:1095 },
-  { id:'suspension',   name:'تعمیر جلوبندی',            icon:'build',                    interval:80000, intervalDays:1095 },
-  { id:'clutch',       name:'تعویض کلاچ',              icon:'settings_backup_restore',  interval:80000, intervalDays:1095 },
-  { id:'water_pump',   name:'تعویض واتر پمپ',          icon:'water',                    interval:80000, intervalDays:1095 },
-  { id:'alternator',   name:'تعمیر دینام و استارت',    icon:'electric_bolt',            interval:100000, intervalDays:1460 },
-  { id:'exhaust',      name:'تعمیر سیستم اگزوز',       icon:'smoke_free',               interval:100000, intervalDays:1460 },
-  { id:'wiper',        name:'تعویض تیغه برف‌پاک‌کن',    icon:'rainy',                    interval:20000, intervalDays:365 },
-  { id:'engine_belt',   name:'بازدید تسمه‌ها و هرزگردها',       icon:'sync',                    interval:20000, intervalDays:365 },
-  { id:'thermostat',    name:'بازدید ترموستات',                 icon:'device_thermostat',        interval:40000, intervalDays:730 },
-  { id:'radiator',      name:'شست‌وشو و سرویس رادیاتور',        icon:'radiator',                 interval:40000, intervalDays:730 },
-  { id:'hoses',         name:'بازدید شلنگ‌ها و اتصالات آب',      icon:'plumbing',                 interval:20000, intervalDays:365 },
-  { id:'engine_mount',  name:'بازدید دسته‌موتور',                icon:'car_repair',               interval:40000, intervalDays:730 },
-  { id:'pcv',           name:'بازدید سوپاپ PCV و بخارات روغن',   icon:'air',                      interval:30000, intervalDays:365 },
-  { id:'throttle',      name:'تمیزکاری دریچه گاز',               icon:'tune',                     interval:20000, intervalDays:365 },
-  { id:'injector',      name:'شست‌وشوی انژکتورها',               icon:'water',                   interval:40000, intervalDays:730 },
-  { id:'intake',        name:'بازدید منیفولد هوا',                icon:'filter_alt',              interval:40000, intervalDays:730 },
-  { id:'oxygen_sensor', name:'بررسی سنسور اکسیژن',               icon:'sensors',                 interval:60000, intervalDays:1095 },
-  { id:'sensors',       name:'بررسی سنسورهای موتور',             icon:'memory',                  interval:30000, intervalDays:365 },
-  { id:'steering_oil',  name:'تعویض روغن هیدرولیک فرمان',        icon:'water_drop',              interval:50000, intervalDays:730 },
-  { id:'steering',      name:'بازدید جعبه‌فرمان و سیبک‌ها',      icon:'settings',                interval:30000, intervalDays:365 },
-  { id:'cv_joint',      name:'بازدید پلوس و گردگیرها',            icon:'tire_repair',             interval:30000, intervalDays:365 },
-  { id:'wheel_bearing', name:'بازدید بلبرینگ چرخ‌ها',             icon:'settings',                interval:50000, intervalDays:730 },
-  { id:'alignment',     name:'تنظیم زوایای چرخ (میزان فرمان)',   icon:'straighten',              interval:10000, intervalDays:180 },
-  { id:'balancing',     name:'بالانس چرخ‌ها',                     icon:'balance',                 interval:10000, intervalDays:180 },
-  { id:'brake_pads',    name:'بازدید کامل سیستم ترمز',            icon:'car_crash',               interval:10000, intervalDays:180 },
-  { id:'handbrake',     name:'تنظیم ترمز دستی',                    icon:'pan_tool',                interval:30000, intervalDays:365 },
-  { id:'ac_service',    name:'سرویس کولر و گاز کولر',             icon:'ac_unit',                 interval:36500, intervalDays:365 },
-  { id:'ac_filter',     name:'بازدید فیلتر و مسیر کولر',          icon:'air',                     interval:15000, intervalDays:365 },
-  { id:'clutch_fluid',  name:'بازدید روغن و سیستم کلاچ',          icon:'opacity',                 interval:20000, intervalDays:365 },
-  { id:'gearbox_check', name:'بازدید دسته‌دنده و اتصالات گیربکس',icon:'settings_input_component',interval:30000, intervalDays:365 },
-  { id:'body_battery',  name:'بازدید سرباتری و اتصالات برق',      icon:'battery_std',             interval:10000, intervalDays:180 },
-  { id:'lights',        name:'بازدید چراغ‌ها و سیستم روشنایی',    icon:'light',                   interval:10000, intervalDays:180 },
-  { id:'wiring',        name:'بازدید سیم‌کشی و فیوزها',            icon:'electrical_services',     interval:30000, intervalDays:365 },
-  { id:'engine_oil_leak',name:'بازدید نشتی روغن موتور',           icon:'oil_barrel',              interval:10000, intervalDays:180 },
-  { id:'fluid_leak',    name:'بازدید نشتی مایعات و اتصالات',      icon:'water_drop',              interval:10000, intervalDays:180 },
-  { id:'exhaust_mount', name:'بازدید پایه‌ها و اتصالات اگزوز',    icon:'construction',            interval:30000, intervalDays:365 },
-  { id:'underbody',     name:'بازدید زیر‌بندی و اتصالات',         icon:'car_repair',              interval:20000, intervalDays:365 },
-  { id:'seatbelt',      name:'بازدید کمربندهای ایمنی',             icon:'airline_seat_recline_normal',interval:36500, intervalDays:365 },
-  { id:'body_check',    name:'بازدید بدنه و زنگ‌زدگی',             icon:'directions_car',          interval:36500, intervalDays:365 },
-  { id:'spare_tire',    name:'بازدید لاستیک زاپاس و جک',          icon:'tire_repair',             interval:10000, intervalDays:180 },
-  { id:'fire_ext',      name:'بازدید کپسول آتش‌نشانی',             icon:'fire_extinguisher',       interval:18000, intervalDays:365 }
+  { id:'oil', name:'تعویض روغن موتور', icon:'oil_barrel', interval:5000, modelAware:true, intervalDays:180 },
+  { id:'oil_filter', name:'تعویض فیلتر روغن', icon:'filter_alt', interval:5000, modelAware:true, intervalDays:180 },
+  { id:'air_filter', name:'تعویض فیلتر هوا', icon:'air', interval:15000, intervalDays:365 },
+  { id:'fuel_filter', name:'تعویض فیلتر بنزین', icon:'local_gas_station', interval:30000, intervalDays:365 },
+  { id:'spark_plug', name:'تعویض شمع‌ها', icon:'bolt', interval:30000, intervalDays:365 },
+  { id:'timing_belt', name:'تعویض تسمه تایم', icon:'settings', interval:70000, intervalDays:1095 },
+  { id:'alt_belt', name:'تعویض تسمه دینام', icon:'sync', interval:40000, intervalDays:730 },
+  { id:'brake_front', name:'تعویض لنت ترمز جلو', icon:'disc_full', interval:30000, intervalDays:365 },
+  { id:'brake_rear', name:'تعویض لنت ترمز عقب', icon:'album', interval:40000, intervalDays:730 },
+  { id:'brake_disc', name:'تعویض دیسک ترمز', icon:'radio_button_unchecked', interval:60000, intervalDays:1095 },
+  { id:'brake_fluid', name:'تعویض روغن ترمز', icon:'water_drop', interval:40000, intervalDays:730 },
+  { id:'coolant', name:'تعویض مایع خنک‌کننده', icon:'thermostat', interval:50000, intervalDays:730 },
+  { id:'gearbox_oil', name:'تعویض روغن گیربکس', icon:'settings_input_component', interval:60000, intervalDays:1095 },
+  { id:'battery', name:'تعویض باتری', icon:'battery_charging_full', interval:60000, intervalDays:1095 },
+  { id:'tires', name:'تعویض لاستیک‌ها', icon:'tire_repair', interval:50000, intervalDays:730 },
+  { id:'shock', name:'تعویض کمک‌فنرها', icon:'vertical_align_center', interval:80000, intervalDays:1095 },
+  { id:'suspension', name:'تعمیر جلوبندی', icon:'build', interval:80000, intervalDays:1095 },
+  { id:'clutch', name:'تعویض کیت کلاچ', icon:'settings_backup_restore', interval:80000, intervalDays:1095 },
+  { id:'water_pump', name:'تعویض واتر پمپ', icon:'water', interval:80000, intervalDays:1095 },
+  { id:'alternator', name:'تعمیر دینام و استارت', icon:'electric_bolt', interval:100000, intervalDays:1460 },
+  { id:'steering_oil', name:'تعویض روغن هیدرولیک', icon:'water_drop', interval:50000, intervalDays:730 }
 ];
-
-// فهرست اصلی و ضروری نگهداری خودرو؛ سرویس‌های کم‌اهمیت و بازدیدهای فرعی نمایش داده نمی‌شوند.
-const CORE_SERVICE_IDS = new Set([
-  'oil','oil_filter','air_filter','fuel_filter','spark_plug','timing_belt',
-  'alt_belt','brake_front','brake_rear','brake_disc','brake_fluid','coolant',
-  'gearbox_oil','battery','tires','shock','suspension','clutch','water_pump',
-  'alternator','steering_oil','ac_service'
-]);
-for (let i = SERVICES.length - 1; i >= 0; i--) {
-  if (!CORE_SERVICE_IDS.has(SERVICES[i].id)) SERVICES.splice(i, 1);
-}
 const SERVICE_MAP = Object.fromEntries(SERVICES.map(s => [s.id, s]));
 
 const STATUS_META = {
@@ -1617,40 +1584,11 @@ function renderTopbar(){
    ۶) رندر : صفحه خانه
    ================================================================ */
 function serviceItemHTML(service, st){
-  const kmText = st.key === 'none' ? 'هر ' + fa(st.interval) + ' کیلومتر ☆ هر ' + fa(st.daysInterval) + ' روز' :
-    st.remaining < 0 ? fa(Math.abs(st.remaining)) + ' کیلومتر از موعد گذشته' : fa(st.remaining) + ' کیلومتر تا موعد';
-  const dayText = st.key === 'none' ? '' :
-    st.daysRemaining === null ? 'زمان ثبت نشده' :
-    st.daysRemaining < 0 ? fa(Math.abs(st.daysRemaining)) + ' روز از موعد گذشته' : fa(st.daysRemaining) + ' روز تا موعد';
-  const lastText = st.key === 'none' ? 'آخرین تعویض و تعمیر : ثبت نشده' :
-    'آخرین تعویض و تعمیر : ' + fa(st.lastKm) + ' کیلومتر ☆ ' + esc(st.lastDate || 'تاریخ نامشخص') + ' تاریخ';
-  const progress = st.key === 'none' ? '' : `
-    <div class="s-progress" role="progressbar" aria-valuenow="${st.progressPct.toFixed(0)}" aria-valuemin="0" aria-valuemax="100">
-      <i style="width:${st.progressPct.toFixed(1)}%"></i>
-    </div>`;
-  return `
-    <article class="s-item">
-      <div class="s-item-main">
-        <div class="s-item-heading">
-          <div class="s-icon"><span class="material-symbols-rounded">${esc(service.icon || 'build')}</span></div>
-          <div class="s-name">${esc(service.name)}</div>
-        </div>
-        <div class="s-info">
-          <div class="s-last">${lastText}</div>
-          <div class="s-due">
-            <span>${kmText}</span>${dayText ? '<span class="due-sep">/</span><span>${dayText}</span>' : ''}
-          </div>
-          ${progress}
-        </div>
-      </div>
-      <div class="s-actions">
-        <button class="detail-btn" data-details="${esc(service.id)}">جزئیات</button>
-        <button class="detail-btn history-btn" data-service-history="${esc(service.id)}">سوابق</button>
-        <button class="s-btn" data-register="${esc(service.id)}" title="ثبت تعویض یا تعمیر" aria-label="ثبت تعویض یا تعمیر">
-          <span class="material-symbols-rounded">add</span>
-        </button>
-      </div>
-    </article>`;
+  const kmText = st.key === 'none' ? 'هر ' + fa(st.interval) + ' کیلومتر ☆ هر ' + fa(st.daysInterval) + ' روز' : st.remaining < 0 ? fa(Math.abs(st.remaining)) + ' کیلومتر از موعد گذشته' : fa(st.remaining) + ' کیلومتر تا موعد';
+  const dayText = st.key === 'none' ? '' : st.daysRemaining === null ? 'زمان ثبت نشده' : st.daysRemaining < 0 ? fa(Math.abs(st.daysRemaining)) + ' روز از موعد گذشته' : fa(st.daysRemaining) + ' روز تا موعد';
+  const lastText = st.key === 'none' ? 'آخرین تعویض و تعمیر : ثبت نشده' : 'آخرین تعویض و تعمیر : ' + fa(st.lastKm) + ' کیلومتر ☆ ' + esc(st.lastDate || 'تاریخ نامشخص') + ' تاریخ';
+  const progress = st.key === 'none' ? '' : '<div class="s-progress" role="progressbar" aria-valuenow="' + st.progressPct.toFixed(0) + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + st.progressPct.toFixed(1) + '%"></i></div>';
+  return '<article class="s-item"><div class="s-item-main"><div class="s-icon"><span class="material-symbols-rounded">' + esc(service.icon || 'build') + '</span></div><div class="s-name">' + esc(service.name) + '</div><div class="s-info"><div class="s-last">' + lastText + '</div><div class="s-due"><span>' + kmText + '</span>' + (dayText ? '<span class="due-sep">/</span><span>' + dayText + '</span>' : '') + '</div>' + progress + '</div></div><div class="s-actions"><button class="detail-btn" data-details="' + esc(service.id) + '">جزئیات</button><button class="detail-btn history-btn" data-service-history="' + esc(service.id) + '">سوابق</button><button class="s-btn" data-register="' + esc(service.id) + '" title="ثبت تعویض یا تعمیر" aria-label="ثبت تعویض یا تعمیر"><span class="material-symbols-rounded">add</span></button></div></article>';
 }
 
 function historyTimestamp(record){
@@ -1671,7 +1609,7 @@ function openServicePanel(serviceId, mode){
     panel.className = 'service-panel-backdrop';
     panel.innerHTML = '<section class="service-panel" role="dialog" aria-modal="true" aria-labelledby="servicePanelTitle"><header class="service-panel-head"><button type="button" class="panel-back" id="servicePanelBack"><span class="material-symbols-rounded">arrow_forward</span> برگشت</button><h2 id="servicePanelTitle"></h2></header><div id="servicePanelContent" class="service-panel-content"></div></section>';
     document.body.appendChild(panel);
-    panel.addEventListener('click', e => { if (e.target === panel || e.target.closest('#servicePanelBack')) panel.classList.remove('show'); });
+    panel.addEventListener('click', e => { if (e.target === panel || e.target.closest('#servicePanelBack')) { panel.classList.remove('show'); document.body.classList.remove('panel-open'); } });
   }
   const records = state.history.filter(r => r.serviceId === serviceId).sort((a,b) => historyTimestamp(a) - historyTimestamp(b));
   const st = getStatus(service);
@@ -1713,6 +1651,7 @@ function openServicePanel(serviceId, mode){
       <button type="button" class="btn btn-outline panel-history-link" data-service-history="${esc(serviceId)}">مشاهده تمام سوابق این قطعه</button>`;
   }
   panel.classList.add('show');
+  document.body.classList.add('panel-open');
   panel.dataset.serviceId = serviceId;
   panel.dataset.mode = mode;
 }
@@ -1774,11 +1713,26 @@ function renderHome(){
       <section class="status-card sc-${key}">
         <header class="sc-head">
           <div class="sc-title"><span class="material-symbols-rounded">${meta.icon}</span><h2>${meta.title}<span class="sc-count">${fa(items.length)}</span></h2></div>
-          ${key === 'none' ? '<div class="service-head-actions"><button class="add-service-inline" id="btnAddCustomService"><span class="material-symbols-rounded">add</span> افزودن سرویس</button><button class="add-service-inline search-service-inline" id="btnServiceSearch"><span class="material-symbols-rounded">search</span> جستجو</button></div>' : ''}
+
         </header>
         <div class="sc-body">${body}</div>
       </section>`;
   }).join('');
+}
+
+
+function searchableServices(){
+  const all=SERVICES.concat(state.customServices||[]);return all.filter((x,i)=>all.findIndex(y=>y.id===x.id)===i);
+}
+function renderServiceSearchResults(query){
+  const host=$('#serviceSearchResults');if(!host)return;const q=String(query||'').trim().toLocaleLowerCase('fa');
+  const list=searchableServices().filter(x=>!q||(x.name+' '+x.id).toLocaleLowerCase('fa').includes(q));
+  if(!list.length){host.innerHTML='<div class="empty-state small"><span class="material-symbols-rounded">search_off</span><p>سرویسی پیدا نشد</p><span>نام سرویس را کوتاه‌تر یا متفاوت وارد کنید</span></div>';return;}
+  host.innerHTML=list.map(service=>{const st=getStatus(service),done=st.key!=='none';return '<article class="search-result"><div class="search-result-icon"><span class="material-symbols-rounded">'+esc(service.icon||'build')+'</span></div><div class="search-result-info"><strong>'+esc(service.name)+'</strong><span>'+(done?'دارای سابقه ثبت‌شده':'هنوز ثبت نشده')+' · هر '+fa(st.interval)+' کیلومتر</span></div><div class="search-result-actions"><button type="button" class="detail-btn" data-details="'+esc(service.id)+'">جزئیات</button><button type="button" class="s-btn" data-register="'+esc(service.id)+'" aria-label="ثبت سرویس"><span class="material-symbols-rounded">add</span></button></div></article>';}).join('');
+}
+function openServiceSearch(){
+  let modal=$('#serviceSearchModal');if(!modal){modal=document.createElement('div');modal.id='serviceSearchModal';modal.className='search-modal-backdrop';modal.innerHTML='<section class="search-modal" role="dialog" aria-modal="true" aria-labelledby="serviceSearchTitle"><header class="search-modal-head"><div><span class="material-symbols-rounded">manage_search</span><div><h2 id="serviceSearchTitle">جستجوی سرویس</h2><p>سرویس‌های دارای سابقه و ثبت‌نشده</p></div></div><button type="button" class="search-close" id="closeServiceSearch" aria-label="بستن"><span class="material-symbols-rounded">close</span></button></header><div class="search-input-wrap"><span class="material-symbols-rounded">search</span><input id="serviceSearchInput" type="search" placeholder="نام سرویس را جستجو کنید..." autocomplete="off"></div><div class="search-results" id="serviceSearchResults"></div></section>';document.body.appendChild(modal);modal.addEventListener('click',e=>{if(e.target===modal||e.target.closest('#closeServiceSearch'))modal.classList.remove('show');});$('#serviceSearchInput').addEventListener('input',e=>renderServiceSearchResults(e.target.value));}
+  modal.classList.add('show');$('#serviceSearchInput').value='';renderServiceSearchResults('');setTimeout(()=>$('#serviceSearchInput').focus(),80);
 }
 
 /* ================================================================
@@ -2210,6 +2164,8 @@ async function driveRestore(){
    ================================================================ */
 function bindEvents(){
 
+  $('#btnServiceSearch').addEventListener('click',openServiceSearch);
+
   /* --- نوار پایینی --- */
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -2245,7 +2201,7 @@ function bindEvents(){
     if(searchItem){const id=searchItem.dataset.searchService;$('#serviceSearchModal').classList.remove('show');openServicePanel(id,'details');return;}
     /* --- دکمه ثبت سرویس (رویداد واگذارشده) --- */
     const detail=e.target.closest('[data-details]');
-    if(detail){ openServicePanel(detail.dataset.details, 'details'); return; }
+    if(detail){ openServicePanel(detail.dataset.details, 'details'); const sm=$('#serviceSearchModal');if(sm)sm.classList.remove('show'); return; }
     const saveDetails=e.target.closest('#btnSaveServiceDetails');
     if(saveDetails){
       const id=saveDetails.dataset.serviceId;
@@ -2278,7 +2234,7 @@ function bindEvents(){
     }
     const regBtn = e.target.closest('[data-register]');
     if (regBtn){
-      openModal(regBtn.dataset.register);
+      const sm=$('#serviceSearchModal');if(sm)sm.classList.remove('show');openModal(regBtn.dataset.register);
       return;
     }
 
@@ -2332,7 +2288,7 @@ function bindEvents(){
   });
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Escape'){ closeModal(); const panel=$('#servicePanel'); if(panel){panel.classList.remove('show');document.body.classList.remove('panel-open');} const search=$('#serviceSearchModal');if(search)search.classList.remove('show'); }
     if (e.key === 'Enter' && $('#modal').classList.contains('show')){
       if (document.activeElement && document.activeElement.tagName === 'INPUT'){
         saveService();
