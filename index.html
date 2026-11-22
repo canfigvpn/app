@@ -321,7 +321,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
   transition:background .35s, color .35s;
 }
 
-.sc-body{ padding:4px 0; max-height:340px; overflow-y:auto; }
+.sc-body{ padding:4px 0; max-height:none; overflow:visible; }
 
 /* آیتم سرویس */
 .s-item{
@@ -950,16 +950,16 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 /* بازطراحی نوار ثابت صفحه خانه، پلاک و کارت سرویس‌ها */
 .topbar{position:relative;top:auto;backdrop-filter:none;-webkit-backdrop-filter:none}
 .home-only{flex-wrap:nowrap}
-.plate-inputs{direction:ltr;flex-direction:row-reverse;gap:4px}
-.plate-part,.plate-letter{font-size:15px!important;font-weight:800!important}
-.plate-part{width:36px!important}
-.plate-letter{width:42px;font-size:14px!important}
-.plate-city{width:30px!important}
+.plate-inputs{direction:ltr;flex-direction:row;gap:5px}
+.plate-part,.plate-letter{font-size:17px!important;font-weight:900!important}
+.plate-part{width:40px!important}
+.plate-letter{width:46px;font-size:16px!important}
+.plate-city{width:34px!important}
 .plate-sep{font-size:15px}
-.km-field{height:52px}
-.km-field input{font-size:21px!important;font-weight:800!important;letter-spacing:.2px}
+.km-field{height:56px}
+.km-field input{font-size:24px!important;font-weight:900!important;letter-spacing:.4px}
 .km-field .unit{font-size:12px}
-.plate-field{height:52px}
+.plate-field{height:56px}
 .s-item{display:block;padding:13px 14px;border-bottom:1px solid var(--sc-bd)}
 .s-item:last-child{border-bottom:0}
 .s-item-main{display:flex;align-items:flex-start;gap:10px;min-width:0}
@@ -983,7 +983,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 .sc-head{align-items:center}
 .service-panel-backdrop{position:fixed;inset:0;z-index:500;background:rgba(2,6,23,.58);display:none;align-items:flex-end;justify-content:center;padding:12px}
 .service-panel-backdrop.show{display:flex}
-.service-panel{width:min(720px,100%);max-height:min(86vh,820px);overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:22px 22px 16px 16px;box-shadow:var(--shadow-lg);padding:17px}
+.service-panel{width:min(720px,100%);max-height:none;overflow:visible;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:22px 22px 16px 16px;box-shadow:var(--shadow-lg);padding:17px}
 .service-panel-head{display:flex;align-items:center;gap:12px;padding-bottom:13px;border-bottom:1px solid var(--border)}
 .service-panel-head h2{font-size:16px;margin:0;font-weight:800;flex:1;min-width:0}
 .panel-back{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--border-strong);border-radius:10px;background:var(--surface-2);color:var(--text);padding:8px 11px;font:700 12px Vazirmatn;white-space:nowrap}
@@ -1004,12 +1004,12 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 .timeline-info p{margin:2px 0 0;color:var(--text-2);font-size:11px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
 .timeline-cost{font-size:10.5px;color:var(--primary-text);font-weight:800;white-space:nowrap}
 @media(max-width:520px){
-  .plate-field,.km-field{height:48px}
-  .plate-part{width:29px!important;font-size:13px!important}
-  .plate-letter{width:34px;font-size:12px!important}
-  .plate-city{width:24px!important}
-  .km-field input{font-size:18px!important}
-  .field>.material-symbols-rounded{font-size:17px}
+  .plate-field,.km-field{height:54px}
+  .plate-part{width:32px!important;font-size:15px!important}
+  .plate-letter{width:38px;font-size:14px!important}
+  .plate-city{width:27px!important}
+  .km-field input{font-size:21px!important}
+  .field>.material-symbols-rounded{font-size:23px}
   .s-item{padding:12px 10px}
   .s-name{font-size:13px}
   .s-due{font-size:11px}
@@ -1030,10 +1030,19 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
   .add-service-inline{font-size:9px;padding:0 6px}
 }
 
+
+/* لودینگ آغازین پنج‌ثانیه‌ای */
+.app-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;background:var(--bg);color:var(--text);transition:opacity .35s ease,visibility .35s ease}
+.app-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
+.loader-ring{width:66px;height:66px;border:5px solid var(--border);border-top-color:var(--primary);border-right-color:var(--primary);border-radius:50%;animation:loaderSpin .8s linear infinite;box-shadow:0 0 25px rgba(37,99,235,.12)}
+.loader-caption{font-size:13px;font-weight:800;letter-spacing:.2px}
+@keyframes loaderSpin{to{transform:rotate(360deg)}}
+
 </style>
 </head>
 
 <body>
+<div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه"><div class="loader-ring"></div><div class="loader-caption">در حال آماده‌سازی...</div></div>
 
 <!-- ══════════════════════════════════════════════
      نوار بالایی : پلاک (راست) + کیلومتر (چپ)
@@ -1443,6 +1452,7 @@ function defaultState(){
     model: 'pride',
     km: 0,
     customServices: [],
+    serviceSettings: {},
     theme: 'light',
     clientId: '',
     services: {},   // { [serviceId]: { lastKm, lastDate } }
@@ -1473,6 +1483,8 @@ let state = loadState();
    ۴) محاسبه وضعیت سرویس
    ================================================================ */
 function getInterval(service){
+  const saved = state.serviceSettings && state.serviceSettings[service.id];
+  if (saved && Number(saved.interval) > 0) return Number(saved.interval);
   if (service.modelAware){
     const m = CAR_MODELS.find(x => x.id === state.model);
     if (m && m.oil) return m.oil;
@@ -1483,7 +1495,8 @@ function getInterval(service){
 function getStatus(service){
   const rec = state.services[service.id];
   const interval = Number(getInterval(service)) || 1;
-  const daysInterval = Number(service.intervalDays || 180);
+  const savedSettings = state.serviceSettings && state.serviceSettings[service.id];
+  const daysInterval = Number(savedSettings && savedSettings.intervalDays || service.intervalDays || 180);
   if (!rec || rec.lastKm == null) {
     return {key:'none', reason:'سابقه ثبت نشده', interval, daysInterval, remaining:null, daysRemaining:null, used:0, pct:0, lastKm:null, lastDate:null, progressPct:0};
   }
@@ -1535,13 +1548,13 @@ function renderTopbar(){
    ================================================================ */
 function serviceItemHTML(service, st){
   const statusLabel = st.key === 'overdue' ? 'گذشته از موعد' : st.key === 'near' ? 'نزدیک موعد' : st.key === 'none' ? 'ثبت نشده' : 'به‌روز';
-  const kmText = st.key === 'none' ? 'فاصله تعویض/تعمیر: هر ' + fa(st.interval) + ' کیلومتر' :
+  const kmText = st.key === 'none' ? 'هر ' + fa(st.interval) + ' کیلومتر ☆ هر ' + fa(st.daysInterval) + ' روز' :
     st.remaining < 0 ? fa(Math.abs(st.remaining)) + ' کیلومتر از موعد گذشته' : fa(st.remaining) + ' کیلومتر تا موعد';
-  const dayText = st.key === 'none' ? 'زمان پیشنهادی: ' + fa(st.daysInterval) + ' روز' :
+  const dayText = st.key === 'none' ? '' :
     st.daysRemaining === null ? 'زمان ثبت نشده' :
     st.daysRemaining < 0 ? fa(Math.abs(st.daysRemaining)) + ' روز از موعد گذشته' : fa(st.daysRemaining) + ' روز تا موعد';
-  const lastText = st.key === 'none' ? 'آخرین تعویض/تعمیر: ثبت نشده' :
-    'آخرین تعویض/تعمیر: ' + esc(st.lastDate || 'تاریخ نامشخص') + ' · ' + fa(st.lastKm) + ' کیلومتر';
+  const lastText = st.key === 'none' ? 'آخرین تعویض و تعمیر : ثبت نشده' :
+    'آخرین تعویض و تعمیر : ' + fa(st.lastKm) + ' کیلومتر ☆ ' + esc(st.lastDate || 'تاریخ نامشخص') + ' تاریخ';
   const progress = st.key === 'none' ? '' : `
     <div class="s-progress" role="progressbar" aria-valuenow="${st.progressPct.toFixed(0)}" aria-valuemin="0" aria-valuemax="100">
       <i style="width:${st.progressPct.toFixed(1)}%"></i>
@@ -1554,9 +1567,9 @@ function serviceItemHTML(service, st){
           <div class="s-name">${esc(service.name)}</div>
           <div class="s-last">${lastText}</div>
           <div class="s-due">
-            <span>${kmText}</span><span class="due-sep">/</span><span>${dayText}</span>
+            <span>${kmText}</span>${dayText ? '<span class="due-sep">/</span><span>${dayText}</span>' : ''}
           </div>
-          <div class="s-status-line"><span class="badge">${statusLabel}</span><span class="s-reason">نوع موعد: ${esc(st.reason)}</span></div>
+          <div class="s-status-line"><span class="badge">${statusLabel}</span></div>
           ${progress}
         </div>
       </div>
@@ -1605,17 +1618,28 @@ function openServicePanel(serviceId, mode){
         </article>`).join('') + '</div>' : '<div class="empty">برای این قطعه هنوز سابقه‌ای ثبت نشده است.</div>'}`;
   } else {
     const statusLabel = st.key === 'overdue' ? 'گذشته از موعد' : st.key === 'near' ? 'نزدیک موعد' : st.key === 'none' ? 'ثبت نشده' : 'به‌روز';
-    const last = st.lastDate ? esc(st.lastDate) + ' · ' + fa(st.lastKm) + ' کیلومتر' : 'هنوز ثبت نشده';
+    const last = st.lastDate ? esc(st.lastDate) + ' ☆ ' + fa(st.lastKm) + ' کیلومتر' : 'هنوز ثبت نشده';
     const dueKm = st.key === 'none' ? 'هر ' + fa(st.interval) + ' کیلومتر' : st.remaining < 0 ? fa(Math.abs(st.remaining)) + ' کیلومتر دیرکرد' : fa(st.remaining) + ' کیلومتر باقی‌مانده';
     const dueDays = st.daysRemaining === null ? 'پس از ثبت تاریخ مشخص می‌شود' : st.daysRemaining < 0 ? fa(Math.abs(st.daysRemaining)) + ' روز دیرکرد' : fa(st.daysRemaining) + ' روز باقی‌مانده';
+    const current = state.services[serviceId] || {};
     content.innerHTML = `
-      <div class="panel-status ${'sc-' + st.key}">${statusLabel} · ${esc(st.reason)}</div>
+      <div class="panel-status sc-${st.key}">${statusLabel}</div>
       <div class="panel-data-grid">
-        <div><small>آخرین تعویض یا تعمیر</small><strong>${last}</strong></div>
-        <div><small>فاصله تعویض/تعمیر</small><strong>${fa(st.interval)} کیلومتر / ${fa(st.daysInterval)} روز</strong></div>
+        <div><small>آخرین تعویض و تعمیر</small><strong>${last}</strong></div>
+        <div><small>فاصله سرویس</small><strong>${fa(st.interval)} کیلومتر ☆ ${fa(st.daysInterval)} روز</strong></div>
         <div><small>مانده تا موعد کیلومتری</small><strong>${dueKm}</strong></div>
         <div><small>مانده تا موعد زمانی</small><strong>${dueDays}</strong></div>
       </div>
+      <div class="panel-section-title" style="margin-top:18px">ویرایش اطلاعات سرویس</div>
+      <label class="lbl" for="editServiceInterval">فاصله تعویض/تعمیر (کیلومتر)</label>
+      <input class="txt" id="editServiceInterval" type="number" min="1" inputmode="numeric" value="${st.interval}">
+      <label class="lbl" for="editServiceDays">فاصله زمانی (روز)</label>
+      <input class="txt" id="editServiceDays" type="number" min="1" inputmode="numeric" value="${st.daysInterval}">
+      <label class="lbl" for="editServiceLastKm">آخرین کیلومتر انجام سرویس</label>
+      <input class="txt" id="editServiceLastKm" type="number" min="0" inputmode="numeric" value="${current.lastKm == null ? '' : current.lastKm}" placeholder="ثبت نشده">
+      <label class="lbl" for="editServiceLastDate">تاریخ آخرین تعویض/تعمیر</label>
+      <input class="txt" id="editServiceLastDate" type="text" value="${esc(current.lastDate || '')}" placeholder="۱۴۰۵/۰۸/۰۲">
+      <button type="button" class="btn btn-primary panel-history-link" id="btnSaveServiceDetails" data-service-id="${esc(serviceId)}">ذخیره تغییرات</button>
       <button type="button" class="btn btn-outline panel-history-link" data-service-history="${esc(serviceId)}">مشاهده تمام سوابق این قطعه</button>`;
   }
   panel.classList.add('show');
@@ -2106,6 +2130,22 @@ function bindEvents(){
   document.addEventListener('click', e => {
     const detail=e.target.closest('[data-details]');
     if(detail){ openServicePanel(detail.dataset.details, 'details'); return; }
+    const saveDetails=e.target.closest('#btnSaveServiceDetails');
+    if(saveDetails){
+      const id=saveDetails.dataset.serviceId;
+      const interval=Number($('#editServiceInterval').value);
+      const intervalDays=Number($('#editServiceDays').value);
+      const lastKmRaw=$('#editServiceLastKm').value.trim();
+      const lastDate=$('#editServiceLastDate').value.trim();
+      if(!interval||interval<1||!intervalDays||intervalDays<1){toast('فاصله کیلومتری و زمانی را درست وارد کنید');return;}
+      state.serviceSettings=state.serviceSettings||{};
+      state.serviceSettings[id]={interval,intervalDays};
+      if(lastKmRaw===''){delete state.services[id];}
+      else {const lastKm=Number(toEnDigits(lastKmRaw));if(!Number.isFinite(lastKm)||lastKm<0){toast('کیلومتر آخرین سرویس معتبر نیست');return;}state.services[id]={lastKm,lastDate};}
+      const custom=(state.customServices||[]).find(x=>x.id===id);
+      if(custom){custom.interval=interval;custom.intervalDays=intervalDays;}
+      save();renderAll();openServicePanel(id,'details');toast('اطلاعات سرویس ذخیره شد ✓');return;
+    }
     const serviceHistory=e.target.closest('[data-service-history]');
     if(serviceHistory){ openServicePanel(serviceHistory.dataset.serviceHistory, 'history'); return; }
     const add=e.target.closest('#btnAddCustomService');
@@ -2145,8 +2185,8 @@ function bindEvents(){
   $('#btnSaveModal').addEventListener('click', saveService);
   $('#btnCurrentKm').addEventListener('click',()=>{$('#mKm').value=state.km?fa(state.km):'';$('#mKm').focus();});
   $('#btnToday').addEventListener('click',()=>{$('#mDate').value=todayFa();});
-  $('#btnPickDate').addEventListener('click',()=>{if(window.jQuery&&window.jQuery.fn.persianDatepicker){window.jQuery('#mDate').persianDatepicker({format:'YYYY/MM/DD',autoClose:true,initialValue:false});$('#mDate').focus();}else{$('#mDateNative').click();}});
-  $('#mDateNative').addEventListener('change',e=>{if(e.target.value)$('#mDate').value=new Date(e.target.value+'T12:00:00').toLocaleDateString('fa-IR');});
+  $('#btnPickDate').addEventListener('click',()=>{const picker=$('#mDateNative');try{if(typeof picker.showPicker==='function'){picker.showPicker();}else{picker.click();}}catch(err){picker.style.cssText='position:fixed!important;left:50%!important;top:50%!important;width:260px!important;height:54px!important;opacity:1!important;pointer-events:auto!important;z-index:99999!important;transform:translate(-50%,-50%)';picker.focus();picker.click();setTimeout(()=>picker.style.cssText='',1000);}});
+  $('#mDateNative').addEventListener('change',e=>{if(e.target.value){const d=new Date(e.target.value+'T12:00:00');$('#mDate').value=d.toLocaleDateString('fa-IR');e.target.style.cssText='';}});
   ['mKm','mCost'].forEach(id=>$('#'+id).addEventListener('input',e=>{const raw=toEnDigits(e.target.value).replace(/[^0-9]/g,'');e.target.value=raw?Number(raw).toLocaleString('fa-IR'):'';}));
 
   $('#modal').addEventListener('click', e => {
@@ -2218,10 +2258,15 @@ function bindEvents(){
 /* ================================================================
    ۱۸) راه‌اندازی
    ================================================================ */
+let appInitialized = false;
 function init(){
+  if(appInitialized)return;
+  appInitialized = true;
   applyTheme();
   bindEvents();
   renderAll();
+  const loader=$('#appLoader');
+  window.setTimeout(()=>{if(loader)loader.classList.add('hide');},5000);
 }
 
 document.addEventListener('DOMContentLoaded', init);
