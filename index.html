@@ -947,13 +947,8 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 <!-- ══════════════════════════════════════════════
      نوار بالایی : پلاک (راست) + کیلومتر (چپ)
      ══════════════════════════════════════════════ -->
-<header class="topbar">
-  <div class="tb-group tb-right">
-    <div class="field plate-field">
-      <span class="material-symbols-rounded">directions_car</span>
-      <input id="plateInput" type="text" maxlength="26" placeholder="پلاک خودرو" autocomplete="off">
-    </div>
-  </div>
+<header class="topbar home-only" id="homeTopbar">
+  <div class="tb-group tb-right"><div class="plate-field field"><span class="material-symbols-rounded">directions_car</span><div class="plate-inputs" dir="rtl"><input id="plateA" class="plate-part" maxlength="2" inputmode="numeric" placeholder="۱۲"><select id="plateLetter" class="plate-letter"><option value="">حرف</option><option>الف</option><option>ب</option><option>پ</option><option>ت</option><option>ث</option><option>ج</option><option>چ</option><option>ح</option><option>خ</option><option>د</option><option>ر</option><option>ز</option><option>س</option><option>ش</option><option>ص</option><option>ط</option><option>ع</option><option>ف</option><option>ق</option><option>ک</option><option>گ</option><option>ل</option><option>م</option><option>ن</option><option>و</option><option>ه</option><option>ی</option></select><input id="plateB" class="plate-part" maxlength="3" inputmode="numeric" placeholder="۳۴۵"><span class="plate-sep">/</span><input id="plateC" class="plate-part plate-city" maxlength="2" inputmode="numeric" placeholder="۶۷"></div></div></div>
 
   <div class="tb-group tb-left">
     <div class="field km-field">
@@ -975,11 +970,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
       <h1>وضعیت سرویس‌ها</h1>
       <p>بر اساس کیلومتر فعلی خودرو و دوره‌های نگهداری</p>
     </div>
-    <div class="vehicle-picker card">
-      <div class="card-head"><span class="material-symbols-rounded">directions_car</span><h3>خودروی من</h3></div>
-      <p class="card-desc">نوع خودرو را برای نمایش دوره‌های سرویس متناسب انتخاب کنید.</p>
-      <select id="modelSelect" class="txt" title="نوع خودرو"></select>
-    </div>
+    <div class="custom-service-row"><button class="btn btn-outline" id="btnAddCustomService"><span class="material-symbols-rounded">add</span> افزودن سرویس جدید</button></div>
     <div class="status-grid" id="statusGrid"></div>
   </section>
 
@@ -1190,27 +1181,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
     <h3 id="modalTitle">ثبت سرویس</h3>
     <p class="m-sub" id="modalSub">اطلاعات سرویس انجام‌شده را وارد کنید</p>
 
-    <div class="grid-2">
-      <div>
-        <label class="lbl" for="mKm">کیلومتر انجام سرویس</label>
-        <input class="txt" id="mKm" type="text" inputmode="numeric" placeholder="مثلاً ۴۵۰۰۰">
-      </div>
-      <div>
-        <label class="lbl" for="mCost">هزینه (تومان)</label>
-        <input class="txt" id="mCost" type="text" inputmode="numeric" placeholder="۰">
-      </div>
-    </div>
-
-    <div class="grid-2">
-      <div>
-        <label class="lbl" for="mDate">تاریخ</label>
-        <input class="txt" id="mDate" type="text" placeholder="۱۴۰۳/۰۵/۱۲">
-      </div>
-      <div>
-        <label class="lbl" for="mNote">توضیحات</label>
-        <input class="txt" id="mNote" type="text" placeholder="اختیاری">
-      </div>
-    </div>
+    <div class="grid-2"><div><label class="lbl" for="mKm">کیلومتر انجام سرویس</label><div class="input-with-action"><input class="txt number-input" id="mKm" type="text" inputmode="numeric" placeholder="کیلومتر واقعی"><button type="button" class="btn btn-outline current-km-btn" id="btnCurrentKm">کیلومتر فعلی</button></div></div><div><label class="lbl" for="mCost">هزینه (تومان)</label><input class="txt number-input" id="mCost" type="text" inputmode="numeric" placeholder="۰"></div></div><div class="grid-2"><div><label class="lbl" for="mDate">تاریخ انجام سرویس</label><div class="input-with-action date-controls"><input class="txt" id="mDate" type="text" placeholder="۱۴۰۵/۰۸/۰۲" autocomplete="off"><button type="button" class="btn btn-outline date-btn" id="btnToday">امروز</button><button type="button" class="btn btn-outline date-btn" id="btnPickDate">تقویم</button><input id="mDateNative" type="date" class="native-date"></div></div><div><label class="lbl" for="mNote">توضیحات</label><textarea class="txt note-area" id="mNote" placeholder="توضیحات اختیاری"></textarea></div></div>
 
     <div class="modal-actions">
       <button class="btn btn-outline" id="btnCancelModal">انصراف</button>
