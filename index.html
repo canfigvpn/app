@@ -48,10 +48,10 @@
   --glass:rgba(255,255,255,.72);
 
   /* وضعیت‌ها */
-  --overdue-bg:#fff1f3; --overdue-bd:#fecdd3; --overdue-fg:#e11d48;
-  --near-bg:#fff8ee;    --near-bd:#fed7aa;    --near-fg:#ea580c;
-  --ok-bg:#f2fdf6;      --ok-bd:#bbf7d0;      --ok-fg:#16a34a;
-  --none-bg:#f6faff;    --none-bd:#dbeafe;    --none-fg:#3b82f6;
+  --overdue-bg:#fff0f0; --overdue-bd:#ef4444; --overdue-fg:#b91c1c;
+  --near-bg:#fff7e6;    --near-bd:#f97316;    --near-fg:#ea580c;
+  --ok-bg:#effcf3;      --ok-bd:#22c55e;      --ok-fg:#15803d;
+  --none-bg:#f3f8ff;    --none-bd:#bfdbfe;    --none-fg:#3b82f6;
 }
 
 [data-theme="dark"]{
@@ -186,6 +186,10 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 .field input::placeholder{ color:var(--text-3); font-weight:400; }
 
 .plate-field{ flex:1 1 auto; }
+.vehicle-picker{ padding:13px 15px; margin-bottom:14px; }
+.vehicle-picker .card-head{ margin-bottom:3px; }
+.vehicle-picker .card-desc{ margin-bottom:8px; }
+.vehicle-picker .txt{ max-width:100%; }
 
 .select-field{
   padding:0 6px;
@@ -949,9 +953,6 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
       <span class="material-symbols-rounded">directions_car</span>
       <input id="plateInput" type="text" maxlength="26" placeholder="پلاک خودرو" autocomplete="off">
     </div>
-    <div class="field select-field">
-      <select id="modelSelect" title="نوع خودرو"></select>
-    </div>
   </div>
 
   <div class="tb-group tb-left">
@@ -973,6 +974,11 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
     <div class="page-head">
       <h1>وضعیت سرویس‌ها</h1>
       <p>بر اساس کیلومتر فعلی خودرو و دوره‌های نگهداری</p>
+    </div>
+    <div class="vehicle-picker card">
+      <div class="card-head"><span class="material-symbols-rounded">directions_car</span><h3>خودروی من</h3></div>
+      <p class="card-desc">نوع خودرو را برای نمایش دوره‌های سرویس متناسب انتخاب کنید.</p>
+      <select id="modelSelect" class="txt" title="نوع خودرو"></select>
     </div>
     <div class="status-grid" id="statusGrid"></div>
   </section>
@@ -1310,7 +1316,41 @@ const SERVICES = [
   { id:'water_pump',   name:'تعویض واتر پمپ',          icon:'water',                    interval:80000 },
   { id:'alternator',   name:'سرویس دینام و استارت',    icon:'electric_bolt',            interval:100000 },
   { id:'exhaust',      name:'سرویس سیستم اگزوز',       icon:'smoke_free',               interval:100000 },
-  { id:'wiper',        name:'تعویض تیغه برف‌پاک‌کن',    icon:'rainy',                    interval:20000 }
+  { id:'wiper',        name:'تعویض تیغه برف‌پاک‌کن',    icon:'rainy',                    interval:20000 },
+  { id:'engine_belt',   name:'بازدید تسمه‌ها و هرزگردها',       icon:'sync',                    interval:20000 },
+  { id:'thermostat',    name:'بازدید ترموستات',                 icon:'device_thermostat',        interval:40000 },
+  { id:'radiator',      name:'شست‌وشو و سرویس رادیاتور',        icon:'radiator',                 interval:40000 },
+  { id:'hoses',         name:'بازدید شلنگ‌ها و اتصالات آب',      icon:'plumbing',                 interval:20000 },
+  { id:'engine_mount',  name:'بازدید دسته‌موتور',                icon:'car_repair',               interval:40000 },
+  { id:'pcv',           name:'بازدید سوپاپ PCV و بخارات روغن',   icon:'air',                      interval:30000 },
+  { id:'throttle',      name:'تمیزکاری دریچه گاز',               icon:'tune',                     interval:20000 },
+  { id:'injector',      name:'شست‌وشوی انژکتورها',               icon:'water',                   interval:40000 },
+  { id:'intake',        name:'بازدید منیفولد هوا',                icon:'filter_alt',              interval:40000 },
+  { id:'oxygen_sensor', name:'بررسی سنسور اکسیژن',               icon:'sensors',                 interval:60000 },
+  { id:'sensors',       name:'بررسی سنسورهای موتور',             icon:'memory',                  interval:30000 },
+  { id:'steering_oil',  name:'تعویض روغن هیدرولیک فرمان',        icon:'water_drop',              interval:50000 },
+  { id:'steering',      name:'بازدید جعبه‌فرمان و سیبک‌ها',      icon:'settings',                interval:30000 },
+  { id:'cv_joint',      name:'بازدید پلوس و گردگیرها',            icon:'tire_repair',             interval:30000 },
+  { id:'wheel_bearing', name:'بازدید بلبرینگ چرخ‌ها',             icon:'settings',                interval:50000 },
+  { id:'alignment',     name:'تنظیم زوایای چرخ (میزان فرمان)',   icon:'straighten',              interval:10000 },
+  { id:'balancing',     name:'بالانس چرخ‌ها',                     icon:'balance',                 interval:10000 },
+  { id:'brake_pads',    name:'بازدید کامل سیستم ترمز',            icon:'car_crash',               interval:10000 },
+  { id:'handbrake',     name:'تنظیم ترمز دستی',                    icon:'pan_tool',                interval:30000 },
+  { id:'ac_service',    name:'سرویس کولر و گاز کولر',             icon:'ac_unit',                 interval:36500 },
+  { id:'ac_filter',     name:'بازدید فیلتر و مسیر کولر',          icon:'air',                     interval:15000 },
+  { id:'clutch_fluid',  name:'بازدید روغن و سیستم کلاچ',          icon:'opacity',                 interval:20000 },
+  { id:'gearbox_check', name:'بازدید دسته‌دنده و اتصالات گیربکس',icon:'settings_input_component',interval:30000 },
+  { id:'body_battery',  name:'بازدید سرباتری و اتصالات برق',      icon:'battery_std',             interval:10000 },
+  { id:'lights',        name:'بازدید چراغ‌ها و سیستم روشنایی',    icon:'light',                   interval:10000 },
+  { id:'wiring',        name:'بازدید سیم‌کشی و فیوزها',            icon:'electrical_services',     interval:30000 },
+  { id:'engine_oil_leak',name:'بازدید نشتی روغن موتور',           icon:'oil_barrel',              interval:10000 },
+  { id:'fluid_leak',    name:'بازدید نشتی مایعات و اتصالات',      icon:'water_drop',              interval:10000 },
+  { id:'exhaust_mount', name:'بازدید پایه‌ها و اتصالات اگزوز',    icon:'construction',            interval:30000 },
+  { id:'underbody',     name:'بازدید زیر‌بندی و اتصالات',         icon:'car_repair',              interval:20000 },
+  { id:'seatbelt',      name:'بازدید کمربندهای ایمنی',             icon:'airline_seat_recline_normal',interval:36500 },
+  { id:'body_check',    name:'بازدید بدنه و زنگ‌زدگی',             icon:'directions_car',          interval:36500 },
+  { id:'spare_tire',    name:'بازدید لاستیک زاپاس و جک',          icon:'tire_repair',             interval:10000 },
+  { id:'fire_ext',      name:'بازدید کپسول آتش‌نشانی',             icon:'fire_extinguisher',       interval:18000 }
 ];
 
 const SERVICE_MAP = Object.fromEntries(SERVICES.map(s => [s.id, s]));
