@@ -1344,6 +1344,7 @@ function defaultState(){
     plate: '',
     model: 'pride',
     km: 0,
+    customServices: [],
     theme: 'light',
     clientId: '',
     services: {},   // { [serviceId]: { lastKm, lastDate } }
@@ -1383,25 +1384,23 @@ function getInterval(service){
 
 function getStatus(service){
   const rec = state.services[service.id];
-  const interval = getInterval(service);
-
-  if (!rec || rec.lastKm == null){
-    return { key:'none', interval, remaining:null, used:0, pct:0, lastKm:null, lastDate:null };
-  }
-
+  const interval = getInterval(service), daysInterval=Number(service.intervalDays||180);
+  if (!rec || rec.lastKm == null) return {key:'none',interval,daysInterval,remaining:null,daysRemaining:null,used:0,pct:0,lastKm:null,lastDate:null};
   const used = Math.max(0, (state.km || 0) - rec.lastKm);
   const remaining = interval - used;
+  let daysRemaining=null;
+  if(rec.lastDate){try{const parts=toEnDigits(rec.lastDate).split('/').map(Number);const d=new persianDate(parts).toDate();daysRemaining=daysInterval-Math.floor((Date.now()-d.getTime())/86400000);}catch(e){}}
   const nearLimit = Math.max(200, Math.min(1000, interval * 0.2));
 
   let key;
-  if (remaining < 0) key = 'overdue';
-  else if (remaining <= nearLimit) key = 'near';
+  if (remaining < 0 || (daysRemaining!==null && daysRemaining<0)) key = 'overdue';
+  else if (remaining <= nearLimit || (daysRemaining!==null && daysRemaining<=30)) key = 'near';
   else key = 'ok';
 
   return {
     key,
-    interval,
-    remaining,
+    interval, daysInterval,
+    remaining, daysRemaining,
     used,
     pct: Math.min(100, (used / interval) * 100),
     lastKm: rec.lastKm,
@@ -1473,7 +1472,7 @@ function serviceItemHTML(service, st){
 function renderHome(){
   const groups = { overdue:[], near:[], ok:[], none:[] };
 
-  SERVICES.forEach(service => {
+  (SERVICES.concat(state.customServices||[])).forEach(service => {
     const st = getStatus(service);
     groups[st.key].push({ service, st });
   });
@@ -1654,14 +1653,15 @@ function toast(msg){
 let currentServiceId = null;
 
 function openModal(serviceId){
-  const service = SERVICE_MAP[serviceId];
+  const service = SERVICES.concat(state.customServices||[]).find(x=>x.id===serviceId);
   if (!service) return;
 
   currentServiceId = serviceId;
 
-  $('#modalTitle').textContent = 'ثبت سرویس';
-  $('#modalSub').textContent = service.name;
-  $('#mKm').value = state.km ? String(state.km) : '';
+  $('#modalTitle').textContent = service.name;
+  $('#modalSub').textContent = 'اطلاعات انجام سرویس را وارد کنید';
+  const previous=state.services[serviceId];
+  $('#mKm').value = previous&&previous.lastKm ? fa(previous.lastKm) : '';
   $('#mCost').value = '';
   $('#mDate').value = todayFa();
   $('#mNote').value = '';
@@ -1678,7 +1678,8 @@ function closeModal(){
 function saveService(){
   if (!currentServiceId) return;
 
-  const service = SERVICE_MAP[currentServiceId];
+  const service = SERVICES.concat(state.customServices||[]).find(x=>x.id===currentServiceId);
+  if(!service)return;
   const km   = parseNum($('#mKm').value);
   const cost = parseNum($('#mCost').value);
   const date = $('#mDate').value.trim() || todayFa();
@@ -1694,7 +1695,7 @@ function saveService(){
   state.services[service.id] = { lastKm: km, lastDate: date };
 
   // اگر کیلومتر ثبت‌شده از کیلومتر فعلی بیشتر است، آن را به‌روز کن
-  if (km > (state.km || 0)) state.km = km;
+  // کیلومتر فعلی خودرو مستقل از کیلومتر ثبت سرویس باقی می‌ماند.
 
   // افزودن به تاریخچه
   state.history.unshift({
