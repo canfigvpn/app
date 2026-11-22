@@ -126,8 +126,8 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
    ۳) نوار بالایی (Sticky Glass)
    ============================================================ */
 .topbar{
-  position:sticky;
-  top:10px;
+  position:relative;
+  top:auto;
   z-index:100;
   width:calc(100% - 24px);
   max-width:900px;
@@ -947,6 +947,89 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 @media(max-width:320px){.plate-field{padding:0 2px}.plate-part{width:20px!important;font-size:8px!important}.plate-city{width:18px!important}.plate-letter{width:27px;font-size:8px}.field>.material-symbols-rounded{display:none}.km-field input{font-size:9px}}
 @media(min-width:701px) and (max-width:1280px){.topbar,.app{max-width:1000px}}
 
+/* بازطراحی نوار ثابت صفحه خانه، پلاک و کارت سرویس‌ها */
+.topbar{position:relative;top:auto;backdrop-filter:none;-webkit-backdrop-filter:none}
+.home-only{flex-wrap:nowrap}
+.plate-inputs{direction:ltr;flex-direction:row-reverse;gap:4px}
+.plate-part,.plate-letter{font-size:15px!important;font-weight:800!important}
+.plate-part{width:36px!important}
+.plate-letter{width:42px;font-size:14px!important}
+.plate-city{width:30px!important}
+.plate-sep{font-size:15px}
+.km-field{height:52px}
+.km-field input{font-size:21px!important;font-weight:800!important;letter-spacing:.2px}
+.km-field .unit{font-size:12px}
+.plate-field{height:52px}
+.s-item{display:block;padding:13px 14px;border-bottom:1px solid var(--sc-bd)}
+.s-item:last-child{border-bottom:0}
+.s-item-main{display:flex;align-items:flex-start;gap:10px;min-width:0}
+.s-icon{width:39px;height:39px}
+.s-info{flex:1;min-width:0}
+.s-name{font-size:14px;font-weight:800;white-space:normal;overflow-wrap:anywhere;line-height:1.7}
+.s-last{margin-top:4px;font-size:11.5px;color:var(--text-2);line-height:1.8;overflow-wrap:anywhere}
+.s-due{display:flex;flex-wrap:wrap;align-items:center;gap:4px 7px;margin-top:5px;font-size:12px;font-weight:800;color:var(--text);line-height:1.9;overflow-wrap:anywhere}
+.due-sep{color:var(--text-3);font-weight:500}
+.s-status-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:5px}
+.s-reason{font-size:10.5px;color:var(--sc-fg);font-weight:700;overflow-wrap:anywhere}
+.s-progress{margin-top:9px;height:6px;background:var(--surface-3);border:1px solid var(--sc-bd)}
+.s-progress>i{background:var(--sc-fg)}
+.s-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin-top:10px;flex-wrap:wrap}
+.s-actions .detail-btn{height:33px;padding:0 12px;font-size:11px}
+.s-actions .history-btn{border-color:var(--sc-bd)}
+.sc-title h2{display:flex;align-items:center;gap:8px}
+.sc-count{display:inline-flex;vertical-align:middle;min-width:25px;justify-content:center;font-size:11px;padding:2px 8px}
+.add-service-inline{display:inline-flex;align-items:center;justify-content:center;gap:4px;flex:0 0 auto;min-height:34px;padding:0 10px;border:1px solid var(--none-bd);border-radius:10px;background:var(--surface);color:var(--none-fg);font:700 11px Vazirmatn;white-space:nowrap}
+.add-service-inline .material-symbols-rounded{font-size:17px}
+.sc-head{align-items:center}
+.service-panel-backdrop{position:fixed;inset:0;z-index:500;background:rgba(2,6,23,.58);display:none;align-items:flex-end;justify-content:center;padding:12px}
+.service-panel-backdrop.show{display:flex}
+.service-panel{width:min(720px,100%);max-height:min(86vh,820px);overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:22px 22px 16px 16px;box-shadow:var(--shadow-lg);padding:17px}
+.service-panel-head{display:flex;align-items:center;gap:12px;padding-bottom:13px;border-bottom:1px solid var(--border)}
+.service-panel-head h2{font-size:16px;margin:0;font-weight:800;flex:1;min-width:0}
+.panel-back{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--border-strong);border-radius:10px;background:var(--surface-2);color:var(--text);padding:8px 11px;font:700 12px Vazirmatn;white-space:nowrap}
+.panel-back .material-symbols-rounded{font-size:18px}
+.service-panel-content{padding-top:15px}
+.panel-status{padding:10px 12px;border:1px solid var(--sc-bd);border-radius:12px;background:var(--sc-bg);color:var(--sc-fg);font-size:12px;font-weight:800;margin-bottom:12px}
+.panel-data-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.panel-data-grid>div{padding:12px;border:1px solid var(--border);border-radius:13px;background:var(--surface-2);min-width:0}
+.panel-data-grid small{display:block;color:var(--text-2);font-size:10.5px;margin-bottom:5px}
+.panel-data-grid strong{display:block;font-size:12px;line-height:1.9;overflow-wrap:anywhere}
+.panel-history-link{margin-top:13px;width:100%}
+.panel-section-title{font-size:12px;font-weight:800;margin-bottom:12px}
+.service-timeline{display:flex;flex-direction:column;gap:9px}
+.timeline-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--border);background:var(--surface-2);border-radius:13px;min-width:0}
+.timeline-index{width:27px;height:27px;display:grid;place-items:center;border-radius:9px;background:var(--primary-soft);color:var(--primary-text);font-size:11px;font-weight:800;flex:0 0 auto}
+.timeline-info{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0;font-size:12px}
+.timeline-info span{color:var(--text-2);font-size:11px}
+.timeline-info p{margin:2px 0 0;color:var(--text-2);font-size:11px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
+.timeline-cost{font-size:10.5px;color:var(--primary-text);font-weight:800;white-space:nowrap}
+@media(max-width:520px){
+  .plate-field,.km-field{height:48px}
+  .plate-part{width:29px!important;font-size:13px!important}
+  .plate-letter{width:34px;font-size:12px!important}
+  .plate-city{width:24px!important}
+  .km-field input{font-size:18px!important}
+  .field>.material-symbols-rounded{font-size:17px}
+  .s-item{padding:12px 10px}
+  .s-name{font-size:13px}
+  .s-due{font-size:11px}
+  .panel-data-grid{grid-template-columns:1fr}
+  .service-panel-backdrop{padding:7px}
+  .service-panel{padding:14px;border-radius:19px 19px 12px 12px}
+}
+@media(max-width:340px){
+  .topbar{gap:4px}
+  .tb-group{gap:3px}
+  .plate-field{padding:0 3px}
+  .plate-part{width:24px!important;font-size:11px!important}
+  .plate-letter{width:29px;font-size:10px!important}
+  .plate-city{width:21px!important}
+  .km-field input{font-size:15px!important}
+  .km-field .unit{display:none}
+  .sc-head{padding:10px}
+  .add-service-inline{font-size:9px;padding:0 6px}
+}
+
 </style>
 </head>
 
@@ -956,7 +1039,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
      نوار بالایی : پلاک (راست) + کیلومتر (چپ)
      ══════════════════════════════════════════════ -->
 <header class="topbar home-only" id="homeTopbar">
-  <div class="tb-group tb-right"><div class="plate-field field"><span class="material-symbols-rounded">directions_car</span><div class="plate-inputs" dir="rtl"><input id="plateA" class="plate-part" maxlength="2" inputmode="numeric" placeholder="۱۲"><select id="plateLetter" class="plate-letter"><option value="">حرف</option><option>الف</option><option>ب</option><option>پ</option><option>ت</option><option>ث</option><option>ج</option><option>چ</option><option>ح</option><option>خ</option><option>د</option><option>ر</option><option>ز</option><option>س</option><option>ش</option><option>ص</option><option>ط</option><option>ع</option><option>ف</option><option>ق</option><option>ک</option><option>گ</option><option>ل</option><option>م</option><option>ن</option><option>و</option><option>ه</option><option>ی</option></select><input id="plateB" class="plate-part" maxlength="3" inputmode="numeric" placeholder="۳۴۵"><span class="plate-sep">/</span><input id="plateC" class="plate-part plate-city" maxlength="2" inputmode="numeric" placeholder="۶۷"></div></div></div>
+  <div class="tb-group tb-right"><div class="plate-field field"><span class="material-symbols-rounded">directions_car</span><div class="plate-inputs" dir="ltr"><input id="plateA" class="plate-part" maxlength="2" inputmode="numeric" placeholder="۱۲"><select id="plateLetter" class="plate-letter"><option value="">حرف</option><option>الف</option><option>ب</option><option>پ</option><option>ت</option><option>ث</option><option>ج</option><option>چ</option><option>ح</option><option>خ</option><option>د</option><option>ر</option><option>ز</option><option>س</option><option>ش</option><option>ص</option><option>ط</option><option>ع</option><option>ف</option><option>ق</option><option>ک</option><option>گ</option><option>ل</option><option>م</option><option>ن</option><option>و</option><option>ه</option><option>ی</option></select><input id="plateB" class="plate-part" maxlength="3" inputmode="numeric" placeholder="۳۴۵"><span class="plate-sep">/</span><input id="plateC" class="plate-part plate-city" maxlength="2" inputmode="numeric" placeholder="۶۷"></div></div></div>
 
   <div class="tb-group tb-left">
     <div class="field km-field">
@@ -978,7 +1061,6 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
       <h1>وضعیت سرویس‌ها</h1>
       <p>بر اساس کیلومتر فعلی خودرو و دوره‌های نگهداری</p>
     </div>
-    <div class="custom-service-row"><button class="btn btn-outline" id="btnAddCustomService"><span class="material-symbols-rounded">add</span> افزودن سرویس جدید</button></div>
     <div class="status-grid" id="statusGrid"></div>
   </section>
 
@@ -1294,11 +1376,11 @@ const SERVICES = [
   { id:'battery',      name:'تعویض باتری',             icon:'battery_charging_full',    interval:60000, intervalDays:1095 },
   { id:'tires',        name:'تعویض لاستیک‌ها',          icon:'tire_repair',              interval:50000, intervalDays:730 },
   { id:'shock',        name:'تعویض کمک فنر',           icon:'vertical_align_center',    interval:80000, intervalDays:1095 },
-  { id:'suspension',   name:'سرویس جلوبندی',           icon:'build',                    interval:80000, intervalDays:1095 },
+  { id:'suspension',   name:'تعمیر جلوبندی',            icon:'build',                    interval:80000, intervalDays:1095 },
   { id:'clutch',       name:'تعویض کلاچ',              icon:'settings_backup_restore',  interval:80000, intervalDays:1095 },
   { id:'water_pump',   name:'تعویض واتر پمپ',          icon:'water',                    interval:80000, intervalDays:1095 },
-  { id:'alternator',   name:'سرویس دینام و استارت',    icon:'electric_bolt',            interval:100000, intervalDays:1460 },
-  { id:'exhaust',      name:'سرویس سیستم اگزوز',       icon:'smoke_free',               interval:100000, intervalDays:1460 },
+  { id:'alternator',   name:'تعمیر دینام و استارت',    icon:'electric_bolt',            interval:100000, intervalDays:1460 },
+  { id:'exhaust',      name:'تعمیر سیستم اگزوز',       icon:'smoke_free',               interval:100000, intervalDays:1460 },
   { id:'wiper',        name:'تعویض تیغه برف‌پاک‌کن',    icon:'rainy',                    interval:20000, intervalDays:365 },
   { id:'engine_belt',   name:'بازدید تسمه‌ها و هرزگردها',       icon:'sync',                    interval:20000, intervalDays:365 },
   { id:'thermostat',    name:'بازدید ترموستات',                 icon:'device_thermostat',        interval:40000, intervalDays:730 },
@@ -1336,6 +1418,10 @@ const SERVICES = [
   { id:'fire_ext',      name:'بازدید کپسول آتش‌نشانی',             icon:'fire_extinguisher',       interval:18000, intervalDays:365 }
 ];
 
+// فقط قطعات قابل تعویض یا تعمیر در فهرست اصلی باقی می‌مانند؛ موارد بازدید/بررسی حذف می‌شوند.
+for (let i = SERVICES.length - 1; i >= 0; i--) {
+  if (/^(بازدید|بررسی)\s/.test(SERVICES[i].name)) SERVICES.splice(i, 1);
+}
 const SERVICE_MAP = Object.fromEntries(SERVICES.map(s => [s.id, s]));
 
 const STATUS_META = {
@@ -1396,27 +1482,38 @@ function getInterval(service){
 
 function getStatus(service){
   const rec = state.services[service.id];
-  const interval = getInterval(service), daysInterval=Number(service.intervalDays||180);
-  if (!rec || rec.lastKm == null) return {key:'none',interval,daysInterval,remaining:null,daysRemaining:null,used:0,pct:0,lastKm:null,lastDate:null};
-  const used = Math.max(0, (state.km || 0) - rec.lastKm);
+  const interval = Number(getInterval(service)) || 1;
+  const daysInterval = Number(service.intervalDays || 180);
+  if (!rec || rec.lastKm == null) {
+    return {key:'none', reason:'سابقه ثبت نشده', interval, daysInterval, remaining:null, daysRemaining:null, used:0, pct:0, lastKm:null, lastDate:null, progressPct:0};
+  }
+  const used = Math.max(0, (Number(state.km) || 0) - Number(rec.lastKm));
   const remaining = interval - used;
-  let daysRemaining=null;
-  if(rec.lastDate){try{const parts=toEnDigits(rec.lastDate).split('/').map(Number);const d=new persianDate(parts).toDate();daysRemaining=daysInterval-Math.floor((Date.now()-d.getTime())/86400000);}catch(e){}}
-  const nearLimit = Math.max(200, Math.min(1000, interval * 0.2));
-
-  let key;
-  if (remaining < 0 || (daysRemaining!==null && daysRemaining<0)) key = 'overdue';
-  else if (remaining <= nearLimit || (daysRemaining!==null && daysRemaining<=30)) key = 'near';
-  else key = 'ok';
-
+  let daysRemaining = null;
+  if (rec.lastDate) {
+    try {
+      const parts = toEnDigits(rec.lastDate).split('/').map(Number);
+      const d = new persianDate(parts).toDate();
+      daysRemaining = daysInterval - Math.floor((Date.now() - d.getTime()) / 86400000);
+    } catch(e) {}
+  }
+  const kmOverdue = remaining < 0;
+  const timeOverdue = daysRemaining !== null && daysRemaining < 0;
+  const kmNear = remaining >= 0 && remaining <= Math.max(200, interval * 0.2);
+  const timeNear = daysRemaining !== null && daysRemaining >= 0 && daysRemaining <= 30;
+  let key = 'ok', reason = 'بدون دیرکرد';
+  if (kmOverdue || timeOverdue) {
+    key = 'overdue';
+    reason = kmOverdue && timeOverdue ? 'دیرکرد کیلومتری و زمانی' : kmOverdue ? 'دیرکرد کیلومتری' : 'دیرکرد زمانی';
+  } else if (kmNear || timeNear) {
+    key = 'near';
+    reason = kmNear && timeNear ? 'نزدیک موعد کیلومتری و زمانی' : kmNear ? 'نزدیک موعد کیلومتری' : 'نزدیک موعد زمانی';
+  }
+  const pct = Math.min(100, Math.max(0, (used / interval) * 100));
+  const progressPct = key === 'overdue' ? 100 : key === 'near' ? Math.max(80, pct) : pct;
   return {
-    key,
-    interval, daysInterval,
-    remaining, daysRemaining,
-    used,
-    pct: Math.min(100, (used / interval) * 100),
-    lastKm: rec.lastKm,
-    lastDate: rec.lastDate || null
+    key, reason, interval, daysInterval, remaining, daysRemaining, used, pct,
+    progressPct, lastKm:rec.lastKm, lastDate:rec.lastDate || null
   };
 }
 
@@ -1437,65 +1534,106 @@ function renderTopbar(){
    ۶) رندر : صفحه خانه
    ================================================================ */
 function serviceItemHTML(service, st){
-  let sub, badge;
-
-  if(st.key==='none'){sub='هر '+fa(st.interval)+' کیلومتر یا '+fa(st.daysInterval)+' روز';badge='ثبت نشده';}
-  else{sub='آخرین انجام: '+fa(st.lastKm)+' کیلومتر • باقی‌مانده: '+(st.remaining<0?fa(Math.abs(st.remaining))+' کیلومتر عقب‌افتاده':fa(st.remaining)+' کیلومتر')+(st.daysRemaining===null?'':' / '+(st.daysRemaining<0?fa(Math.abs(st.daysRemaining))+' روز عقب‌افتاده':fa(st.daysRemaining)+' روز'))+' • دوره: '+fa(st.interval)+' کیلومتر / '+fa(st.daysInterval)+' روز';badge=st.key==='overdue'?'گذشته از موعد':st.key==='near'?'نزدیک موعد':'به‌روز';}
-
+  const statusLabel = st.key === 'overdue' ? 'گذشته از موعد' : st.key === 'near' ? 'نزدیک موعد' : st.key === 'none' ? 'ثبت نشده' : 'به‌روز';
+  const kmText = st.key === 'none' ? 'فاصله تعویض/تعمیر: هر ' + fa(st.interval) + ' کیلومتر' :
+    st.remaining < 0 ? fa(Math.abs(st.remaining)) + ' کیلومتر از موعد گذشته' : fa(st.remaining) + ' کیلومتر تا موعد';
+  const dayText = st.key === 'none' ? 'زمان پیشنهادی: ' + fa(st.daysInterval) + ' روز' :
+    st.daysRemaining === null ? 'زمان ثبت نشده' :
+    st.daysRemaining < 0 ? fa(Math.abs(st.daysRemaining)) + ' روز از موعد گذشته' : fa(st.daysRemaining) + ' روز تا موعد';
+  const lastText = st.key === 'none' ? 'آخرین تعویض/تعمیر: ثبت نشده' :
+    'آخرین تعویض/تعمیر: ' + esc(st.lastDate || 'تاریخ نامشخص') + ' · ' + fa(st.lastKm) + ' کیلومتر';
   const progress = st.key === 'none' ? '' : `
-    <div class="s-progress"><i style="width:${st.pct.toFixed(1)}%"></i></div>
-  `;
-
+    <div class="s-progress" role="progressbar" aria-valuenow="${st.progressPct.toFixed(0)}" aria-valuemin="0" aria-valuemax="100">
+      <i style="width:${st.progressPct.toFixed(1)}%"></i>
+    </div>`;
   return `
-    <div class="s-item">
-      <div class="s-icon">
-        <span class="material-symbols-rounded">${service.icon}</span>
+    <article class="s-item">
+      <div class="s-item-main">
+        <div class="s-icon"><span class="material-symbols-rounded">${esc(service.icon || 'build')}</span></div>
+        <div class="s-info">
+          <div class="s-name">${esc(service.name)}</div>
+          <div class="s-last">${lastText}</div>
+          <div class="s-due">
+            <span>${kmText}</span><span class="due-sep">/</span><span>${dayText}</span>
+          </div>
+          <div class="s-status-line"><span class="badge">${statusLabel}</span><span class="s-reason">نوع موعد: ${esc(st.reason)}</span></div>
+          ${progress}
+        </div>
       </div>
-      <div class="s-info">
-        <div class="s-name">${esc(service.name)}</div>
-        <div class="s-sub">${sub}</div>
-        ${progress}
-      </div>
-      <div class="s-side">
-        <button class="detail-btn" data-details="${service.id}">جزئیات</button>
-        <span class="badge">${badge}</span>
-        <button class="s-btn" data-register="${service.id}" title="ثبت سرویس">
+      <div class="s-actions">
+        <button class="detail-btn" data-details="${esc(service.id)}">جزئیات</button>
+        <button class="detail-btn history-btn" data-service-history="${esc(service.id)}">سوابق</button>
+        <button class="s-btn" data-register="${esc(service.id)}" title="ثبت تعویض یا تعمیر" aria-label="ثبت تعویض یا تعمیر">
           <span class="material-symbols-rounded">add</span>
         </button>
       </div>
-    </div>
-  `;
+    </article>`;
+}
+
+function openServicePanel(serviceId, mode){
+  const service = SERVICES.concat(state.customServices || []).find(x => x.id === serviceId);
+  if (!service) return;
+  let panel = document.getElementById('servicePanel');
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.id = 'servicePanel';
+    panel.className = 'service-panel-backdrop';
+    panel.innerHTML = '<section class="service-panel" role="dialog" aria-modal="true" aria-labelledby="servicePanelTitle"><header class="service-panel-head"><button type="button" class="panel-back" id="servicePanelBack"><span class="material-symbols-rounded">arrow_forward</span> برگشت</button><h2 id="servicePanelTitle"></h2></header><div id="servicePanelContent" class="service-panel-content"></div></section>';
+    document.body.appendChild(panel);
+    panel.addEventListener('click', e => { if (e.target === panel || e.target.closest('#servicePanelBack')) panel.classList.remove('show'); });
+  }
+  const records = state.history.filter(r => r.serviceId === serviceId).sort((a,b) => (a.createdAt || 0) - (b.createdAt || 0));
+  const st = getStatus(service);
+  const content = document.getElementById('servicePanelContent');
+  document.getElementById('servicePanelTitle').textContent = service.name;
+  if (mode === 'history') {
+    content.innerHTML = `
+      <div class="panel-section-title">سوابق تعویض و تعمیر · قدیمی به جدید</div>
+      ${records.length ? '<div class="service-timeline">' + records.map((r,i) => `
+        <article class="timeline-item">
+          <span class="timeline-index">${fa(i+1)}</span>
+          <div class="timeline-info"><strong>${esc(r.date || 'تاریخ نامشخص')}</strong><span>${fa(r.km)} کیلومتر</span>${r.note ? '<p>' + esc(r.note) + '</p>' : ''}</div>
+          <div class="timeline-cost">${r.cost ? fa(r.cost) + ' تومان' : 'بدون هزینه'}</div>
+        </article>`).join('') + '</div>' : '<div class="empty">برای این قطعه هنوز سابقه‌ای ثبت نشده است.</div>'}`;
+  } else {
+    const statusLabel = st.key === 'overdue' ? 'گذشته از موعد' : st.key === 'near' ? 'نزدیک موعد' : st.key === 'none' ? 'ثبت نشده' : 'به‌روز';
+    const last = st.lastDate ? esc(st.lastDate) + ' · ' + fa(st.lastKm) + ' کیلومتر' : 'هنوز ثبت نشده';
+    const dueKm = st.key === 'none' ? 'هر ' + fa(st.interval) + ' کیلومتر' : st.remaining < 0 ? fa(Math.abs(st.remaining)) + ' کیلومتر دیرکرد' : fa(st.remaining) + ' کیلومتر باقی‌مانده';
+    const dueDays = st.daysRemaining === null ? 'پس از ثبت تاریخ مشخص می‌شود' : st.daysRemaining < 0 ? fa(Math.abs(st.daysRemaining)) + ' روز دیرکرد' : fa(st.daysRemaining) + ' روز باقی‌مانده';
+    content.innerHTML = `
+      <div class="panel-status ${'sc-' + st.key}">${statusLabel} · ${esc(st.reason)}</div>
+      <div class="panel-data-grid">
+        <div><small>آخرین تعویض یا تعمیر</small><strong>${last}</strong></div>
+        <div><small>فاصله تعویض/تعمیر</small><strong>${fa(st.interval)} کیلومتر / ${fa(st.daysInterval)} روز</strong></div>
+        <div><small>مانده تا موعد کیلومتری</small><strong>${dueKm}</strong></div>
+        <div><small>مانده تا موعد زمانی</small><strong>${dueDays}</strong></div>
+      </div>
+      <button type="button" class="btn btn-outline panel-history-link" data-service-history="${esc(serviceId)}">مشاهده تمام سوابق این قطعه</button>`;
+  }
+  panel.classList.add('show');
+  panel.dataset.serviceId = serviceId;
+  panel.dataset.mode = mode;
 }
 
 function renderHome(){
   const groups = { overdue:[], near:[], ok:[], none:[] };
-
-  (SERVICES.concat(state.customServices||[])).forEach(service => {
+  (SERVICES.concat(state.customServices || [])).forEach(service => {
     const st = getStatus(service);
-    groups[st.key].push({ service, st });
+    groups[st.key].push({service, st});
   });
-
   const grid = $('#statusGrid');
   grid.innerHTML = STATUS_ORDER.map(key => {
-    const meta = STATUS_META[key];
-    const items = groups[key];
-
-    const body = items.length
-      ? items.map(it => serviceItemHTML(it.service, it.st)).join('')
-      : `<div class="empty">موردی در این وضعیت وجود ندارد</div>`;
-
+    const meta = STATUS_META[key], items = groups[key];
+    const body = items.length ? items.map(it => serviceItemHTML(it.service, it.st)).join('') :
+      '<div class="empty">موردی در این وضعیت وجود ندارد</div>';
     return `
       <section class="status-card sc-${key}">
         <header class="sc-head">
-          <div class="sc-title">
-            <span class="material-symbols-rounded">${meta.icon}</span>
-            <h2>${meta.title}</h2>
-          </div>
-          <span class="sc-count">${fa(items.length)}</span>
+          <div class="sc-title"><span class="material-symbols-rounded">${meta.icon}</span><h2>${meta.title}<span class="sc-count">${fa(items.length)}</span></h2></div>
+          ${key === 'none' ? '<button class="add-service-inline" id="btnAddCustomService"><span class="material-symbols-rounded">add</span> افزودن سرویس جدید</button>' : ''}
         </header>
         <div class="sc-body">${body}</div>
-      </section>
-    `;
+      </section>`;
   }).join('');
 }
 
@@ -1959,11 +2097,9 @@ function bindEvents(){
   /* --- دکمه ثبت سرویس (رویداد واگذارشده) --- */
   document.addEventListener('click', e => {
     const detail=e.target.closest('[data-details]');
-    if(detail){
-      const svc=SERVICES.concat(state.customServices||[]).find(x=>x.id===detail.dataset.details);
-      if(svc)alert('فاصله پیشنهادی: هر '+fa(svc.interval)+' کیلومتر یا '+fa(svc.intervalDays||180)+' روز.\nبازدید: در بازدیدهای دوره‌ای و هنگام مشاهده علائم.\nتعویض: طبق دوره تعریف‌شده یا وضعیت قطعه.');
-      return;
-    }
+    if(detail){ openServicePanel(detail.dataset.details, 'details'); return; }
+    const serviceHistory=e.target.closest('[data-service-history]');
+    if(serviceHistory){ openServicePanel(serviceHistory.dataset.serviceHistory, 'history'); return; }
     const add=e.target.closest('#btnAddCustomService');
     if(add){
       const name=prompt('نام سرویس جدید را وارد کنید:');
