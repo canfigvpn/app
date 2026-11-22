@@ -1440,7 +1440,7 @@ function serviceItemHTML(service, st){
   let sub, badge;
 
   if(st.key==='none'){sub='هر '+fa(st.interval)+' کیلومتر یا '+fa(st.daysInterval)+' روز';badge='ثبت نشده';}
-  else{sub='آخرین انجام: '+fa(st.lastKm)+' کیلومتر • '+(st.remaining<0?fa(Math.abs(st.remaining))+' کیلومتر عقب‌افتاده':fa(st.remaining)+' کیلومتر مانده')+(st.daysRemaining===null?'':' • '+(st.daysRemaining<0?fa(Math.abs(st.daysRemaining))+' روز عقب‌افتاده':fa(st.daysRemaining)+' روز مانده'));badge=st.key==='overdue'?'گذشته از موعد':st.key==='near'?'نزدیک موعد':'به‌روز';}
+  else{sub='آخرین انجام: '+fa(st.lastKm)+' کیلومتر • باقی‌مانده: '+(st.remaining<0?fa(Math.abs(st.remaining))+' کیلومتر عقب‌افتاده':fa(st.remaining)+' کیلومتر')+(st.daysRemaining===null?'':' / '+(st.daysRemaining<0?fa(Math.abs(st.daysRemaining))+' روز عقب‌افتاده':fa(st.daysRemaining)+' روز'))+' • دوره: '+fa(st.interval)+' کیلومتر / '+fa(st.daysInterval)+' روز';badge=st.key==='overdue'?'گذشته از موعد':st.key==='near'?'نزدیک موعد':'به‌روز';}
 
   const progress = st.key === 'none' ? '' : `
     <div class="s-progress"><i style="width:${st.pct.toFixed(1)}%"></i></div>
