@@ -939,6 +939,14 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
   opacity:1;
   transform:translate(-50%, 0);
 }
+
+/* Responsive polish: 300px–1280px */
+.home-only{flex-wrap:nowrap;gap:7px}.tb-group{flex:1 1 0;min-width:0}.plate-field{min-width:0;gap:4px;padding:0 6px}.plate-inputs{display:flex;align-items:center;gap:2px;min-width:0;flex:1}.plate-part{width:30px!important;min-width:0!important;text-align:center;font-size:11px!important;padding:0!important;font-weight:800!important}.plate-city{width:25px!important}.plate-letter{width:37px;min-width:0;border:0;background:transparent;color:var(--text);font:700 11px Vazirmatn;outline:none}.plate-sep{font-weight:800;color:var(--text-2)}.km-field{min-width:0}.km-field input{text-align:center;font-variant-numeric:tabular-nums}.s-side{gap:5px;flex-wrap:wrap;justify-content:flex-end}.detail-btn{height:30px;padding:0 8px;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface);color:var(--text);font:700 10px Vazirmatn;white-space:nowrap}.s-sub{white-space:normal;overflow-wrap:anywhere;line-height:1.8}.note-area{height:90px;min-height:90px;resize:vertical;line-height:1.9;padding:9px 12px;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}.input-with-action{display:flex;align-items:center;gap:5px}.input-with-action .txt{min-width:0;flex:1}.current-km-btn,.date-btn{min-width:0;flex:0 0 auto;padding:0 8px;font-size:10px;height:42px}.date-controls{flex-wrap:wrap}.native-date{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}.custom-service-row{display:flex;justify-content:flex-end;margin:0 0 12px}.custom-service-row .btn{flex:0 1 auto}
+[data-theme="dark"]{--bg:#030609;--surface:#080d14;--surface-2:#05090f;--surface-3:#0d1520;--border:#151d29;--border-strong:#263244;--glass:rgba(5,9,15,.94);--shadow:0 5px 24px rgba(0,0,0,.7);--shadow-lg:0 16px 48px rgba(0,0,0,.82)}
+@media(max-width:420px){.topbar{width:calc(100% - 12px);margin-top:6px;padding:6px;gap:5px;border-radius:14px}.tb-group{gap:4px}.field{height:40px;padding:0 4px;gap:3px;border-radius:10px}.field>.material-symbols-rounded{font-size:15px}.plate-part{width:23px!important;font-size:9px!important}.plate-city{width:21px!important}.plate-letter{width:31px;font-size:9px}.plate-sep{font-size:10px}.field input{font-size:10px}.km-field .unit{display:none}.app{padding-left:7px;padding-right:7px}.card{padding:12px}.s-item{padding:8px 9px;gap:7px}.s-icon{width:30px;height:30px}.s-name{font-size:12px}.badge{font-size:9px;padding:4px 6px}.detail-btn{font-size:9px;padding:0 5px}.s-side{gap:3px}.grid-2{grid-template-columns:1fr}.modal{padding-left:13px;padding-right:13px}}
+@media(max-width:320px){.plate-field{padding:0 2px}.plate-part{width:20px!important;font-size:8px!important}.plate-city{width:18px!important}.plate-letter{width:27px;font-size:8px}.field>.material-symbols-rounded{display:none}.km-field input{font-size:9px}}
+@media(min-width:701px) and (max-width:1280px){.topbar,.app{max-width:1000px}}
+
 </style>
 </head>
 
@@ -1196,6 +1204,9 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
 <script>
 /* ================================================================
    ۱) ابزارهای کمکی
@@ -1413,15 +1424,7 @@ function getStatus(service){
    ================================================================ */
 const $ = sel => document.querySelector(sel);
 
-function renderModelOptions(){
-  const sel = $('#modelSelect');
-  sel.innerHTML = CAR_MODELS
-    .map(m => `<option value="${m.id}">${m.name}</option>`)
-    .join('');
-}
-
 function renderTopbar(){
-  const plateEl = $('#plateInput');
   const kmEl = $('#kmInput');
   const plateParts = String(state.plate || '').split('|');
   ['plateA','plateLetter','plateB','plateC'].forEach((id,i)=>{const el=$('#'+id);if(document.activeElement!==el)el.value=plateParts[i]||'';});
@@ -1934,6 +1937,7 @@ function bindEvents(){
       const page = document.getElementById('page-' + btn.dataset.page);
       if (page) page.classList.add('active');
       $('#homeTopbar').style.display=btn.dataset.page==='home'?'flex':'none';
+      $('#homeTopbar').style.display=btn.dataset.page==='home'?'flex':'none';
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -2054,7 +2058,6 @@ function bindEvents(){
    ================================================================ */
 function init(){
   applyTheme();
-  renderModelOptions();
   bindEvents();
   renderAll();
 }
