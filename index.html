@@ -962,10 +962,12 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 .plate-field{height:56px}
 .s-item{display:block;padding:13px 14px;border-bottom:1px solid var(--sc-bd)}
 .s-item:last-child{border-bottom:0}
-.s-item-main{display:flex;align-items:flex-start;gap:10px;min-width:0}
-.s-icon{width:39px;height:39px}
-.s-info{flex:1;min-width:0}
-.s-name{font-size:14px;font-weight:800;white-space:normal;overflow-wrap:anywhere;line-height:1.7}
+.s-item-main{display:block;min-width:0}
+.s-item-heading{display:flex;align-items:center;gap:11px;min-width:0}
+.s-icon{width:43px;height:43px;flex:0 0 43px}
+.s-icon .material-symbols-rounded{font-size:23px}
+.s-info{width:100%;min-width:0;margin-top:8px}
+.s-name{font-size:16px;font-weight:900;white-space:normal;overflow-wrap:anywhere;line-height:1.65}
 .s-last{margin-top:4px;font-size:11.5px;color:var(--text-2);line-height:1.8;overflow-wrap:anywhere}
 .s-due{display:flex;flex-wrap:wrap;align-items:center;gap:4px 7px;margin-top:5px;font-size:12px;font-weight:800;color:var(--text);line-height:1.9;overflow-wrap:anywhere}
 .due-sep{color:var(--text-3);font-weight:500}
@@ -979,16 +981,18 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 .sc-title h2{display:flex;align-items:center;gap:8px}
 .sc-count{display:inline-flex;vertical-align:middle;min-width:25px;justify-content:center;font-size:11px;padding:2px 8px}
 .add-service-inline{display:inline-flex;align-items:center;justify-content:center;gap:4px;flex:0 0 auto;min-height:34px;padding:0 10px;border:1px solid var(--none-bd);border-radius:10px;background:var(--surface);color:var(--none-fg);font:700 11px Vazirmatn;white-space:nowrap}
+.service-head-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;justify-content:flex-end}
 .add-service-inline .material-symbols-rounded{font-size:17px}
+.search-service-inline{border-color:var(--border-strong);color:var(--text-2)}
 .sc-head{align-items:center}
-.service-panel-backdrop{position:fixed;inset:0;z-index:500;background:rgba(2,6,23,.58);display:none;align-items:flex-end;justify-content:center;padding:12px}
+.service-panel-backdrop{position:fixed;inset:0;z-index:500;background:rgba(2,6,23,.62);display:none;align-items:center;justify-content:center;padding:12px;overscroll-behavior:contain}
 .service-panel-backdrop.show{display:flex}
-.service-panel{width:min(720px,100%);max-height:none;overflow:visible;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:22px 22px 16px 16px;box-shadow:var(--shadow-lg);padding:17px}
+.service-panel{width:min(720px,100%);max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow-lg);padding:17px}
 .service-panel-head{display:flex;align-items:center;gap:12px;padding-bottom:13px;border-bottom:1px solid var(--border)}
 .service-panel-head h2{font-size:16px;margin:0;font-weight:800;flex:1;min-width:0}
 .panel-back{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--border-strong);border-radius:10px;background:var(--surface-2);color:var(--text);padding:8px 11px;font:700 12px Vazirmatn;white-space:nowrap}
 .panel-back .material-symbols-rounded{font-size:18px}
-.service-panel-content{padding-top:15px}
+.service-panel-content{padding-top:15px;overflow:visible;max-height:none}
 .panel-status{padding:10px 12px;border:1px solid var(--sc-bd);border-radius:12px;background:var(--sc-bg);color:var(--sc-fg);font-size:12px;font-weight:800;margin-bottom:12px}
 .panel-data-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
 .panel-data-grid>div{padding:12px;border:1px solid var(--border);border-radius:13px;background:var(--surface-2);min-width:0}
@@ -1031,18 +1035,78 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 }
 
 
-/* لودینگ آغازین پنج‌ثانیه‌ای */
-.app-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;background:var(--bg);color:var(--text);transition:opacity .35s ease,visibility .35s ease}
+/* لودینگ آغازین؛ هویت بصری مدرن و چندلایه */
+.app-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:17px;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(37,99,235,.16),transparent 34%),var(--bg);color:var(--text);transition:opacity .55s ease,visibility .55s ease}
+.app-loader:before,.app-loader:after{content:"";position:absolute;width:270px;height:270px;border:1px solid rgba(96,165,250,.15);border-radius:50%;animation:loaderOrbit 8s linear infinite}
+.app-loader:after{width:360px;height:360px;border-style:dashed;opacity:.55;animation-direction:reverse}
 .app-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.loader-ring{width:66px;height:66px;border:5px solid var(--border);border-top-color:var(--primary);border-right-color:var(--primary);border-radius:50%;animation:loaderSpin .8s linear infinite;box-shadow:0 0 25px rgba(37,99,235,.12)}
-.loader-caption{font-size:13px;font-weight:800;letter-spacing:.2px}
+.loader-brand{position:relative;z-index:1;width:94px;height:94px;display:grid;place-items:center;border-radius:30px;background:linear-gradient(145deg,rgba(255,255,255,.2),rgba(37,99,235,.12));border:1px solid rgba(96,165,250,.34);box-shadow:0 18px 55px rgba(37,99,235,.2),inset 0 1px rgba(255,255,255,.55);backdrop-filter:blur(18px)}
+.loader-brand .material-symbols-rounded{font-size:48px;color:var(--primary);font-variation-settings:'FILL' 1,'wght' 500}
+.loader-orbit{position:absolute;inset:-9px;border:2px solid transparent;border-top-color:var(--primary);border-left-color:rgba(96,165,250,.5);border-radius:35px;animation:loaderSpin 1.7s cubic-bezier(.5,.1,.5,.9) infinite}
+.loader-copy{position:relative;z-index:1;text-align:center}
+.loader-caption{font-size:16px;font-weight:900;letter-spacing:-.3px}
+.loader-subtitle{margin-top:6px;font-size:11px;color:var(--text-2);font-weight:600}
+.loader-progress{position:relative;z-index:1;width:min(210px,58vw);height:5px;margin-top:3px;border-radius:99px;background:var(--surface-3);overflow:hidden}
+.loader-progress i{display:block;width:38%;height:100%;border-radius:99px;background:linear-gradient(90deg,#60a5fa,var(--primary));animation:loaderProgress 2.2s ease-in-out infinite}
+.loader-dots{position:relative;z-index:1;display:flex;gap:6px}
+.loader-dots i{width:5px;height:5px;border-radius:50%;background:var(--primary);opacity:.35;animation:loaderDot 1s ease-in-out infinite}
+.loader-dots i:nth-child(2){animation-delay:.15s}.loader-dots i:nth-child(3){animation-delay:.3s}
 @keyframes loaderSpin{to{transform:rotate(360deg)}}
+@keyframes loaderOrbit{to{transform:rotate(360deg)}}
+@keyframes loaderProgress{0%{transform:translateX(180%)}100%{transform:translateX(-280%)}}
+@keyframes loaderDot{50%{opacity:1;transform:translateY(-4px)}}
 
+/* تقویم شمسی شخصی‌سازی‌شده */
+.datepicker-plot-area{font-family:'Vazirmatn',sans-serif!important;border:1px solid var(--border)!important;border-radius:20px!important;background:var(--surface)!important;color:var(--text)!important;box-shadow:0 22px 65px rgba(2,6,23,.24)!important;overflow:hidden!important;padding:12px!important}
+.datepicker-plot-area .datepicker-navigator{height:42px!important;margin-bottom:8px!important}
+.datepicker-plot-area .datepicker-navigator .pwt-btn{border-radius:11px!important;color:var(--primary)!important}
+.datepicker-plot-area .datepicker-navigator .pwt-btn:hover{background:var(--primary-soft)!important}
+.datepicker-plot-area .datepicker-navigator .datepicker-month-view,.datepicker-plot-area .datepicker-navigator .datepicker-year-view{font-weight:900!important;color:var(--text)!important}
+.datepicker-plot-area .datepicker-day-view .table-days td span{border-radius:10px!important;font-family:'Vazirmatn',sans-serif!important;font-weight:600!important}
+.datepicker-plot-area .datepicker-day-view .table-days td span:hover{background:var(--primary-soft)!important;color:var(--primary)!important}
+.datepicker-plot-area .datepicker-day-view .table-days td span.selected{background:var(--primary)!important;color:#fff!important;box-shadow:0 5px 14px rgba(37,99,235,.25)!important}
+.datepicker-plot-area .datepicker-day-view .table-days th{color:var(--text-2)!important;font-weight:800!important}
+.datepicker-plot-area .datepicker-time-view,.datepicker-plot-area .datepicker-footer{border-color:var(--border)!important;background:var(--surface-2)!important}
+.datepicker-plot-area .datepicker-footer .pwt-btn-today{color:var(--primary)!important;font-family:'Vazirmatn',sans-serif!important;font-weight:800!important}
+.datepicker-plot-area *{font-family:'Vazirmatn',sans-serif!important}
+[data-theme="dark"] .datepicker-plot-area{background:#0b1422!important;color:#e6edf7!important;border-color:#26354d!important}
+[data-theme="dark"] .datepicker-plot-area .datepicker-day-view .table-days td span{color:#dbeafe!important}
+/* پنجره جستجوی سرویس */
+.service-search-backdrop{position:fixed;inset:0;z-index:700;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(2,6,23,.64);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.service-search-backdrop.show{display:flex}
+.service-search-box{width:min(520px,100%);max-height:min(78dvh,680px);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-radius:23px;background:var(--surface);box-shadow:var(--shadow-lg);padding:16px}
+.service-search-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.service-search-head strong{display:block;font-size:16px;font-weight:900}
+.service-search-head small{display:block;margin-top:4px;font-size:11px;color:var(--text-2)}
+.service-search-close{width:34px;height:34px;border:1px solid var(--border);border-radius:11px;background:var(--surface-2);color:var(--text);font-size:24px;line-height:1}
+.service-search-input{display:flex;align-items:center;gap:9px;height:48px;padding:0 13px;border:1.5px solid var(--border-strong);border-radius:14px;background:var(--surface-2)}
+.service-search-input:focus-within{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-soft)}
+.service-search-input .material-symbols-rounded{color:var(--primary);font-size:21px}
+.service-search-input input{width:100%;border:0;outline:0;background:transparent;color:var(--text);font:600 13px Vazirmatn}
+.service-search-results{overflow-y:auto;overscroll-behavior:contain;padding-top:10px}
+.service-search-result{display:flex;align-items:center;gap:10px;width:100%;padding:10px 8px;border:0;border-bottom:1px solid var(--border);background:transparent;color:var(--text);text-align:right}
+.service-search-result:active{background:var(--surface-2)}
+.service-search-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:var(--primary-soft);color:var(--primary);flex:0 0 auto}
+.service-search-name{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.service-search-name strong{font-size:13px;font-weight:800}
+.service-search-name small{font-size:10px;color:var(--text-2)}
+.service-search-arrow{color:var(--text-3)}
+@media(max-width:520px){
+  .service-panel-backdrop{align-items:flex-end;padding:6px}
+  .service-panel{max-height:calc(100dvh - 12px);border-radius:22px 22px 12px 12px;padding:14px}
+  .service-search-box{max-height:82dvh;padding:13px;border-radius:20px}
+  .s-item-heading{gap:9px}.s-name{font-size:15px}
+}
 </style>
 </head>
 
 <body>
-<div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه"><div class="loader-ring"></div><div class="loader-caption">در حال آماده‌سازی...</div></div>
+<div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه">
+  <div class="loader-brand"><span class="material-symbols-rounded">directions_car</span><i class="loader-orbit"></i></div>
+  <div class="loader-copy"><div class="loader-caption">خودرو من</div><div class="loader-subtitle">در حال آماده‌سازی دفترچه هوشمند خودرو</div></div>
+  <div class="loader-progress"><i></i></div>
+  <div class="loader-dots"><i></i><i></i><i></i></div>
+</div>
 
 <!-- ══════════════════════════════════════════════
      نوار بالایی : پلاک (راست) + کیلومتر (چپ)
@@ -1427,9 +1491,15 @@ const SERVICES = [
   { id:'fire_ext',      name:'بازدید کپسول آتش‌نشانی',             icon:'fire_extinguisher',       interval:18000, intervalDays:365 }
 ];
 
-// فقط قطعات قابل تعویض یا تعمیر در فهرست اصلی باقی می‌مانند؛ موارد بازدید/بررسی حذف می‌شوند.
+// فهرست اصلی و ضروری نگهداری خودرو؛ سرویس‌های کم‌اهمیت و بازدیدهای فرعی نمایش داده نمی‌شوند.
+const CORE_SERVICE_IDS = new Set([
+  'oil','oil_filter','air_filter','fuel_filter','spark_plug','timing_belt',
+  'alt_belt','brake_front','brake_rear','brake_disc','brake_fluid','coolant',
+  'gearbox_oil','battery','tires','shock','suspension','clutch','water_pump',
+  'alternator','steering_oil','ac_service'
+]);
 for (let i = SERVICES.length - 1; i >= 0; i--) {
-  if (/^(بازدید|بررسی)\s/.test(SERVICES[i].name)) SERVICES.splice(i, 1);
+  if (!CORE_SERVICE_IDS.has(SERVICES[i].id)) SERVICES.splice(i, 1);
 }
 const SERVICE_MAP = Object.fromEntries(SERVICES.map(s => [s.id, s]));
 
@@ -1547,7 +1617,6 @@ function renderTopbar(){
    ۶) رندر : صفحه خانه
    ================================================================ */
 function serviceItemHTML(service, st){
-  const statusLabel = st.key === 'overdue' ? 'گذشته از موعد' : st.key === 'near' ? 'نزدیک موعد' : st.key === 'none' ? 'ثبت نشده' : 'به‌روز';
   const kmText = st.key === 'none' ? 'هر ' + fa(st.interval) + ' کیلومتر ☆ هر ' + fa(st.daysInterval) + ' روز' :
     st.remaining < 0 ? fa(Math.abs(st.remaining)) + ' کیلومتر از موعد گذشته' : fa(st.remaining) + ' کیلومتر تا موعد';
   const dayText = st.key === 'none' ? '' :
@@ -1562,14 +1631,15 @@ function serviceItemHTML(service, st){
   return `
     <article class="s-item">
       <div class="s-item-main">
-        <div class="s-icon"><span class="material-symbols-rounded">${esc(service.icon || 'build')}</span></div>
-        <div class="s-info">
+        <div class="s-item-heading">
+          <div class="s-icon"><span class="material-symbols-rounded">${esc(service.icon || 'build')}</span></div>
           <div class="s-name">${esc(service.name)}</div>
+        </div>
+        <div class="s-info">
           <div class="s-last">${lastText}</div>
           <div class="s-due">
             <span>${kmText}</span>${dayText ? '<span class="due-sep">/</span><span>${dayText}</span>' : ''}
           </div>
-          <div class="s-status-line"><span class="badge">${statusLabel}</span></div>
           ${progress}
         </div>
       </div>
@@ -1647,6 +1717,48 @@ function openServicePanel(serviceId, mode){
   panel.dataset.mode = mode;
 }
 
+
+// جستجوی زنده میان تمام سرویس‌های اصلی و سرویس‌های سفارشی
+function ensureServiceSearch(){
+  let modal=$('#serviceSearchModal');
+  if(modal)return modal;
+  modal=document.createElement('div');
+  modal.id='serviceSearchModal';
+  modal.className='service-search-backdrop';
+  modal.innerHTML=`<section class="service-search-box" role="dialog" aria-modal="true" aria-labelledby="serviceSearchTitle">
+    <header class="service-search-head"><div><strong id="serviceSearchTitle">جستجوی سرویس</strong><small>نام سرویس موردنظر را وارد کنید</small></div><button type="button" class="service-search-close" id="closeServiceSearch" aria-label="بستن">×</button></header>
+    <div class="service-search-input"><span class="material-symbols-rounded">search</span><input id="serviceSearchInput" type="search" placeholder="مثلاً روغن، ترمز، تسمه..." autocomplete="off"></div>
+    <div class="service-search-results" id="serviceSearchResults"></div>
+  </section>`;
+  document.body.appendChild(modal);
+  modal.addEventListener('click',e=>{if(e.target===modal||e.target.closest('#closeServiceSearch'))modal.classList.remove('show');});
+  return modal;
+}
+function renderServiceSearch(query=''){
+  const box=$('#serviceSearchResults');
+  if(!box)return;
+  const q=String(query||'').trim().toLocaleLowerCase('fa');
+  const all=SERVICES.concat(state.customServices||[]);
+  const matches=all.filter(service=>!q||service.name.toLocaleLowerCase('fa').includes(q));
+  if(!matches.length){box.innerHTML='<div class="empty">سرویسی با این نام پیدا نشد</div>';return;}
+  box.innerHTML=matches.map(service=>{
+    const st=getStatus(service);
+    const label=st.key==='none'?'ثبت نشده':st.key==='overdue'?'گذشته از موعد':st.key==='near'?'نزدیک موعد':'به‌روز';
+    return `<button type="button" class="service-search-result" data-search-service="${esc(service.id)}">
+      <span class="service-search-icon"><span class="material-symbols-rounded">${esc(service.icon||'build')}</span></span>
+      <span class="service-search-name"><strong>${esc(service.name)}</strong><small>${label}</small></span>
+      <span class="material-symbols-rounded service-search-arrow">chevron_left</span>
+    </button>`;
+  }).join('');
+}
+function openServiceSearch(){
+  const modal=ensureServiceSearch();
+  modal.classList.add('show');
+  $('#serviceSearchInput').value='';
+  renderServiceSearch('');
+  setTimeout(()=>$('#serviceSearchInput').focus(),100);
+}
+
 function renderHome(){
   const groups = { overdue:[], near:[], ok:[], none:[] };
   (SERVICES.concat(state.customServices || [])).forEach(service => {
@@ -1662,7 +1774,7 @@ function renderHome(){
       <section class="status-card sc-${key}">
         <header class="sc-head">
           <div class="sc-title"><span class="material-symbols-rounded">${meta.icon}</span><h2>${meta.title}<span class="sc-count">${fa(items.length)}</span></h2></div>
-          ${key === 'none' ? '<button class="add-service-inline" id="btnAddCustomService"><span class="material-symbols-rounded">add</span> افزودن سرویس جدید</button>' : ''}
+          ${key === 'none' ? '<div class="service-head-actions"><button class="add-service-inline" id="btnAddCustomService"><span class="material-symbols-rounded">add</span> افزودن سرویس</button><button class="add-service-inline search-service-inline" id="btnServiceSearch"><span class="material-symbols-rounded">search</span> جستجو</button></div>' : ''}
         </header>
         <div class="sc-body">${body}</div>
       </section>`;
@@ -2126,8 +2238,12 @@ function bindEvents(){
     e.target.value = state.km ? fa(state.km) : '';
   });
 
-  /* --- دکمه ثبت سرویس (رویداد واگذارشده) --- */
+  /* --- جستجوی سرویس --- */
   document.addEventListener('click', e => {
+    if(e.target.closest('#btnServiceSearch')){openServiceSearch();return;}
+    const searchItem=e.target.closest('[data-search-service]');
+    if(searchItem){const id=searchItem.dataset.searchService;$('#serviceSearchModal').classList.remove('show');openServicePanel(id,'details');return;}
+    /* --- دکمه ثبت سرویس (رویداد واگذارشده) --- */
     const detail=e.target.closest('[data-details]');
     if(detail){ openServicePanel(detail.dataset.details, 'details'); return; }
     const saveDetails=e.target.closest('#btnSaveServiceDetails');
@@ -2180,12 +2296,34 @@ function bindEvents(){
     }
   });
 
+  /* --- فیلتر زنده جستجو --- */
+  document.addEventListener('input',e=>{if(e.target.id==='serviceSearchInput')renderServiceSearch(e.target.value);});
+
   /* --- مودال --- */
   $('#btnCancelModal').addEventListener('click', closeModal);
   $('#btnSaveModal').addEventListener('click', saveService);
   $('#btnCurrentKm').addEventListener('click',()=>{$('#mKm').value=state.km?fa(state.km):'';$('#mKm').focus();});
   $('#btnToday').addEventListener('click',()=>{$('#mDate').value=todayFa();});
-  $('#btnPickDate').addEventListener('click',()=>{const picker=$('#mDateNative');try{if(typeof picker.showPicker==='function'){picker.showPicker();}else{picker.click();}}catch(err){picker.style.cssText='position:fixed!important;left:50%!important;top:50%!important;width:260px!important;height:54px!important;opacity:1!important;pointer-events:auto!important;z-index:99999!important;transform:translate(-50%,-50%)';picker.focus();picker.click();setTimeout(()=>picker.style.cssText='',1000);}});
+  $('#btnPickDate').addEventListener('click',()=>{
+    const input=$('#mDate');
+    try{
+      if(window.jQuery && jQuery.fn && typeof jQuery.fn.persianDatepicker==='function'){
+        if(!input.dataset.persianCalendarReady){
+          jQuery(input).persianDatepicker({
+            format:'YYYY/MM/DD',autoClose:true,initialValue:false,
+            toolbox:{calendarSwitch:{enabled:false},todayButton:{enabled:true,text:{fa:'امروز'}}},
+            navigator:{enabled:true,scroll:{enabled:false}}
+          });
+          input.dataset.persianCalendarReady='1';
+        }
+        jQuery(input).persianDatepicker('show');
+        return;
+      }
+    }catch(err){console.warn('Persian calendar unavailable:',err);}
+    const picker=$('#mDateNative');
+    try{if(typeof picker.showPicker==='function')picker.showPicker();else picker.click();}
+    catch(err){picker.click();}
+  });
   $('#mDateNative').addEventListener('change',e=>{if(e.target.value){const d=new Date(e.target.value+'T12:00:00');$('#mDate').value=d.toLocaleDateString('fa-IR');e.target.style.cssText='';}});
   ['mKm','mCost'].forEach(id=>$('#'+id).addEventListener('input',e=>{const raw=toEnDigits(e.target.value).replace(/[^0-9]/g,'');e.target.value=raw?Number(raw).toLocaleString('fa-IR'):'';}));
 
