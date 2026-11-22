@@ -1435,15 +1435,8 @@ function renderTopbar(){
 function serviceItemHTML(service, st){
   let sub, badge;
 
-  if (st.key === 'none'){
-    sub = `دوره سرویس: هر ${fa(st.interval)} کیلومتر`;
-    badge = 'ثبت نشده';
-  } else {
-    sub = `آخرین: ${fa(st.lastKm)} کیلومتر • دوره: ${fa(st.interval)} کیلومتر`;
-    badge = st.key === 'overdue'
-      ? `${fa(Math.abs(st.remaining))} کیلومتر گذشته`
-      : `${fa(st.remaining)} کیلومتر مانده`;
-  }
+  if(st.key==='none'){sub='هر '+fa(st.interval)+' کیلومتر یا '+fa(st.daysInterval)+' روز';badge='ثبت نشده';}
+  else{sub='آخرین انجام: '+fa(st.lastKm)+' کیلومتر • '+(st.remaining<0?fa(Math.abs(st.remaining))+' کیلومتر عقب‌افتاده':fa(st.remaining)+' کیلومتر مانده')+(st.daysRemaining===null?'':' • '+(st.daysRemaining<0?fa(Math.abs(st.daysRemaining))+' روز عقب‌افتاده':fa(st.daysRemaining)+' روز مانده'));badge=st.key==='overdue'?'گذشته از موعد':st.key==='near'?'نزدیک موعد':'به‌روز';}
 
   const progress = st.key === 'none' ? '' : `
     <div class="s-progress"><i style="width:${st.pct.toFixed(1)}%"></i></div>
@@ -1460,6 +1453,7 @@ function serviceItemHTML(service, st){
         ${progress}
       </div>
       <div class="s-side">
+        <button class="detail-btn" data-details="${service.id}">جزئیات</button>
         <span class="badge">${badge}</span>
         <button class="s-btn" data-register="${service.id}" title="ثبت سرویس">
           <span class="material-symbols-rounded">add</span>
@@ -1939,30 +1933,20 @@ function bindEvents(){
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       const page = document.getElementById('page-' + btn.dataset.page);
       if (page) page.classList.add('active');
+      $('#homeTopbar').style.display=btn.dataset.page==='home'?'flex':'none';
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   });
 
   /* --- پلاک --- */
-  $('#plateInput').addEventListener('input', e => {
-    state.plate = e.target.value;
-    save();
-  });
-
-  /* --- مدل خودرو --- */
-  $('#modelSelect').addEventListener('change', e => {
-    state.model = e.target.value;
-    save();
-    renderHome();
-  });
+  ['plateA','plateB','plateC'].forEach((id,i)=>$('#'+id).addEventListener('input',e=>{e.target.value=toEnDigits(e.target.value).replace(/[^0-9]/g,'').slice(0,i===1?3:2);state.plate=['plateA','plateLetter','plateB','plateC'].map(x=>$('#'+x).value).join('|');save();}));
+  $('#plateLetter').addEventListener('change',()=>{state.plate=['plateA','plateLetter','plateB','plateC'].map(x=>$('#'+x).value).join('|');save();});
 
   /* --- کیلومتر --- */
   const kmEl = $('#kmInput');
   kmEl.addEventListener('input', e => {
-    state.km = parseNum(e.target.value);
-    save();
-    renderHome();
+    const raw=toEnDigits(e.target.value).replace(/[^0-9]/g,'');state.km=parseNum(raw);e.target.value=raw?Number(raw).toLocaleString('fa-IR'):'';save();renderHome();
   });
   kmEl.addEventListener('blur', e => {
     e.target.value = state.km ? fa(state.km) : '';
@@ -1993,6 +1977,11 @@ function bindEvents(){
   /* --- مودال --- */
   $('#btnCancelModal').addEventListener('click', closeModal);
   $('#btnSaveModal').addEventListener('click', saveService);
+  $('#btnCurrentKm').addEventListener('click',()=>{$('#mKm').value=state.km?fa(state.km):'';$('#mKm').focus();});
+  $('#btnToday').addEventListener('click',()=>{$('#mDate').value=todayFa();});
+  $('#btnPickDate').addEventListener('click',()=>{if(window.jQuery&&$.fn.persianDatepicker){$('#mDate').persianDatepicker({format:'YYYY/MM/DD',autoClose:true,initialValue:false});$('#mDate').focus();}else{$('#mDateNative').click();}});
+  $('#mDateNative').addEventListener('change',e=>{if(e.target.value)$('#mDate').value=new Date(e.target.value+'T12:00:00').toLocaleDateString('fa-IR');});
+  ['mKm','mCost'].forEach(id=>$('#'+id).addEventListener('input',e=>{const raw=toEnDigits(e.target.value).replace(/[^0-9]/g,'');e.target.value=raw?Number(raw).toLocaleString('fa-IR'):'';}));
 
   $('#modal').addEventListener('click', e => {
     if (e.target.id === 'modal') closeModal();
