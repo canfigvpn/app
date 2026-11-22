@@ -1959,6 +1959,24 @@ function bindEvents(){
 
   /* --- دکمه ثبت سرویس (رویداد واگذارشده) --- */
   document.addEventListener('click', e => {
+    const detail=e.target.closest('[data-details]');
+    if(detail){
+      const svc=SERVICES.concat(state.customServices||[]).find(x=>x.id===detail.dataset.details);
+      if(svc)alert('فاصله پیشنهادی: هر '+fa(svc.interval)+' کیلومتر یا '+fa(svc.intervalDays||180)+' روز.\nبازدید: در بازدیدهای دوره‌ای و هنگام مشاهده علائم.\nتعویض: طبق دوره تعریف‌شده یا وضعیت قطعه.');
+      return;
+    }
+    const add=e.target.closest('#btnAddCustomService');
+    if(add){
+      const name=prompt('نام سرویس جدید را وارد کنید:');
+      if(name&&name.trim()){
+        const km=Number(prompt('فاصله به کیلومتر؟','10000'))||10000;
+        const days=Number(prompt('فاصله به روز؟','180'))||180;
+        state.customServices=state.customServices||[];
+        state.customServices.push({id:'custom_'+Date.now(),name:name.trim(),icon:'build',interval:km,intervalDays:days});
+        save();renderHome();toast('سرویس جدید اضافه شد');
+      }
+      return;
+    }
     const regBtn = e.target.closest('[data-register]');
     if (regBtn){
       openModal(regBtn.dataset.register);
