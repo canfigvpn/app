@@ -1938,7 +1938,6 @@ function bindEvents(){
       const page = document.getElementById('page-' + btn.dataset.page);
       if (page) page.classList.add('active');
       $('#homeTopbar').style.display=btn.dataset.page==='home'?'flex':'none';
-      $('#homeTopbar').style.display=btn.dataset.page==='home'?'flex':'none';
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -2002,7 +2001,7 @@ function bindEvents(){
   $('#btnSaveModal').addEventListener('click', saveService);
   $('#btnCurrentKm').addEventListener('click',()=>{$('#mKm').value=state.km?fa(state.km):'';$('#mKm').focus();});
   $('#btnToday').addEventListener('click',()=>{$('#mDate').value=todayFa();});
-  $('#btnPickDate').addEventListener('click',()=>{if(window.jQuery&&$.fn.persianDatepicker){$('#mDate').persianDatepicker({format:'YYYY/MM/DD',autoClose:true,initialValue:false});$('#mDate').focus();}else{$('#mDateNative').click();}});
+  $('#btnPickDate').addEventListener('click',()=>{if(window.jQuery&&window.jQuery.fn.persianDatepicker){window.jQuery('#mDate').persianDatepicker({format:'YYYY/MM/DD',autoClose:true,initialValue:false});$('#mDate').focus();}else{$('#mDateNative').click();}});
   $('#mDateNative').addEventListener('change',e=>{if(e.target.value)$('#mDate').value=new Date(e.target.value+'T12:00:00').toLocaleDateString('fa-IR');});
   ['mKm','mCost'].forEach(id=>$('#'+id).addEventListener('input',e=>{const raw=toEnDigits(e.target.value).replace(/[^0-9]/g,'');e.target.value=raw?Number(raw).toLocaleString('fa-IR'):'';}));
 
