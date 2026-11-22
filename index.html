@@ -1570,6 +1570,14 @@ function serviceItemHTML(service, st){
     </article>`;
 }
 
+function historyTimestamp(record){
+  if (Number(record.createdAt)) return Number(record.createdAt);
+  try {
+    const parts = toEnDigits(record.date || '').split('/').map(Number);
+    return new persianDate(parts).toDate().getTime() || 0;
+  } catch(e) { return 0; }
+}
+
 function openServicePanel(serviceId, mode){
   const service = SERVICES.concat(state.customServices || []).find(x => x.id === serviceId);
   if (!service) return;
@@ -1582,7 +1590,7 @@ function openServicePanel(serviceId, mode){
     document.body.appendChild(panel);
     panel.addEventListener('click', e => { if (e.target === panel || e.target.closest('#servicePanelBack')) panel.classList.remove('show'); });
   }
-  const records = state.history.filter(r => r.serviceId === serviceId).sort((a,b) => (a.createdAt || 0) - (b.createdAt || 0));
+  const records = state.history.filter(r => r.serviceId === serviceId).sort((a,b) => historyTimestamp(a) - historyTimestamp(b));
   const st = getStatus(service);
   const content = document.getElementById('servicePanelContent');
   document.getElementById('servicePanelTitle').textContent = service.name;
