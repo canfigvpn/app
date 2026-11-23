@@ -1553,8 +1553,8 @@ function getStatus(service){
   }
   const kmOverdue = remaining < 0;
   const timeOverdue = daysRemaining !== null && daysRemaining < 0;
-  const kmNear = remaining >= 0 && remaining <= Math.max(200, interval * 0.2);
-  const timeNear = daysRemaining !== null && daysRemaining >= 0 && daysRemaining <= 30;
+  const kmNear = remaining >= 0 && remaining <= 5000;
+  const timeNear = daysRemaining !== null && daysRemaining >= 0 && daysRemaining <= 15;
   let key = 'ok', reason = 'بدون دیرکرد';
   if (kmOverdue || timeOverdue) {
     key = 'overdue';
@@ -2369,6 +2369,7 @@ function runAppSelfTests(){
   check('خواندن عدد با جداکننده',()=>parseNum('۱۲۳٬۴۵۶')===123456);
   check('فرار HTML برای متن',()=>esc('<img src=x onerror=1>')==='&lt;img src=x onerror=1&gt;');
   check('فاصله پیش‌فرض روغن بدون وابستگی به مدل',()=>getInterval(SERVICE_MAP.oil)===5000);
+  check('آستانه نزدیک موعد کیلومتری ۵۰۰۰',()=>{const previous=state;state=Object.assign(defaultState(),{km:0,services:{oil:{lastKm:0,lastDate:''}}});const result=getStatus(SERVICE_MAP.oil).key==='near';state=previous;return result;});
   check('پذیرش بکاپ معتبر',()=>validateBackupData({services:{},history:[]}).history.length===0);
   check('رد تاریخچه نامعتبر',()=>{try{validateBackupData({services:{},history:{}});return false;}catch(e){return true;}});
   check('رد کیلومتر منفی',()=>validateBackupData({services:{x:{lastKm:-1}}}).services.x===undefined);
