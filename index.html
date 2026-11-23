@@ -1072,18 +1072,12 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 [data-theme="dark"] .datepicker-plot-area{background:#0b1422!important;color:#e6edf7!important;border-color:#26354d!important}
 [data-theme="dark"] .datepicker-plot-area .datepicker-day-view .table-days td span{color:#dbeafe!important}
 /* پنجره جستجوی سرویس */
-.service-search-backdrop{position:fixed;inset:0;z-index:700;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(2,6,23,.64);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.service-search-backdrop.show{display:flex}
-.service-search-box{width:min(520px,100%);max-height:min(78dvh,680px);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-radius:23px;background:var(--surface);box-shadow:var(--shadow-lg);padding:16px}
+.service-search-backdrop{position:fixed;inset:0;z-index:700;display:none;align-items:flex-start;justify-content:center;padding:max(18px,env(safe-area-inset-top)) 12px 14px;background:rgba(2,6,23,.68);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur((8px);overflow:hidden}.service-search-backdrop.show{display:flex}.service-search-box{position:relative;width:min(700px,100%);max-height:calc(100dvh - max(32px,env(safe-area-inset-top)) - 14px);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-radius:23px;background:var(--surface);box-shadow:var(--shadow-lg);padding:18px;margin:0 auto;min-height:0}
 .service-search-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
 .service-search-head strong{display:block;font-size:16px;font-weight:900}
 .service-search-head small{display:block;margin-top:4px;font-size:11px;color:var(--text-2)}
 .service-search-close{width:34px;height:34px;border:1px solid var(--border);border-radius:11px;background:var(--surface-2);color:var(--text);font-size:24px;line-height:1}
-.service-search-input{display:flex;align-items:center;gap:9px;height:48px;padding:0 13px;border:1.5px solid var(--border-strong);border-radius:14px;background:var(--surface-2)}
-.service-search-input:focus-within{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-soft)}
-.service-search-input .material-symbols-rounded{color:var(--primary);font-size:21px}
-.service-search-input input{width:100%;border:0;outline:0;background:transparent;color:var(--text);font:600 13px Vazirmatn}
-.service-search-results{overflow-y:auto;overscroll-behavior:contain;padding-top:10px}
+.service-search-input{display:flex;align-items:center;gap:10px;width:100%;height:54px;flex:0 0 54px;padding:0 16px;border:1.5px solid var(--border-strong);border-radius:15px;background:var(--surface-2)}.service-search-input:focus-within{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-soft)}.service-search-input .material-symbols-rounded{color:var(--primary);font-size:23px}.service-search-input input{display:block;width:100%;min-width:0;flex:1;border:0;outline:0;background:transparent;color:var(--text);font:600 14px Vazirmatn}.service-search-results{flex:1 1 auto;min-height:120px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-top:12px}
 .service-search-result{display:flex;align-items:center;gap:10px;width:100%;padding:10px 8px;border:0;border-bottom:1px solid var(--border);background:transparent;color:var(--text);text-align:right}
 .service-search-result:active{background:var(--surface-2)}
 .service-search-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:var(--primary-soft);color:var(--primary);flex:0 0 auto}
@@ -1094,7 +1088,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 @media(max-width:520px){
   .service-panel-backdrop{align-items:flex-end;padding:6px}
   .service-panel{max-height:calc(100dvh - 12px);border-radius:22px 22px 12px 12px;padding:14px}
-  .service-search-box{max-height:82dvh;padding:13px;border-radius:20px}
+  .service-search-backdrop{padding-top:max(12px,env(safe-area-inset-top))}.service-search-box{width:100%;max-height:calc(100dvh - max(24px,env(safe-area-inset-top)) - 10px);padding:15px;border-radius:20px}.service-search-input{height:56px;flex-basis:56px}.service-search-results{min-height:100px}
   .s-item-heading{gap:9px}.s-name{font-size:15px}
 }
 
@@ -1113,6 +1107,8 @@ body.panel-open{overflow:hidden}.service-panel-content{touch-action:pan-y}
 
 .loader-scene{position:relative;width:180px;height:180px;display:grid;place-items:center;margin-bottom:18px;z-index:1}.loader-scene .loader-brand{z-index:2}.loader-scene .loader-orbit{position:absolute;inset:5px;width:auto;height:auto;border:1px solid rgba(96,165,250,.28);border-radius:50%;animation:loaderOrbit 7s linear infinite}.loader-scene .orbit-b{inset:22px;border-style:dashed;border-color:rgba(214,168,79,.42);animation-direction:reverse;animation-duration:11s}.loader-scene .orbit-c{inset:39px;border:2px solid transparent;border-top-color:var(--primary);border-bottom-color:#d6a84f;animation:loaderSpin 2.5s linear infinite}.loader-spark{position:absolute;width:6px;height:6px;border-radius:50%;background:#d6a84f;box-shadow:0 0 14px #d6a84f;animation:loaderDot 1.5s ease-in-out infinite}.spark-a{top:19px;right:31px}.spark-b{bottom:27px;left:24px;animation-delay:.5s}.spark-c{top:84px;left:0;animation-delay:1s}.loader-copy,.loader-progress,.loader-footnote{position:relative;z-index:2}.loader-progress{margin-top:20px}.loader-footnote{margin-top:11px}.loader-brand{margin-bottom:0}
 
+
+.history-page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 4px 12px}.history-page-head .page-head{margin:0;min-width:0}.history-trash-toggle{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid var(--border-strong);border-radius:13px;background:var(--surface);color:var(--text-2);box-shadow:var(--shadow)}.history-trash-toggle .material-symbols-rounded{font-size:21px}.history-trash-toggle.active{background:var(--overdue-bg);border-color:var(--overdue-bd);color:var(--overdue-fg)}.history-toolbar{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap;margin:0 0 12px;padding:10px 12px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2)}.history-select-all{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--text-2);white-space:nowrap}.history-select-all input,.history-record-check input{width:17px;height:17px;accent-color:var(--primary)}.history-bulk-actions{display:flex;gap:6px;flex-wrap:wrap}.history-bulk-actions .btn{height:34px;min-width:0;flex:0 1 auto;padding:0 9px;font-size:10px}.history-bulk-actions .btn .material-symbols-rounded{font-size:16px}.history-bulk-actions .btn:disabled{opacity:.4;cursor:not-allowed}.history-record-check{display:flex;align-items:center;justify-content:center;flex:0 0 19px;padding-top:10px}.h-restore{width:29px;height:29px;border:0;border-radius:9px;background:var(--ok-bg);color:var(--ok-fg);display:grid;place-items:center}.h-restore .material-symbols-rounded{font-size:18px}.h-item-trashed{border-style:dashed;opacity:.94}.report-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.expense-month{border:1px solid var(--border);border-radius:15px;overflow:hidden;margin-bottom:12px;background:var(--surface)}.expense-month:last-child{margin-bottom:0}.expense-month>header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;background:var(--surface-2);border-bottom:1px solid var(--border)}.expense-month>header>div{display:flex;flex-direction:column;gap:3px}.expense-month>header strong{font-size:13px;font-weight:850}.expense-month>header small{font-size:10px;color:var(--text-2)}.expense-month>header>b{font-size:13px;color:var(--primary-text);white-space:nowrap}.expense-month>header>b small{font-size:9px;font-weight:500}.expense-month-list{padding:2px 11px}.expense-record{display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid var(--border);min-width:0}.expense-record:last-child{border-bottom:0}.expense-record-icon{width:34px;height:34px;display:grid;place-items:center;flex:0 0 34px;border-radius:10px;background:var(--primary-soft);color:var(--primary)}.expense-record-info{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}.expense-record-info strong{font-size:11.5px;overflow-wrap:anywhere}.expense-record-info small,.expense-record-info>span{font-size:9.5px;color:var(--text-2);overflow-wrap:anywhere}.expense-record>b{font-size:11px;color:var(--primary-text);white-space:nowrap}.expense-record>b small{font-size:8.5px;font-weight:500}.s-last-inline{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.s-actions-inline{margin:0;gap:5px;flex:0 0 auto}.s-actions-inline .detail-btn{height:28px;padding:0 8px;font-size:9.5px}.s-actions-inline .s-btn{width:28px;height:28px}@media(max-width:520px){.history-toolbar{align-items:flex-start}.history-bulk-actions{width:100%}.history-bulk-actions .btn{flex:1 1 auto}.expense-record{gap:7px}.expense-record-icon{width:30px;height:30px;flex-basis:30px}.expense-record>b{font-size:10px}.s-last-inline{align-items:flex-start}.s-actions-inline{gap:4px}.s-actions-inline .detail-btn{padding:0 6px;font-size:9px}}@media(max-width:360px){.history-bulk-actions .btn{font-size:9px;padding:0 6px}.history-record-check{flex-basis:17px}.s-actions-inline .detail-btn{font-size:8.5px;padding:0 5px}}
 </style>
 </head>
 
@@ -1153,12 +1149,7 @@ body.panel-open{overflow:hidden}.service-panel-content{touch-action:pan-y}
   </section>
 
   <!-- ───────── صفحه تاریخچه ───────── -->
-  <section class="page" id="page-history">
-    <div class="page-head">
-      <h1>تاریخچه سرویس‌ها</h1>
-      <p id="historyCount">۰ سرویس</p>
-    </div>
-    <div id="historyList"></div>
+  <section class="page" id="page-history"><div class="history-page-head"><div class="page-head"><h1>تاریخچه سرویس‌ها</h1><p id="historyCount">۰ سرویس ثبت‌شده</p></div><button type="button" class="history-trash-toggle" id="btnHistoryTrash" aria-label="نمایش سطل زباله" title="سطل زباله"><span class="material-symbols-rounded">delete</span></button></div><div id="historyToolbar" class="history-toolbar"></div><div id="historyList"></div>
   </section>
 
   <!-- ───────── صفحه گزارش هزینه ───────── -->
@@ -1168,31 +1159,7 @@ body.panel-open{overflow:hidden}.service-panel-content{touch-action:pan-y}
       <p>خلاصه هزینه‌های ثبت‌شده خودرو</p>
     </div>
 
-    <div class="stats-row">
-      <div class="stat">
-        <span class="material-symbols-rounded">payments</span>
-        <div class="val"><span id="repTotal">۰</span><small>تومان</small></div>
-        <div class="lbl">مجموع هزینه‌ها</div>
-      </div>
-      <div class="stat">
-        <span class="material-symbols-rounded">handyman</span>
-        <div class="val"><span id="repCount">۰</span><small>مورد</small></div>
-        <div class="lbl">تعداد سرویس</div>
-      </div>
-      <div class="stat">
-        <span class="material-symbols-rounded">trending_up</span>
-        <div class="val"><span id="repAvg">۰</span><small>تومان</small></div>
-        <div class="lbl">میانگین هر سرویس</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <span class="material-symbols-rounded">bar_chart</span>
-        <h3>هزینه به تفکیک سرویس</h3>
-      </div>
-      <div id="repBreakdown"></div>
-    </div>
+<div class="stats-row report-stats"><div class="stat"><span class="material-symbols-rounded">payments</span><div class="val"><span id="repTotal">۰</span><small>تومان</small></div><div class="lbl">کل هزینه‌های پرداخت‌شده</div></div><div class="stat"><span class="material-symbols-rounded">receipt_long</span><div class="val"><span id="repCount">۰</span><small>سرویس</small></div><div class="lbl">تعداد سرویس‌های دارای هزینه</div></div></div><div class="card"><div class="card-head"><span class="material-symbols-rounded">calendar_month</span><h3>گزارش ماهانه هزینه‌ها</h3></div><div id="repBreakdown"></div></div>
   </section>
 
   <!-- ───────── صفحه تنظیمات ───────── -->
@@ -1488,7 +1455,8 @@ function defaultState(){
     theme: 'light',
     clientId: '',
     services: {},   // { [serviceId]: { lastKm, lastDate } }
-    history: []     // [{ id, serviceId, name, icon, km, cost, date, note, createdAt }]
+    history: [],
+    trash: []       // سوابق حذف‌شده و قابل‌بازیابی
   };
 }
 
@@ -1498,7 +1466,7 @@ function loadState(){
     if (raw){
       const parsed = JSON.parse(raw);
       const loaded = Object.assign(defaultState(), parsed);
-      delete loaded.model;
+      delete loaded.model;if(!Array.isArray(loaded.trash))loaded.trash=[];
       return loaded;
     }
   }catch(e){ console.warn('خطا در خواندن حافظه:', e); }
