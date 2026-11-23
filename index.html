@@ -1389,12 +1389,12 @@ function persianPartsToDate(parts){
   if(persianDateCache.has(key))return new Date(persianDateCache.get(key));
   try{
     const formatter=new Intl.DateTimeFormat('en-US-u-ca-persian-nu-latn',{year:'numeric',month:'numeric',day:'numeric',timeZone:'UTC'});
-    const start=Date.UTC(jy+621,0,1);
-    for(let offset=0;offset<370;offset++){
+    const start=Date.UTC(jy+621,0,1,12);
+    for(let offset=0;offset<430;offset++){
       const candidate=new Date(start+offset*86400000),values={};
       formatter.formatToParts(candidate).forEach(part=>{if(part.type==='year'||part.type==='month'||part.type==='day')values[part.type]=Number(part.value);});
       if(values.year===jy&&values.month===jm&&values.day===jd){
-        const result=new Date(candidate.getUTCFullYear(),candidate.getUTCMonth(),candidate.getUTCDate(),12);
+        const result=new Date(Date.UTC(candidate.getUTCFullYear(),candidate.getUTCMonth(),candidate.getUTCDate(),12));
         persianDateCache.set(key,result.getTime());return result;
       }
     }
@@ -1517,7 +1517,7 @@ function getStatus(service){
   let daysRemaining = null;
   if (rec.lastDate) {
     try {
-      const parts = toEnDigits(rec.lastDate).split('/').map(Number);
+      const parts = toEnDigits(rec.lastDate).split(/[\/.-]/).map(Number);
       const d = persianPartsToDate(parts);
       if(d) daysRemaining = daysInterval - Math.floor((Date.now() - d.getTime()) / 86400000);
     } catch(e) {}
@@ -1560,7 +1560,7 @@ function renderTopbar(){
    ================================================================ */
 function serviceItemHTML(service,st){
  const none=st.key==='none',kmText=none?'هر '+fa(st.interval)+' کیلومتر ☆ هر '+fa(st.daysInterval)+' روز':st.remaining<0?fa(Math.abs(st.remaining))+' کیلومتر از موعد گذشته':fa(st.remaining)+' کیلومتر تا موعد';
- const dayText=none?'':st.daysRemaining===null?'زمان ثبت نشده':st.daysRemaining<0?fa(Math.abs(st.daysRemaining))+' روز از موعد گذشته':fa(st.daysRemaining)+' روز تا موعد';
+ const dayText=none?'':st.daysRemaining===null?'زمان ثبت نشده':st.daysRemaining<0?formatDurationDays(Math.abs(st.daysRemaining))+' از موعد گذشته':formatDurationDays(st.daysRemaining)+' تا موعد';
  const lastText=none?'':'آخرین تعویض و تعمیر : '+fa(st.lastKm)+' کیلومتر ☆ '+esc(st.lastDate||'تاریخ نامشخص')+' تاریخ';
  const progress=none?'':'<div class="s-progress" role="progressbar" aria-valuenow="'+st.progressPct.toFixed(0)+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+st.progressPct.toFixed(1)+'%"></i></div>';
  const actions='<button class="detail-btn" data-details="'+esc(service.id)+'">جزئیات</button><button class="detail-btn history-btn" data-service-history="'+esc(service.id)+'">سوابق</button><button class="s-btn" data-register="'+esc(service.id)+'" title="ثبت تعویض یا تعمیر" aria-label="ثبت تعویض یا تعمیر"><span class="material-symbols-rounded">add</span></button>';
@@ -1601,7 +1601,7 @@ function openServicePanel(serviceId, mode){
     const statusLabel = st.key === 'overdue' ? 'گذشته از موعد' : st.key === 'near' ? 'نزدیک موعد' : st.key === 'none' ? 'ثبت نشده' : 'به‌روز';
     const last = st.lastDate ? esc(displayJalaliDate(st.lastDate)) + ' ☆ ' + fa(st.lastKm) + ' کیلومتر' : 'ثبت نشده';
     const dueKm = st.key === 'none' ? 'هر ' + fa(st.interval) + ' کیلومتر' : st.remaining < 0 ? fa(Math.abs(st.remaining)) + ' کیلومتر دیرکرد' : fa(st.remaining) + ' کیلومتر باقی‌مانده';
-    const dueDays = st.daysRemaining === null ? 'پس از ثبت تاریخ مشخص می‌شود' : st.daysRemaining < 0 ? fa(Math.abs(st.daysRemaining)) + ' روز دیرکرد' : fa(st.daysRemaining) + ' روز باقی‌مانده';
+    const dueDays = st.daysRemaining === null ? 'پس از ثبت تاریخ مشخص می‌شود' : st.daysRemaining < 0 ? formatDurationDays(Math.abs(st.daysRemaining)) + ' دیرکرد' : formatDurationDays(st.daysRemaining) + ' باقی‌مانده';
     const current = state.services[serviceId] || {};
     content.innerHTML = `
       <div class="panel-status sc-${st.key}">${statusLabel}</div>
@@ -1833,7 +1833,7 @@ function openJalaliPicker(inputId){
 function renderJalaliPicker(){
   const title=document.getElementById('jalaliPickerTitle'),days=document.getElementById('jalaliPickerDays');if(!title||!days)return;
   const {year,month,selected,today}=jalaliPickerState;title.textContent=JALALI_MONTH_NAMES[month-1]+' '+fa(year);
-  const first=persianPartsToDate([year,month,1]),offset=first?(first.getDay()+1)%7:0,total=jalaliMonthLength(year,month);
+  const first=persianPartsToDate([year,month,1]),offset=first?(first.getUTCDay()+1)%7:0,total=jalaliMonthLength(year,month);
   let html='';for(let i=0;i<offset;i++)html+='<button class="jalali-day" disabled></button>';
   for(let d=1;d<=total;d++){const value=jalaliString(year,month,d),cls='jalali-day'+(value===selected?' selected':'')+(value===today?' today':'');html+='<button type="button" class="'+cls+'" data-jalali-day="'+value+'">'+fa(d)+'</button>';}
   days.innerHTML=html;
@@ -2277,7 +2277,7 @@ function bindEvents(){
   $('#btnHistoryTrash').addEventListener('click',()=>{historyTrashView=!historyTrashView;selectedHistoryIds.clear();renderHistory();});
 
   /* --- فیلتر زنده جستجو --- */
-  document.addEventListener('input',e=>{if(e.target.id==='serviceSearchInput')renderServiceSearch(e.target.value);});
+  document.addEventListener('input',e=>{if(e.target.id==='serviceSearchInput')renderServiceSearch(e.target.value);if(e.target.matches('#editServiceYears,#editServiceMonths,#editServiceDays')){const total=parseNum($('#editServiceYears').value)*365+parseNum($('#editServiceMonths').value)*30+parseNum($('#editServiceDays').value);$('#editServiceDaysPreview').textContent='مجموع: '+formatDurationDays(total);}});
 
   /* --- مودال --- */
   $('#btnCancelModal').addEventListener('click', closeModal);
