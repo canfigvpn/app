@@ -1890,6 +1890,7 @@ function validateBackupData(data){
   if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('ساختار فایل پشتیبان نامعتبر است');
   if(!data.services||typeof data.services!=='object'||Array.isArray(data.services))throw new Error('بخش سرویس‌های فایل پشتیبان نامعتبر است');
   if(data.history!=null&&!Array.isArray(data.history))throw new Error('ساختار تاریخچه فایل پشتیبان نامعتبر است');
+  if(data.trash!=null&&!Array.isArray(data.trash))throw new Error('ساختار سطل زباله فایل پشتیبان نامعتبر است');
   if(data.customServices!=null&&!Array.isArray(data.customServices))throw new Error('فهرست سرویس‌های سفارشی نامعتبر است');
   if(data.serviceSettings!=null&&(typeof data.serviceSettings!=='object'||Array.isArray(data.serviceSettings)))throw new Error('تنظیمات سرویس‌ها نامعتبر است');
   const safe=defaultState();
@@ -1918,6 +1919,7 @@ function validateBackupData(data){
       createdAt:Number.isFinite(Number(r.createdAt))&&Number(r.createdAt)>0?Number(r.createdAt):0
     };
   });
+  safe.trash=(data.trash||[]).filter(r=>r&&typeof r==='object'&&!Array.isArray(r)).slice(0,10000).map((r,index)=>{const km=Number(r.km),cost=Number(r.cost);return {id:typeof r.id==='string'&&r.id.length<=150?r.id:'trash_'+index,serviceId:typeof r.serviceId==='string'&&/^[a-zA-Z0-9_-]{1,100}$/.test(r.serviceId)?r.serviceId:'',name:typeof r.name==='string'?r.name.slice(0,120):'سرویس ثبت‌شده',icon:typeof r.icon==='string'&&/^[a-zA-Z0-9_]{1,64}$/.test(r.icon)?r.icon:'build',km:Number.isFinite(km)&&km>=0?Math.floor(km):0,cost:Number.isFinite(cost)&&cost>=0?Math.floor(cost):0,date:typeof r.date==='string'?r.date.slice(0,30):'',note:typeof r.note==='string'?r.note.slice(0,2000):'',createdAt:Number.isFinite(Number(r.createdAt))&&Number(r.createdAt)>0?Number(r.createdAt):0};});
   safe.customServices=(data.customServices||[]).filter(x=>x&&typeof x==='object'&&!Array.isArray(x)&&typeof x.id==='string'&&x.id!=='__proto__'&&/^[a-zA-Z0-9_-]{1,100}$/.test(x.id)&&typeof x.name==='string').slice(0,200).map(x=>({
     id:x.id,name:x.name.slice(0,120),icon:typeof x.icon==='string'&&/^[a-zA-Z0-9_]{1,64}$/.test(x.icon)?x.icon:'build',
     interval:Number.isFinite(Number(x.interval))&&Number(x.interval)>0?Number(x.interval):10000,
