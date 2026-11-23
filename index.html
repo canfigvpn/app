@@ -1697,104 +1697,48 @@ function renderHome(){
 /* ================================================================
    ۷) رندر : تاریخچه
    ================================================================ */
+let historyTrashView=false;
+const selectedHistoryIds=new Set();
 function renderHistory(){
-  const el = $('#historyList');
-  const list = [...state.history].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-
-  $('#historyCount').textContent = `${fa(list.length)} سرویس ثبت‌شده`;
-
-  if (!list.length){
-    el.innerHTML = `
-      <div class="empty-state">
-        <span class="material-symbols-rounded">history</span>
-        <p>هنوز سرویسی ثبت نشده است</p>
-        <span>از صفحه «خانه» سرویس‌ها را ثبت کنید</span>
-      </div>`;
-    return;
-  }
-
-  el.innerHTML = list.map(r => `
-    <div class="h-item">
-      <div class="h-icon">
-        <span class="material-symbols-rounded">${esc(r.icon || 'build')}</span>
-      </div>
-      <div class="h-info">
-        <div class="h-name">${esc(r.name)}</div>
-        <div class="h-meta">
-          <span>
-            <span class="material-symbols-rounded">calendar_today</span>
-            ${esc(r.date || '—')}
-          </span>
-          <span>
-            <span class="material-symbols-rounded">speed</span>
-            ${fa(r.km)} کیلومتر
-          </span>
-        </div>
-        ${r.note ? `<div class="h-note">${esc(r.note)}</div>` : ''}
-      </div>
-      <div class="h-side">
-        <div class="h-cost">
-          ${r.cost ? `${fa(r.cost)} <small>تومان</small>` : '<small>بدون هزینه</small>'}
-        </div>
-        <button class="h-del" data-del="${esc(r.id)}" title="حذف">
-          <span class="material-symbols-rounded">delete</span>
-        </button>
-      </div>
-    </div>
-  `).join('');
+ const el=$('#historyList'),toolbar=$('#historyToolbar'),trashBtn=$('#btnHistoryTrash');
+ const source=historyTrashView?(state.trash||[]):state.history;
+ const list=[...source].sort((a,b)=>historyTimestamp(b)-historyTimestamp(a));
+ trashBtn.classList.toggle('active',historyTrashView);trashBtn.title=historyTrashView?'بازگشت به تاریخچه':'نمایش سطل زباله';
+ trashBtn.innerHTML='<span class="material-symbols-rounded">'+(historyTrashView?'history':'delete')+'</span>';
+ $('#historyCount').textContent=historyTrashView?fa(list.length)+' مورد در سطل زباله':fa(list.length)+' سرویس ثبت‌شده';
+ const selected=list.filter(r=>selectedHistoryIds.has(r.id)).length;
+ if(historyTrashView){
+  toolbar.innerHTML='<label class="history-select-all"><input type="checkbox" data-history-select-all '+(list.length&&selected===list.length?'checked':'')+(!list.length?'disabled':'')+'> انتخاب همه</label><div class="history-bulk-actions"><button class="btn btn-outline" type="button" data-history-action="restore-selected" '+(!selected?'disabled':'')+'><span class="material-symbols-rounded">restore</span> برگرداندن انتخابی</button><button class="btn btn-danger" type="button" data-history-action="purge-selected" '+(!selected?'disabled':'')+'><span class="material-symbols-rounded">delete_forever</span> حذف انتخابی</button><button class="btn btn-danger" type="button" data-history-action="purge-all" '+(!list.length?'disabled':'')+'><span class="material-symbols-rounded">delete_sweep</span> پاکسازی همگانی</button></div>';
+ }else{
+  toolbar.innerHTML='<label class="history-select-all"><input type="checkbox" data-history-select-all '+(list.length&&selected===list.length?'checked':'')+(!list.length?'disabled':'')+'> انتخاب همه</label><div class="history-bulk-actions"><button class="btn btn-danger" type="button" data-history-action="trash-selected" '+(!selected?'disabled':'')+'><span class="material-symbols-rounded">delete</span> انتقال انتخاب‌شده‌ها به سطل</button></div>';
+ }
+ if(!list.length){el.innerHTML='<div class="empty-state"><span class="material-symbols-rounded">'+(historyTrashView?'delete_outline':'history')+'</span><p>'+(historyTrashView?'سطل زباله خالی است':'هنوز سرویسی ثبت نشده است')+'</p><span>'+(historyTrashView?'رکوردهای حذف‌شده اینجا نمایش داده می‌شوند':'از صفحه «خانه» سرویس‌ها را ثبت کنید')+'</span></div>';return;}
+ el.innerHTML=list.map(r=>'<div class="h-item '+(historyTrashView?'h-item-trashed':'')+'"><label class="history-record-check" title="انتخاب رکورد"><input type="checkbox" data-select-history="'+esc(r.id)+'" '+(selectedHistoryIds.has(r.id)?'checked':'')+'></label><div class="h-icon"><span class="material-symbols-rounded">'+esc(r.icon||'build')+'</span></div><div class="h-info"><div class="h-name">'+esc(r.name)+'</div><div class="h-meta"><span><span class="material-symbols-rounded">calendar_today</span>'+esc(r.date||'—')+'</span><span><span class="material-symbols-rounded">speed</span>'+fa(r.km)+' کیلومتر</span></div>'+(r.note?'<div class="h-note">'+esc(r.note)+'</div>':'')+'</div><div class="h-side"><div class="h-cost">'+(Number(r.cost)>0?fa(r.cost)+' <small>تومان</small>':'<small>بدون هزینه</small>')+'</div>'+(historyTrashView?'<button class="h-restore" data-restore="'+esc(r.id)+'" title="برگرداندن"><span class="material-symbols-rounded">restore</span></button>':'<button class="h-del" data-del="'+esc(r.id)+'" title="انتقال به سطل زباله"><span class="material-symbols-rounded">delete</span></button>')+'</div></div>').join('');
 }
 
 /* ================================================================
    ۸) رندر : گزارش هزینه
    ================================================================ */
 function renderReport(){
-  const records = state.history;
-  const total = records.reduce((s, r) => s + (Number(r.cost) || 0), 0);
-
-  $('#repTotal').textContent = fa(total);
-  $('#repCount').textContent = fa(records.length);
-  $('#repAvg').textContent   = fa(records.length ? Math.round(total / records.length) : 0);
-
-  const map = new Map();
-  records.forEach(r => {
-    const k = r.serviceId || r.name;
-    if (!map.has(k)){
-      map.set(k, { name: r.name, icon: r.icon || 'build', total: 0, count: 0 });
-    }
-    const o = map.get(k);
-    o.total += Number(r.cost) || 0;
-    o.count++;
-  });
-
-  const arr = [...map.values()].sort((a, b) => b.total - a.total);
-  const max = arr.length ? arr[0].total : 0;
-  const box = $('#repBreakdown');
-
-  if (!arr.length){
-    box.innerHTML = `
-      <div class="empty-state small">
-        <span class="material-symbols-rounded">insights</span>
-        <p>داده‌ای برای نمایش نیست</p>
-      </div>`;
-    return;
-  }
-
-  box.innerHTML = arr.map(o => {
-    const pct = max ? (o.total / max) * 100 : 0;
-    return `
-      <div class="bar-row">
-        <div class="bar-top">
-          <span class="bar-name">
-            <span class="material-symbols-rounded">${esc(o.icon || 'build')}</span>
-            <span>${esc(o.name)}</span>
-          </span>
-          <span class="bar-val">${fa(o.total)} <small>تومان</small></span>
-        </div>
-        <div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%"></div></div>
-        <div class="bar-sub">${fa(o.count)} بار انجام شده</div>
-      </div>
-    `;
-  }).join('');
+ const records=state.history.filter(r=>Number(r.cost)>0),total=records.reduce((s,r)=>s+Number(r.cost||0),0);
+ $('#repTotal').textContent=fa(total);$('#repCount').textContent=fa(records.length);
+ const box=$('#repBreakdown');
+ if(!records.length){box.innerHTML='<div class="empty-state small"><span class="material-symbols-rounded">receipt_long</span><p>هنوز هزینه‌ای برای سرویس‌ها ثبت نشده است</p></div>';return;}
+ const months=new Map();
+ records.forEach(r=>{
+  const p=toEnDigits(String(r.date||'')).split(/[\\/.-]/).map(Number);
+  const y=p.length>=2&&p[0]>0?p[0]:0,m=p.length>=2&&p[1]>=1&&p[1]<=12?p[1]:0;
+  const key=y&&m?y+'/'+String(m).padStart(2,'0'):'نامشخص';
+  if(!months.has(key))months.set(key,{year:y,month:m,total:0,records:[]});
+  const g=months.get(key);g.total+=Number(r.cost);g.records.push(r);
+ });
+ const names=['','فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+ const sorted=[...months.entries()].sort((a,b)=>a[0]==='نامشخص'?1:b[0]==='نامشخص'?-1:b[1].year-a[1].year||b[1].month-a[1].month);
+ box.innerHTML=sorted.map(([key,g])=>{
+  const title=key==='نامشخص'?'تاریخ نامشخص':names[g.month]+' '+fa(g.year);
+  const rows=g.records.sort((a,b)=>historyTimestamp(b)-historyTimestamp(a)).map(r=>'<div class="expense-record"><div class="expense-record-icon"><span class="material-symbols-rounded">'+esc(r.icon||'build')+'</span></div><div class="expense-record-info"><strong>'+esc(r.name)+'</strong><small>'+esc(r.date||'تاریخ نامشخص')+' · '+fa(r.km)+' کیلومتر</small>'+(r.note?'<span>'+esc(r.note)+'</span>':'')+'</div><b>'+fa(r.cost)+' <small>تومان</small></b></div>').join('');
+  return '<section class="expense-month"><header><div><strong>'+title+'</strong><small>'+fa(g.records.length)+' سرویس دارای هزینه</small></div><b>'+fa(g.total)+' <small>تومان</small></b></header><div class="expense-month-list">'+rows+'</div></section>';
+ }).join('');
 }
 
 /* ================================================================
