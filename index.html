@@ -1555,12 +1555,13 @@ function renderTopbar(){
 /* ================================================================
    ۶) رندر : صفحه خانه
    ================================================================ */
-function serviceItemHTML(service, st){
-  const kmText = st.key === 'none' ? 'هر ' + fa(st.interval) + ' کیلومتر ☆ هر ' + fa(st.daysInterval) + ' روز' : st.remaining < 0 ? fa(Math.abs(st.remaining)) + ' کیلومتر از موعد گذشته' : fa(st.remaining) + ' کیلومتر تا موعد';
-  const dayText = st.key === 'none' ? '' : st.daysRemaining === null ? 'زمان ثبت نشده' : st.daysRemaining < 0 ? fa(Math.abs(st.daysRemaining)) + ' روز از موعد گذشته' : fa(st.daysRemaining) + ' روز تا موعد';
-  const lastText = st.key === 'none' ? 'آخرین تعویض و تعمیر : ثبت نشده' : 'آخرین تعویض و تعمیر : ' + fa(st.lastKm) + ' کیلومتر ☆ ' + esc(st.lastDate || 'تاریخ نامشخص') + ' تاریخ';
-  const progress = st.key === 'none' ? '' : '<div class="s-progress" role="progressbar" aria-valuenow="' + st.progressPct.toFixed(0) + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + st.progressPct.toFixed(1) + '%"></i></div>';
-  return '<article class="s-item"><div class="s-item-main"><div class="s-icon"><span class="material-symbols-rounded">' + esc(service.icon || 'build') + '</span></div><div class="s-name">' + esc(service.name) + '</div><div class="s-info"><div class="s-last">' + lastText + '</div><div class="s-due"><span>' + kmText + '</span>' + (dayText ? '<span class="due-sep">/</span><span>' + dayText + '</span>' : '') + '</div>' + progress + '</div></div><div class="s-actions"><button class="detail-btn" data-details="' + esc(service.id) + '">جزئیات</button><button class="detail-btn history-btn" data-service-history="' + esc(service.id) + '">سوابق</button><button class="s-btn" data-register="' + esc(service.id) + '" title="ثبت تعویض یا تعمیر" aria-label="ثبت تعویض یا تعمیر"><span class="material-symbols-rounded">add</span></button></div></article>';
+function serviceItemHTML(service,st){
+ const none=st.key==='none',kmText=none?'هر '+fa(st.interval)+' کیلومتر ☆ هر '+fa(st.daysInterval)+' روز':st.remaining<0?fa(Math.abs(st.remaining))+' کیلومتر از موعد گذشته':fa(st.remaining)+' کیلومتر تا موعد';
+ const dayText=none?'':st.daysRemaining===null?'زمان ثبت نشده':st.daysRemaining<0?fa(Math.abs(st.daysRemaining))+' روز از موعد گذشته':fa(st.daysRemaining)+' روز تا موعد';
+ const lastText=none?'آخرین تعویض و تعمیر : ثبت نشده':'آخرین تعویض و تعمیر : '+fa(st.lastKm)+' کیلومتر ☆ '+esc(st.lastDate||'تاریخ نامشخص')+' تاریخ';
+ const progress=none?'':'<div class="s-progress" role="progressbar" aria-valuenow="'+st.progressPct.toFixed(0)+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+st.progressPct.toFixed(1)+'%"></i></div>';
+ const actions='<button class="detail-btn" data-details="'+esc(service.id)+'">جزئیات</button><button class="detail-btn history-btn" data-service-history="'+esc(service.id)+'">سوابق</button><button class="s-btn" data-register="'+esc(service.id)+'" title="ثبت تعویض یا تعمیر" aria-label="ثبت تعویض یا تعمیر"><span class="material-symbols-rounded">add</span></button>';
+ return '<article class="s-item"><div class="s-item-main"><div class="s-icon"><span class="material-symbols-rounded">'+esc(service.icon||'build')+'</span></div><div class="s-name">'+esc(service.name)+'</div><div class="s-info">'+(none?'<div class="s-last s-last-inline"><span>'+lastText+'</span><div class="s-actions s-actions-inline">'+actions+'</div></div>':'<div class="s-last">'+lastText+'</div>')+'<div class="s-due"><span>'+kmText+'</span>'+(dayText?'<span class="due-sep">/</span><span>'+dayText+'</span>':'')+'</div>'+progress+'</div></div>'+(none?'':'<div class="s-actions">'+actions+'</div>')+'</article>';
 }
 
 function historyTimestamp(record){
@@ -2174,16 +2175,10 @@ function bindEvents(){
       return;
     }
 
-    const delBtn = e.target.closest('[data-del]');
-    if (delBtn){
-      const id=delBtn.dataset.del,rec=state.history.find(r=>r.id===id);if(!rec)return;
-      state.history=state.history.filter(r=>r.id!==id);state.trash=state.trash||[];state.trash.unshift(rec);
-      recomputeService(rec.serviceId);selectedHistoryIds.delete(id);save();renderAll();toast('رکورد به سطل زباله منتقل شد');
-    }
-  });
-
+    const delBtn=e.target.closest('[data-del]');
+    if(delBtn){const id=delBtn.dataset.del,rec=state.history.find(r=>r.id===id);if(rec){state.history=state.history.filter(r=>r.id!==id);state.trash=state.trash||[];state.trash.unshift(rec);recomputeService(rec.serviceId);selectedHistoryIds.delete(id);save();renderAll();toast('رکورد به سطل زباله منتقل شد');}}
     const restoreBtn=e.target.closest('[data-restore]');
-    if(restoreBtn){const id=restoreBtn.dataset.restore,rec=(state.trash||[]).find(r=>r.id===id);if(!rec)return;state.trash=state.trash.filter(r=>r.id!==id);state.history.push(rec);recomputeService(rec.serviceId);selectedHistoryIds.delete(id);save();renderAll();toast('رکورد به تاریخچه برگشت ✓');return;}
+    if(restoreBtn){const id=restoreBtn.dataset.restore,rec=(state.trash||[]).find(r=>r.id===id);if(rec){state.trash=state.trash.filter(r=>r.id!==id);state.history.push(rec);recomputeService(rec.serviceId);selectedHistoryIds.delete(id);save();renderAll();toast('رکورد به تاریخچه برگشت ✓');}return;}
     const actionBtn=e.target.closest('[data-history-action]');
     if(actionBtn){const action=actionBtn.dataset.historyAction;
       if(action==='trash-selected'){const moving=state.history.filter(r=>selectedHistoryIds.has(r.id));if(!moving.length)return;state.history=state.history.filter(r=>!selectedHistoryIds.has(r.id));state.trash=state.trash||[];state.trash.unshift(...moving);[...new Set(moving.map(r=>r.serviceId))].forEach(recomputeService);selectedHistoryIds.clear();save();renderAll();toast('رکوردهای انتخاب‌شده به سطل منتقل شدند');return;}
