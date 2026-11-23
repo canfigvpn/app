@@ -1569,7 +1569,7 @@ function serviceItemHTML(service,st){
 
 function historyTimestamp(record){
   if(Number(record.createdAt))return Number(record.createdAt);
-  try{const raw=toEnDigits(record.date||'').trim();if(/^\\d{4}-\\d{2}-\\d{2}$/.test(raw)){const d=new Date(raw+'T12:00:00');return Number.isNaN(d.getTime())?0:d.getTime();}const p=raw.split(/[\\/.-]/).map(Number);const d=p[0]>1700?new Date(p[0],p[1]-1,p[2],12):persianPartsToDate(p);return d&&!Number.isNaN(d.getTime())?d.getTime():0;}catch(e){return 0;}
+  try{const raw=toEnDigits(record.date||'').trim();if(/^\d{4}-\d{2}-\d{2}$/.test(raw)){const d=new Date(raw+'T12:00:00');return Number.isNaN(d.getTime())?0:d.getTime();}const p=raw.split(/[\/.-]/).map(Number);const d=p[0]>1700?new Date(p[0],p[1]-1,p[2],12):persianPartsToDate(p);return d&&!Number.isNaN(d.getTime())?d.getTime():0;}catch(e){return 0;}
 }
 
 function openServicePanel(serviceId, mode){
@@ -1719,7 +1719,7 @@ function renderHistory(){
    ================================================================ */
 let selectedReportMonth=null;
 const REPORT_MONTH_NAMES=['','فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
-function reportMonthFromDate(value){const raw=toEnDigits(String(value||'')).trim();if(/^\\d{4}-\\d{2}-\\d{2}$/.test(raw)){const d=new Date(raw+'T12:00:00');if(!Number.isNaN(d.getTime())){const p=jalaliParts(d);return{year:p.year,month:p.month};}}const p=raw.split(/[\\/.-]/).map(Number);return p.length>=2&&p[0]>0&&p[1]>=1&&p[1]<=12?{year:p[0],month:p[1]}:null;}
+function reportMonthFromDate(value){const raw=toEnDigits(String(value||'')).trim();if(/^\d{4}-\d{2}-\d{2}$/.test(raw)){const d=new Date(raw+'T12:00:00');if(!Number.isNaN(d.getTime())){const p=jalaliParts(d);return{year:p.year,month:p.month};}}const p=raw.split(/[\/.-]/).map(Number);return p.length>=2&&p[0]>0&&p[1]>=1&&p[1]<=12?{year:p[0],month:p[1]}:null;}
 function reportMonthKey(year,month){return year*12+(month-1);}
 function reportMonthParts(key){return{year:Math.floor(key/12),month:key%12+1};}
 function reportMonthTitle(year,month){return REPORT_MONTH_NAMES[month]+' '+fa(year);}
