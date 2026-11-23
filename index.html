@@ -1566,12 +1566,8 @@ function serviceItemHTML(service,st){
 }
 
 function historyTimestamp(record){
-  if (Number(record.createdAt)) return Number(record.createdAt);
-  try {
-    const parts = toEnDigits(record.date || '').split('/').map(Number);
-    const parsed=persianPartsToDate(parts);
-    return parsed?parsed.getTime():0;
-  } catch(e) { return 0; }
+  if(Number(record.createdAt))return Number(record.createdAt);
+  try{const raw=toEnDigits(record.date||'').trim();if(/^\\d{4}-\\d{2}-\\d{2}$/.test(raw)){const d=new Date(raw+'T12:00:00');return Number.isNaN(d.getTime())?0:d.getTime();}const p=raw.split(/[\\/.-]/).map(Number);const d=p[0]>1700?new Date(p[0],p[1]-1,p[2],12):persianPartsToDate(p);return d&&!Number.isNaN(d.getTime())?d.getTime():0;}catch(e){return 0;}
 }
 
 function openServicePanel(serviceId, mode){
@@ -1720,12 +1716,33 @@ function renderHistory(){
    ================================================================ */
 let selectedReportMonth=null;
 const REPORT_MONTH_NAMES=['','فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
-function reportMonthFromDate(value){const p=toEnDigits(String(value||'')).split(/[\\/.-]/).map(Number);return p.length>=2&&p[0]>0&&p[1]>=1&&p[1]<=12?{year:p[0],month:p[1]}:null;}
+function reportMonthFromDate(value){const raw=toEnDigits(String(value||'')).trim();if(/^\\d{4}-\\d{2}-\\d{2}$/.test(raw)){const d=new Date(raw+'T12:00:00');if(!Number.isNaN(d.getTime())){const p=jalaliParts(d);return{year:p.year,month:p.month};}}const p=raw.split(/[\\/.-]/).map(Number);return p.length>=2&&p[0]>0&&p[1]>=1&&p[1]<=12?{year:p[0],month:p[1]}:null;}
 function reportMonthKey(year,month){return year*12+(month-1);}
 function reportMonthParts(key){return{year:Math.floor(key/12),month:key%12+1};}
 function reportMonthTitle(year,month){return REPORT_MONTH_NAMES[month]+' '+fa(year);}
-function renderReport(){const records=state.history.filter(r=>Number(r.cost)>0),grouped=new Map();records.forEach(r=>{const p=reportMonthFromDate(r.date);if(!p)return;const key=reportMonthKey(p.year,p.month);if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(r);});if(selectedReportMonth===null){if(grouped.size)selectedReportMonth=Math.max(...grouped.keys());else{const p=reportMonthFromDate(todayFa());selectedReportMonth=p?reportMonthKey(p.year,p.month):0;}}const current=reportMonthParts(selectedReportMonth),items=grouped.get(selectedReportMonth)||[],title=reportMonthTitle(current.year,current.month),total=items.reduce((sum,r)=>sum+Number(r.cost||0),0);$('#repMonthName').textContent=title;$('#repTotalMonth').textContent=title;$('#repTotal').textContent=fa(total);$('#repCount').textContent=fa(items.length);$('#repPrevMonth').disabled=selectedReportMonth<=0;const now=reportMonthFromDate(todayFa());$('#repNextMonth').disabled=now?selectedReportMonth>=reportMonthKey(now.year,now.month):false;}
-function openReportHistory(){const records=state.history.filter(r=>Number(r.cost)>0).slice().sort((a,b)=>historyTimestamp(b)-historyTimestamp(a));let modal=$('#reportHistoryModal');if(!modal){modal=document.createElement('div');modal.id='reportHistoryModal';modal.className='report-history-backdrop';modal.innerHTML='<section class="report-history-panel" role="dialog" aria-modal="true" aria-labelledby="reportHistoryTitle"><header class="report-history-head"><div><h2 id="reportHistoryTitle">تاریخچه هزینه‌ها</h2><p>تمام سرویس‌هایی که برای آن‌ها هزینه ثبت شده است</p></div><button type="button" class="report-history-close" id="closeReportHistory" aria-label="بستن"><span class="material-symbols-rounded">close</span></button></header><div class="report-history-list" id="reportHistoryList"></div><footer class="report-history-total"><span>مجموع تمام هزینه‌های پرداخت‌شده</span><strong id="reportHistoryTotal">۰ تومان</strong></footer></section>';document.body.appendChild(modal);modal.addEventListener('click',e=>{if(e.target===modal||e.target.closest('#closeReportHistory'))modal.classList.remove('show');});}const list=$('#reportHistoryList');if(!records.length)list.innerHTML='<div class="empty-state"><span class="material-symbols-rounded">receipt_long</span><p>هنوز هزینه‌ای ثبت نشده است</p><span>هزینه سرویس‌ها پس از ثبت در این بخش نمایش داده می‌شود</span></div>';else list.innerHTML=records.map(r=>'<article class="h-item"><div class="h-icon"><span class="material-symbols-rounded">'+esc(r.icon||'build')+'</span></div><div class="h-info"><div class="h-name">'+esc(r.name)+'</div><div class="h-meta"><span><span class="material-symbols-rounded">calendar_today</span>'+esc(r.date||'تاریخ نامشخص')+'</span><span><span class="material-symbols-rounded">speed</span>'+fa(r.km)+' کیلومتر</span></div>'+(r.note?'<div class="h-note">'+esc(r.note)+'</div>':'')+'</div><div class="h-side"><div class="h-cost">'+fa(r.cost)+' <small>تومان</small></div></div></article>').join('');$('#reportHistoryTotal').textContent=fa(records.reduce((sum,r)=>sum+Number(r.cost||0),0))+' تومان';modal.classList.add('show');}
+function renderReport(){
+  const records=state.history.filter(r=>Number(r.cost)>0),grouped=new Map();
+  records.forEach(r=>{const p=reportMonthFromDate(r.date);if(!p)return;const key=reportMonthKey(p.year,p.month);if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(r);});
+  if(selectedReportMonth===null){if(grouped.size)selectedReportMonth=Math.max(...grouped.keys());else{const p=reportMonthFromDate(todayFa());selectedReportMonth=p?reportMonthKey(p.year,p.month):0;}}
+  const current=reportMonthParts(selectedReportMonth),items=grouped.get(selectedReportMonth)||[],title=reportMonthTitle(current.year,current.month),total=items.reduce((sum,r)=>sum+Number(r.cost||0),0);
+  $('#repMonthName').textContent=title;$('#repTotalMonth').textContent=title;$('#repTotal').textContent=fa(total);$('#repCount').textContent=fa(state.history.length);
+  $('#repPrevMonth').disabled=selectedReportMonth<=0;const now=reportMonthFromDate(todayFa());$('#repNextMonth').disabled=now?selectedReportMonth>=reportMonthKey(now.year,now.month):false;
+  const monthList=$('#reportMonthList'),monthKeys=[...grouped.keys()].sort((a,b)=>b-a);
+  monthList.innerHTML=monthKeys.length?monthKeys.map(key=>{
+    const p=reportMonthParts(key),rows=grouped.get(key).slice().sort((a,b)=>historyTimestamp(b)-historyTimestamp(a)),monthTotal=rows.reduce((sum,r)=>sum+Number(r.cost||0),0);
+    return '<section class="expense-month"><header><div><strong>'+reportMonthTitle(p.year,p.month)+'</strong><small>'+fa(rows.length)+' سرویس دارای هزینه</small></div><b>'+fa(monthTotal)+' <small>تومان</small></b></header><div class="expense-month-list">'+rows.map(r=>'<article class="expense-record"><span class="expense-record-icon"><span class="material-symbols-rounded">'+esc(r.icon||'build')+'</span></span><div class="expense-record-info"><strong>'+esc(r.name)+'</strong><small>'+esc(displayJalaliDate(r.date))+' · '+fa(r.km)+' کیلومتر</small>'+(r.note?'<span>'+esc(r.note)+'</span>':'')+'</div><b>'+fa(r.cost)+' <small>تومان</small></b></article>').join('')+'</div></section>';
+  }).join(''):'<div class="empty-state small"><span class="material-symbols-rounded">receipt_long</span><p>هنوز هزینه‌ای ثبت نشده است</p><span>سوابق هزینه‌ها پس از ثبت در این بخش نمایش داده می‌شوند</span></div>';
+}
+function openReportHistory(){
+  const records=state.history.filter(r=>Number(r.cost)>0).slice().sort((a,b)=>historyTimestamp(b)-historyTimestamp(a));
+  let modal=$('#reportHistoryModal');
+  if(!modal){modal=document.createElement('div');modal.id='reportHistoryModal';modal.className='report-history-backdrop';modal.innerHTML='<section class="report-history-panel" role="dialog" aria-modal="true" aria-labelledby="reportHistoryTitle"><header class="report-history-head"><div><h2 id="reportHistoryTitle">تمام هزینه‌های ثبت‌شده</h2><p id="reportHistoryCount"></p></div><button type="button" class="report-history-close" id="closeReportHistory" aria-label="بستن"><span class="material-symbols-rounded">close</span></button></header><div class="report-history-list" id="reportHistoryList"></div><footer class="report-history-total"><span>مجموع تمام هزینه‌های پرداخت‌شده</span><strong id="reportHistoryTotal">۰ تومان</strong></footer></section>';document.body.appendChild(modal);modal.addEventListener('click',e=>{if(e.target===modal||e.target.closest('#closeReportHistory'))modal.classList.remove('show');});}
+  $('#reportHistoryCount').textContent='تا امروز '+fa(state.history.length)+' سرویس انجام شده است · '+fa(records.length)+' سرویس دارای هزینه';
+  const list=$('#reportHistoryList');
+  if(!records.length)list.innerHTML='<div class="empty-state"><span class="material-symbols-rounded">receipt_long</span><p>هنوز هزینه‌ای ثبت نشده است</p><span>هزینه سرویس‌ها پس از ثبت در این بخش نمایش داده می‌شود</span></div>';
+  else list.innerHTML=records.map(r=>'<article class="h-item"><div class="h-icon"><span class="material-symbols-rounded">'+esc(r.icon||'build')+'</span></div><div class="h-info"><div class="h-name">'+esc(r.name)+'</div><div class="h-meta"><span><span class="material-symbols-rounded">calendar_today</span>'+esc(displayJalaliDate(r.date))+'</span><span><span class="material-symbols-rounded">speed</span>'+fa(r.km)+' کیلومتر</span></div>'+(r.note?'<div class="h-note">'+esc(r.note)+'</div>':'')+'</div><div class="h-side"><div class="h-cost">'+fa(r.cost)+' <small>تومان</small></div></div></article>').join('');
+  $('#reportHistoryTotal').textContent=fa(records.reduce((sum,r)=>sum+Number(r.cost||0),0))+' تومان';modal.classList.add('show');
+}
 
 /* ================================================================
    ۹) رندر : تنظیمات
@@ -1775,6 +1792,73 @@ function toast(msg){
    ================================================================ */
 let currentServiceId = null;
 
+const JALALI_MONTH_NAMES=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const JALALI_WEEKDAYS=['ش','ی','د','س','چ','پ','ج'];
+let jalaliPickerState={inputId:null,year:0,month:1,selected:'',today:''};
+function jalaliParts(date){
+  const d=new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate(),12));
+  const parts=new Intl.DateTimeFormat('en-US-u-ca-persian-nu-latn',{year:'numeric',month:'numeric',day:'numeric',timeZone:'UTC'}).formatToParts(d);
+  const out={};parts.forEach(x=>{if(['year','month','day'].includes(x.type))out[x.type]=Number(x.value);});
+  return {year:out.year,month:out.month,day:out.day};
+}
+function jalaliString(y,m,d){
+  const digits='۰۱۲۳۴۵۶۷۸۹';
+  const pad=n=>String(n).padStart(2,'0').replace(/\d/g,x=>digits[Number(x)]);
+  return fa(y)+'/'+pad(m)+'/'+pad(d);
+}
+function parseJalaliDate(value){
+  const raw=toEnDigits(String(value||'')).trim();
+  if(/^\d{4}-\d{2}-\d{2}$/.test(raw)){const d=new Date(raw+'T12:00:00');if(!Number.isNaN(d.getTime()))return jalaliParts(d);}
+  const p=raw.split(/[\/.-]/).map(Number);
+  return p.length>=3&&p[0]>=1200&&p[0]<=1600&&p[1]>=1&&p[1]<=12&&p[2]>=1&&p[2]<=31?{year:p[0],month:p[1],day:p[2]}:null;
+}
+function jalaliMonthLength(y,m){let count=0;for(let d=1;d<=31;d++){if(persianPartsToDate([y,m,d]))count=d;else break;}return count||30;}
+function normalizeJalaliPickerMonth(){while(jalaliPickerState.month<1){jalaliPickerState.month=12;jalaliPickerState.year--;}while(jalaliPickerState.month>12){jalaliPickerState.month=1;jalaliPickerState.year++;}}
+function openJalaliPicker(inputId){
+  const input=document.getElementById(inputId);if(!input)return;
+  const today=jalaliParts(new Date()),selected=parseJalaliDate(input.value)||today;
+  jalaliPickerState={inputId,year:selected.year,month:selected.month,selected:input.value?displayJalaliDate(input.value):'',today:jalaliString(today.year,today.month,today.day)};
+  let backdrop=document.getElementById('jalaliPickerBackdrop');
+  if(!backdrop){
+    backdrop=document.createElement('div');backdrop.id='jalaliPickerBackdrop';backdrop.className='jalali-picker-backdrop';
+    backdrop.innerHTML='<section class="jalali-picker" role="dialog" aria-modal="true" aria-label="تقویم شمسی"><header class="jalali-picker-head"><button type="button" data-jalali-nav="-1" aria-label="ماه قبل"><span class="material-symbols-rounded">chevron_right</span></button><strong id="jalaliPickerTitle"></strong><button type="button" data-jalali-nav="1" aria-label="ماه بعد"><span class="material-symbols-rounded">chevron_left</span></button></header><div class="jalali-weekdays">'+JALALI_WEEKDAYS.map(x=>'<span>'+x+'</span>').join('')+'</div><div class="jalali-days" id="jalaliPickerDays"></div><footer class="jalali-picker-foot"><button type="button" data-jalali-close>بستن</button><button type="button" id="jalaliPickerToday">امروز</button></footer></section>';
+    document.body.appendChild(backdrop);
+    backdrop.querySelector('#jalaliPickerToday').addEventListener('click',()=>{const input=document.getElementById(jalaliPickerState.inputId);if(input)input.value=jalaliPickerState.today;closeJalaliPicker();});
+  }
+  renderJalaliPicker();backdrop.classList.add('show');
+}
+function renderJalaliPicker(){
+  const title=document.getElementById('jalaliPickerTitle'),days=document.getElementById('jalaliPickerDays');if(!title||!days)return;
+  const {year,month,selected,today}=jalaliPickerState;title.textContent=JALALI_MONTH_NAMES[month-1]+' '+fa(year);
+  const first=persianPartsToDate([year,month,1]),offset=first?(first.getDay()+1)%7:0,total=jalaliMonthLength(year,month);
+  let html='';for(let i=0;i<offset;i++)html+='<button class="jalali-day" disabled></button>';
+  for(let d=1;d<=total;d++){const value=jalaliString(year,month,d),cls='jalali-day'+(value===selected?' selected':'')+(value===today?' today':'');html+='<button type="button" class="'+cls+'" data-jalali-day="'+value+'">'+fa(d)+'</button>';}
+  days.innerHTML=html;
+}
+function closeJalaliPicker(){const el=document.getElementById('jalaliPickerBackdrop');if(el)el.classList.remove('show');}
+function formatDurationDays(value){
+  let days=Math.max(0,Math.floor(Number(value)||0));if(!days)return '۰ روز';
+  const years=Math.floor(days/365);days%=365;const months=Math.floor(days/30);days%=30;
+  const parts=[];if(years)parts.push(fa(years)+' سال');if(months)parts.push(fa(months)+' ماه');if(days)parts.push(fa(days)+' روز');
+  return parts.join(' و ');
+}
+function displayJalaliDate(value){
+  const raw=toEnDigits(String(value||'')).trim();
+  if(/^\d{4}-\d{2}-\d{2}$/.test(raw)){const d=new Date(raw+'T12:00:00');if(!Number.isNaN(d.getTime())){const p=jalaliParts(d);return jalaliString(p.year,p.month,p.day);}}
+  const p=raw.split(/[\/.-]/).map(Number);
+  if(p.length>=3&&p[0]>=1200&&p[0]<=1600&&p[1]>=1&&p[1]<=12&&p[2]>=1&&p[2]<=31)return jalaliString(p[0],p[1],p[2]);
+  return value||'تاریخ نامشخص';
+}
+function latestServiceRecord(serviceId){
+  return state.history.filter(r=>r.serviceId===serviceId).slice().sort((a,b)=>historyTimestamp(b)-historyTimestamp(a))[0]||null;
+}
+function fillLastServiceRecord(){
+  if(!currentServiceId){toast('ابتدا یک سرویس را انتخاب کنید');return;}
+  const record=latestServiceRecord(currentServiceId);if(!record){toast('برای این سرویس سابقه‌ای ثبت نشده است');return;}
+  $('#mKm').value=fa(record.km);$('#mCost').value=fa(record.cost);$('#mDate').value=displayJalaliDate(record.date);$('#mNote').value=record.note||'';
+  toast('اطلاعات آخرین سرویس وارد شد');
+}
+
 function openModal(serviceId){
   const service = SERVICES.concat(state.customServices||[]).find(x=>x.id===serviceId);
   if (!service) return;
@@ -1805,7 +1889,7 @@ function saveService(){
   if(!service)return;
   const km   = parseNum($('#mKm').value);
   const cost = parseNum($('#mCost').value);
-  const date = $('#mDate').value.trim() || todayFa();
+  const date = displayJalaliDate($('#mDate').value.trim() || todayFa());
   const note = $('#mNote').value.trim();
 
   if (!km){
@@ -2137,15 +2221,15 @@ function bindEvents(){
     const saveDetails=e.target.closest('#btnSaveServiceDetails');
     if(saveDetails){
       const id=saveDetails.dataset.serviceId;
-      const interval=Number($('#editServiceInterval').value);
-      const intervalDays=Number($('#editServiceDays').value);
+      const interval=parseNum($('#editServiceInterval').value);
+      const intervalDays=parseNum($('#editServiceDays').value);
       const lastKmRaw=$('#editServiceLastKm').value.trim();
-      const lastDate=$('#editServiceLastDate').value.trim();
+      const lastDate=displayJalaliDate($('#editServiceLastDate').value.trim());
       if(!interval||interval<1||!intervalDays||intervalDays<1){toast('فاصله کیلومتری و زمانی را درست وارد کنید');return;}
       state.serviceSettings=state.serviceSettings||{};
       state.serviceSettings[id]={interval,intervalDays};
       if(lastKmRaw===''){delete state.services[id];}
-      else {const lastKm=Number(toEnDigits(lastKmRaw));if(!Number.isFinite(lastKm)||lastKm<0){toast('کیلومتر آخرین سرویس معتبر نیست');return;}state.services[id]={lastKm,lastDate};}
+      else {const lastKm=parseNum(lastKmRaw);if(!Number.isFinite(lastKm)||lastKm<0){toast('کیلومتر آخرین سرویس معتبر نیست');return;}state.services[id]={lastKm,lastDate};}
       const custom=(state.customServices||[]).find(x=>x.id===id);
       if(custom){custom.interval=interval;custom.intervalDays=intervalDays;}
       save();renderAll();openServicePanel(id,'details');toast('اطلاعات سرویس ذخیره شد ✓');return;
@@ -2196,12 +2280,18 @@ function bindEvents(){
   $('#btnSaveModal').addEventListener('click', saveService);
   $('#btnCurrentKm').addEventListener('click',()=>{$('#mKm').value=state.km?fa(state.km):'';$('#mKm').focus();});
   $('#btnToday').addEventListener('click',()=>{$('#mDate').value=todayFa();});
-  $('#btnPickDate').addEventListener('click',()=>{
-    const picker=$('#mDateNative');
-    try{if(typeof picker.showPicker==='function')picker.showPicker();else picker.click();}
-    catch(err){picker.click();}
+  $('#btnPickDate').addEventListener('click',()=>openJalaliPicker('mDate'));
+  $('#btnLastService').addEventListener('click',fillLastServiceRecord);
+  document.addEventListener('click',e=>{
+    const dateButton=e.target.closest('[data-jalali-date]');if(dateButton)openJalaliPicker(dateButton.dataset.jalaliDate);
+    const nav=e.target.closest('[data-jalali-nav]');if(nav){jalaliPickerState.month+=Number(nav.dataset.jalaliNav);normalizeJalaliPickerMonth();renderJalaliPicker();}
+    const day=e.target.closest('[data-jalali-day]');if(day){const target=document.getElementById(jalaliPickerState.inputId);if(target)target.value=day.dataset.jalaliDay;closeJalaliPicker();}
+    if(e.target.closest('[data-jalali-close]')||e.target.id==='jalaliPickerBackdrop')closeJalaliPicker();
   });
-  $('#mDateNative').addEventListener('change',e=>{if(e.target.value){const d=new Date(e.target.value+'T12:00:00');$('#mDate').value=d.toLocaleDateString('fa-IR');e.target.style.cssText='';}});
+  document.addEventListener('input',e=>{
+    if(e.target.matches('#editServiceDays'))$('#editServiceDaysPreview').textContent='معادل: '+formatDurationDays(parseNum(e.target.value));
+    if(e.target.matches('#editServiceInterval,#editServiceLastKm')){const raw=toEnDigits(e.target.value).replace(/[^0-9]/g,'');e.target.value=raw?Number(raw).toLocaleString('fa-IR'):'';}
+  });
   ['mKm','mCost'].forEach(id=>$('#'+id).addEventListener('input',e=>{const raw=toEnDigits(e.target.value).replace(/[^0-9]/g,'');e.target.value=raw?Number(raw).toLocaleString('fa-IR'):'';}));
 
   $('#modal').addEventListener('click', e => {
