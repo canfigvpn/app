@@ -1989,7 +1989,7 @@ function validateBackupData(data){
   safe.clientId=typeof data.clientId==='string'?data.clientId.trim().slice(0,300):'';
   safe.services={};
   Object.keys(data.services).forEach(id=>{
-    if(!/^[a-zA-Z0-9_-]{1,100}$/.test(id))return;
+    if(id==='__proto__'||! /^[a-zA-Z0-9_-]{1,100}$/.test(id))return;
     const rec=data.services[id];if(!rec||typeof rec!=='object'||Array.isArray(rec))return;
     const lastKm=Number(rec.lastKm);if(!Number.isFinite(lastKm)||lastKm<0)return;
     safe.services[id]={lastKm:Math.floor(lastKm),lastDate:typeof rec.lastDate==='string'?rec.lastDate.slice(0,30):''};
@@ -2008,14 +2008,14 @@ function validateBackupData(data){
       createdAt:Number.isFinite(Number(r.createdAt))&&Number(r.createdAt)>0?Number(r.createdAt):0
     };
   });
-  safe.customServices=(data.customServices||[]).filter(x=>x&&typeof x==='object'&&!Array.isArray(x)&&typeof x.id==='string'&&/^[a-zA-Z0-9_-]{1,100}$/.test(x.id)&&typeof x.name==='string').slice(0,200).map(x=>({
+  safe.customServices=(data.customServices||[]).filter(x=>x&&typeof x==='object'&&!Array.isArray(x)&&typeof x.id==='string'&&x.id!=='__proto__'&&/^[a-zA-Z0-9_-]{1,100}$/.test(x.id)&&typeof x.name==='string').slice(0,200).map(x=>({
     id:x.id,name:x.name.slice(0,120),icon:typeof x.icon==='string'&&/^[a-zA-Z0-9_]{1,64}$/.test(x.icon)?x.icon:'build',
     interval:Number.isFinite(Number(x.interval))&&Number(x.interval)>0?Number(x.interval):10000,
     intervalDays:Number.isFinite(Number(x.intervalDays))&&Number(x.intervalDays)>0?Number(x.intervalDays):180
   }));
   safe.serviceSettings={};
   Object.keys(data.serviceSettings||{}).forEach(id=>{
-    if(!/^[a-zA-Z0-9_-]{1,100}$/.test(id))return;
+    if(id==='__proto__'||! /^[a-zA-Z0-9_-]{1,100}$/.test(id))return;
     const x=data.serviceSettings[id];if(!x||typeof x!=='object')return;
     const interval=Number(x.interval),intervalDays=Number(x.intervalDays);
     if(Number.isFinite(interval)&&interval>0&&Number.isFinite(intervalDays)&&intervalDays>0)safe.serviceSettings[id]={interval,intervalDays};
@@ -2362,6 +2362,26 @@ function bindEvents(){
   });
 }
 
+function runAppSelfTests(){
+  const results=[];
+  const check=(name,fn)=>{try{if(!fn())throw new Error('شرط برقرار نشد');results.push({name,passed:true});}catch(error){results.push({name,passed:false,error:error.message});}};
+  check('تبدیل ارقام فارسی',()=>toEnDigits('۱۲۳۴۵۶۷۸۹۰')==='1234567890');
+  check('خواندن عدد با جداکننده',()=>parseNum('۱۲۳٬۴۵۶')===123456);
+  check('فرار HTML برای متن',()=>esc('<img src=x onerror=1>')==='&lt;img src=x onerror=1&gt;');
+  check('فاصله پیش‌فرض روغن بدون وابستگی به مدل',()=>getInterval(SERVICE_MAP.oil)===5000);
+  check('پذیرش بکاپ معتبر',()=>validateBackupData({services:{},history:[]}).history.length===0);
+  check('رد تاریخچه نامعتبر',()=>{try{validateBackupData({services:{},history:{}});return false;}catch(e){return true;}});
+  check('رد کیلومتر منفی',()=>validateBackupData({services:{x:{lastKm:-1}}}).services.x===undefined);
+  check('جلوگیری از prototype pollution',()=>{const x=JSON.parse('{"services":{"__proto__":{"lastKm":12}}}');const y=validateBackupData(x);return Object.getPrototypeOf(y.services)===Object.prototype&&y.services.__proto__===undefined;});
+  check('تبدیل تاریخ شمسی',()=>{const d=persianPartsToDate([1400,1,1]);return d instanceof Date&&!Number.isNaN(d.getTime());});
+  const failed=results.filter(x=>!x.passed);
+  console.groupCollapsed('Car Service Manager · Self tests: '+(results.length-failed.length)+'/'+results.length);
+  results.forEach(x=>x.passed?console.info('✓',x.name):console.error('✗',x.name,x.error));
+  console.groupEnd();
+  return {passed:results.length-failed.length,total:results.length,failed};
+}
+window.runAppSelfTests=runAppSelfTests;
+
 /* ================================================================
    ۱۸) راه‌اندازی
    ================================================================ */
@@ -2372,6 +2392,7 @@ function init(){
   applyTheme();
   bindEvents();
   renderAll();
+  runAppSelfTests();
   const loader=$('#appLoader');
   window.setTimeout(()=>{if(loader)loader.classList.add('hide');},5000);
 }
