@@ -1599,7 +1599,7 @@ function openServicePanel(serviceId, mode){
         </article>`).join('') + '</div>' : '<div class="empty">برای این قطعه هنوز سابقه‌ای ثبت نشده است.</div>'}`;
   } else {
     const statusLabel = st.key === 'overdue' ? 'گذشته از موعد' : st.key === 'near' ? 'نزدیک موعد' : st.key === 'none' ? 'ثبت نشده' : 'به‌روز';
-    const last = st.lastDate ? esc(st.lastDate) + ' ☆ ' + fa(st.lastKm) + ' کیلومتر' : 'هنوز ثبت نشده';
+    const last = st.lastDate ? esc(displayJalaliDate(st.lastDate)) + ' ☆ ' + fa(st.lastKm) + ' کیلومتر' : 'ثبت نشده';
     const dueKm = st.key === 'none' ? 'هر ' + fa(st.interval) + ' کیلومتر' : st.remaining < 0 ? fa(Math.abs(st.remaining)) + ' کیلومتر دیرکرد' : fa(st.remaining) + ' کیلومتر باقی‌مانده';
     const dueDays = st.daysRemaining === null ? 'پس از ثبت تاریخ مشخص می‌شود' : st.daysRemaining < 0 ? fa(Math.abs(st.daysRemaining)) + ' روز دیرکرد' : fa(st.daysRemaining) + ' روز باقی‌مانده';
     const current = state.services[serviceId] || {};
@@ -1620,7 +1620,7 @@ function openServicePanel(serviceId, mode){
       <label class="lbl" for="editServiceLastKm">آخرین کیلومتر انجام سرویس</label>
       <input class="txt number-input" id="editServiceLastKm" type="text" inputmode="numeric" value="${current.lastKm == null ? '' : fa(current.lastKm)}" placeholder="ثبت نشده">
       <label class="lbl" for="editServiceLastDate">تاریخ آخرین تعویض/تعمیر</label>
-      <div class="input-with-action"><input class="txt" id="editServiceLastDate" type="text" value="${esc(current.lastDate || '')}" placeholder="۱۴۰۵/۰۸/۰۲" autocomplete="off"><button type="button" class="btn btn-outline date-btn" data-jalali-date="editServiceLastDate">تقویم</button></div>
+      <div class="input-with-action"><input class="txt" id="editServiceLastDate" type="text" value="${esc(current.lastDate ? displayJalaliDate(current.lastDate) : '')}" placeholder="۱۴۰۵/۰۸/۰۲" autocomplete="off"><button type="button" class="btn btn-outline date-btn" data-jalali-date="editServiceLastDate">تقویم</button></div>
       <button type="button" class="btn btn-primary panel-history-link" id="btnSaveServiceDetails" data-service-id="${esc(serviceId)}">ذخیره تغییرات</button>
       <button type="button" class="btn btn-outline panel-history-link" data-service-history="${esc(serviceId)}">مشاهده تمام سوابق این قطعه</button>`;
   }
