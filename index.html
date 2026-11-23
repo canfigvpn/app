@@ -2373,7 +2373,7 @@ function runAppSelfTests(){
   check('پذیرش بکاپ معتبر',()=>validateBackupData({services:{},history:[]}).history.length===0);
   check('رد تاریخچه نامعتبر',()=>{try{validateBackupData({services:{},history:{}});return false;}catch(e){return true;}});
   check('رد کیلومتر منفی',()=>validateBackupData({services:{x:{lastKm:-1}}}).services.x===undefined);
-  check('جلوگیری از prototype pollution',()=>{const x=JSON.parse('{"services":{"__proto__":{"lastKm":12}}}');const y=validateBackupData(x);return Object.getPrototypeOf(y.services)===Object.prototype&&y.services.__proto__===undefined;});
+  check('جلوگیری از prototype pollution',()=>{const x=JSON.parse('{"services":{"__proto__":{"lastKm":12}}}');const y=validateBackupData(x);return Object.getPrototypeOf(y.services)===Object.prototype&&!Object.prototype.hasOwnProperty.call(y.services,'__proto__');});
   check('تبدیل تاریخ شمسی',()=>{const d=persianPartsToDate([1400,1,1]);return d instanceof Date&&!Number.isNaN(d.getTime());});
   const failed=results.filter(x=>!x.passed);
   console.groupCollapsed('Car Service Manager · Self tests: '+(results.length-failed.length)+'/'+results.length);
