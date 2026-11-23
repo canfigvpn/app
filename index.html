@@ -1072,7 +1072,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 [data-theme="dark"] .datepicker-plot-area{background:#0b1422!important;color:#e6edf7!important;border-color:#26354d!important}
 [data-theme="dark"] .datepicker-plot-area .datepicker-day-view .table-days td span{color:#dbeafe!important}
 /* پنجره جستجوی سرویس */
-.service-search-backdrop{position:fixed;inset:0;z-index:700;display:none;align-items:flex-start;justify-content:center;padding:max(18px,env(safe-area-inset-top)) 12px 14px;background:rgba(2,6,23,.68);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur((8px);overflow:hidden}.service-search-backdrop.show{display:flex}.service-search-box{position:relative;width:min(700px,100%);max-height:calc(100dvh - max(32px,env(safe-area-inset-top)) - 14px);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-radius:23px;background:var(--surface);box-shadow:var(--shadow-lg);padding:18px;margin:0 auto;min-height:0}
+.service-search-backdrop{position:fixed;inset:0;z-index:700;display:none;align-items:flex-start;justify-content:center;padding:max(18px,env(safe-area-inset-top)) 12px 14px;background:rgba(2,6,23,.68);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow:hidden}.service-search-backdrop.show{display:flex}.service-search-box{position:relative;width:min(700px,100%);max-height:calc(100dvh - max(32px,env(safe-area-inset-top)) - 14px);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-radius:23px;background:var(--surface);box-shadow:var(--shadow-lg);padding:18px;margin:0 auto;min-height:0}
 .service-search-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
 .service-search-head strong{display:block;font-size:16px;font-weight:900}
 .service-search-head small{display:block;margin-top:4px;font-size:11px;color:var(--text-2)}
@@ -1665,10 +1665,7 @@ function renderServiceSearch(query=''){
 }
 function openServiceSearch(){
   const modal=ensureServiceSearch();
-  modal.classList.add('show');
-  $('#serviceSearchInput').value='';
-  renderServiceSearch('');
-  setTimeout(()=>$('#serviceSearchInput').focus(),100);
+  modal.classList.add('show');const input=$('#serviceSearchInput');input.value='';renderServiceSearch('');requestAnimationFrame(()=>{input.focus({preventScroll:true});modal.scrollTop=0;});
 }
 
 function renderHome(){
@@ -2179,17 +2176,27 @@ function bindEvents(){
 
     const delBtn = e.target.closest('[data-del]');
     if (delBtn){
-      const id = delBtn.dataset.del;
-      const rec = state.history.find(r => r.id === id);
-      if (!rec) return;
-
-      state.history = state.history.filter(r => r.id !== id);
-      recomputeService(rec.serviceId);
-      save();
-      renderAll();
-      toast('رکورد حذف شد');
+      const id=delBtn.dataset.del,rec=state.history.find(r=>r.id===id);if(!rec)return;
+      state.history=state.history.filter(r=>r.id!==id);state.trash=state.trash||[];state.trash.unshift(rec);
+      recomputeService(rec.serviceId);selectedHistoryIds.delete(id);save();renderAll();toast('رکورد به سطل زباله منتقل شد');
     }
   });
+
+    const restoreBtn=e.target.closest('[data-restore]');
+    if(restoreBtn){const id=restoreBtn.dataset.restore,rec=(state.trash||[]).find(r=>r.id===id);if(!rec)return;state.trash=state.trash.filter(r=>r.id!==id);state.history.push(rec);recomputeService(rec.serviceId);selectedHistoryIds.delete(id);save();renderAll();toast('رکورد به تاریخچه برگشت ✓');return;}
+    const actionBtn=e.target.closest('[data-history-action]');
+    if(actionBtn){const action=actionBtn.dataset.historyAction;
+      if(action==='trash-selected'){const moving=state.history.filter(r=>selectedHistoryIds.has(r.id));if(!moving.length)return;state.history=state.history.filter(r=>!selectedHistoryIds.has(r.id));state.trash=state.trash||[];state.trash.unshift(...moving);[...new Set(moving.map(r=>r.serviceId))].forEach(recomputeService);selectedHistoryIds.clear();save();renderAll();toast('رکوردهای انتخاب‌شده به سطل منتقل شدند');return;}
+      if(action==='restore-selected'){const restoring=(state.trash||[]).filter(r=>selectedHistoryIds.has(r.id));if(!restoring.length)return;state.trash=state.trash.filter(r=>!selectedHistoryIds.has(r.id));state.history.push(...restoring);[...new Set(restoring.map(r=>r.serviceId))].forEach(recomputeService);selectedHistoryIds.clear();save();renderAll();toast('رکوردهای انتخاب‌شده برگردانده شدند');return;}
+      if(action==='purge-selected'){const n=(state.trash||[]).filter(r=>selectedHistoryIds.has(r.id)).length;if(!n)return;if(!confirm(fa(n)+' رکورد برای همیشه حذف شود؟'))return;state.trash=state.trash.filter(r=>!selectedHistoryIds.has(r.id));selectedHistoryIds.clear();save();renderAll();toast('رکوردهای انتخاب‌شده برای همیشه حذف شدند');return;}
+      if(action==='purge-all'){if(!state.trash||!state.trash.length){toast('سطل زباله خالی است');return;}if(!confirm('تمام رکوردهای سطل زباله برای همیشه حذف شوند؟'))return;state.trash=[];selectedHistoryIds.clear();save();renderAll();toast('سطل زباله پاکسازی شد');return;}
+    }
+  });
+  document.addEventListener('change',e=>{
+    if(e.target.matches('[data-select-history]')){const id=e.target.dataset.selectHistory;e.target.checked?selectedHistoryIds.add(id):selectedHistoryIds.delete(id);renderHistory();return;}
+    if(e.target.matches('[data-history-select-all]')){const rows=historyTrashView?(state.trash||[]):state.history;if(e.target.checked)rows.forEach(r=>selectedHistoryIds.add(r.id));else rows.forEach(r=>selectedHistoryIds.delete(r.id));renderHistory();}
+  });
+  $('#btnHistoryTrash').addEventListener('click',()=>{historyTrashView=!historyTrashView;selectedHistoryIds.clear();renderHistory();});
 
   /* --- فیلتر زنده جستجو --- */
   document.addEventListener('input',e=>{if(e.target.id==='serviceSearchInput')renderServiceSearch(e.target.value);});
