@@ -1410,6 +1410,28 @@ function esc(s){
   }[c]));
 }
 
+const persianDateCache = new Map();
+function persianPartsToDate(parts){
+  if(!Array.isArray(parts)||parts.length<3)return null;
+  const [jy,jm,jd]=parts.map(Number);
+  if(!Number.isInteger(jy)||!Number.isInteger(jm)||!Number.isInteger(jd)||jm<1||jm>12||jd<1||jd>31)return null;
+  const key=jy+'/'+jm+'/'+jd;
+  if(persianDateCache.has(key))return new Date(persianDateCache.get(key));
+  try{
+    const formatter=new Intl.DateTimeFormat('en-US-u-ca-persian-nu-latn',{year:'numeric',month:'numeric',day:'numeric',timeZone:'UTC'});
+    const start=Date.UTC(jy+621,0,1);
+    for(let offset=0;offset<370;offset++){
+      const candidate=new Date(start+offset*86400000),values={};
+      formatter.formatToParts(candidate).forEach(part=>{if(part.type==='year'||part.type==='month'||part.type==='day')values[part.type]=Number(part.value);});
+      if(values.year===jy&&values.month===jm&&values.day===jd){
+        const result=new Date(candidate.getUTCFullYear(),candidate.getUTCMonth(),candidate.getUTCDate(),12);
+        persianDateCache.set(key,result.getTime());return result;
+      }
+    }
+  }catch(error){console.warn('تقویم شمسی در این مرورگر پشتیبانی نمی‌شود:',error);}
+  return null;
+}
+
 /** تاریخ امروز به شمسی */
 function todayFa(){
   try { return new Date().toLocaleDateString('fa-IR'); }
@@ -1525,8 +1547,8 @@ function getStatus(service){
   if (rec.lastDate) {
     try {
       const parts = toEnDigits(rec.lastDate).split('/').map(Number);
-      const d = new persianDate(parts).toDate();
-      daysRemaining = daysInterval - Math.floor((Date.now() - d.getTime()) / 86400000);
+      const d = persianPartsToDate(parts);
+      if(d) daysRemaining = daysInterval - Math.floor((Date.now() - d.getTime()) / 86400000);
     } catch(e) {}
   }
   const kmOverdue = remaining < 0;
@@ -1577,7 +1599,8 @@ function historyTimestamp(record){
   if (Number(record.createdAt)) return Number(record.createdAt);
   try {
     const parts = toEnDigits(record.date || '').split('/').map(Number);
-    return new persianDate(parts).toDate().getTime() || 0;
+    const parsed=persianPartsToDate(parts);
+    return parsed?parsed.getTime():0;
   } catch(e) { return 0; }
 }
 
@@ -1953,16 +1976,62 @@ function downloadBackup(){
   toast('فایل پشتیبان دانلود شد ✓');
 }
 
+function validateBackupData(data){
+  if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('ساختار فایل پشتیبان نامعتبر است');
+  if(!data.services||typeof data.services!=='object'||Array.isArray(data.services))throw new Error('بخش سرویس‌های فایل پشتیبان نامعتبر است');
+  if(data.history!=null&&!Array.isArray(data.history))throw new Error('ساختار تاریخچه فایل پشتیبان نامعتبر است');
+  if(data.customServices!=null&&!Array.isArray(data.customServices))throw new Error('فهرست سرویس‌های سفارشی نامعتبر است');
+  if(data.serviceSettings!=null&&(typeof data.serviceSettings!=='object'||Array.isArray(data.serviceSettings)))throw new Error('تنظیمات سرویس‌ها نامعتبر است');
+  const safe=defaultState();
+  safe.plate=typeof data.plate==='string'?data.plate.slice(0,80):'';
+  safe.km=Number.isFinite(Number(data.km))&&Number(data.km)>=0?Math.floor(Number(data.km)):0;
+  safe.theme=data.theme==='dark'?'dark':'light';
+  safe.clientId=typeof data.clientId==='string'?data.clientId.trim().slice(0,300):'';
+  safe.services={};
+  Object.keys(data.services).forEach(id=>{
+    if(!/^[a-zA-Z0-9_-]{1,100}$/.test(id))return;
+    const rec=data.services[id];if(!rec||typeof rec!=='object'||Array.isArray(rec))return;
+    const lastKm=Number(rec.lastKm);if(!Number.isFinite(lastKm)||lastKm<0)return;
+    safe.services[id]={lastKm:Math.floor(lastKm),lastDate:typeof rec.lastDate==='string'?rec.lastDate.slice(0,30):''};
+  });
+  safe.history=(data.history||[]).filter(r=>r&&typeof r==='object'&&!Array.isArray(r)).slice(0,10000).map((r,index)=>{
+    const km=Number(r.km),cost=Number(r.cost);
+    return {
+      id:typeof r.id==='string'&&r.id.length<=150?r.id:'imported_'+index,
+      serviceId:typeof r.serviceId==='string'&&/^[a-zA-Z0-9_-]{1,100}$/.test(r.serviceId)?r.serviceId:'',
+      name:typeof r.name==='string'?r.name.slice(0,120):'سرویس ثبت‌شده',
+      icon:typeof r.icon==='string'&&/^[a-zA-Z0-9_]{1,64}$/.test(r.icon)?r.icon:'build',
+      km:Number.isFinite(km)&&km>=0?Math.floor(km):0,
+      cost:Number.isFinite(cost)&&cost>=0?Math.floor(cost):0,
+      date:typeof r.date==='string'?r.date.slice(0,30):'',
+      note:typeof r.note==='string'?r.note.slice(0,2000):'',
+      createdAt:Number.isFinite(Number(r.createdAt))&&Number(r.createdAt)>0?Number(r.createdAt):0
+    };
+  });
+  safe.customServices=(data.customServices||[]).filter(x=>x&&typeof x==='object'&&!Array.isArray(x)&&typeof x.id==='string'&&/^[a-zA-Z0-9_-]{1,100}$/.test(x.id)&&typeof x.name==='string').slice(0,200).map(x=>({
+    id:x.id,name:x.name.slice(0,120),icon:typeof x.icon==='string'&&/^[a-zA-Z0-9_]{1,64}$/.test(x.icon)?x.icon:'build',
+    interval:Number.isFinite(Number(x.interval))&&Number(x.interval)>0?Number(x.interval):10000,
+    intervalDays:Number.isFinite(Number(x.intervalDays))&&Number(x.intervalDays)>0?Number(x.intervalDays):180
+  }));
+  safe.serviceSettings={};
+  Object.keys(data.serviceSettings||{}).forEach(id=>{
+    if(!/^[a-zA-Z0-9_-]{1,100}$/.test(id))return;
+    const x=data.serviceSettings[id];if(!x||typeof x!=='object')return;
+    const interval=Number(x.interval),intervalDays=Number(x.intervalDays);
+    if(Number.isFinite(interval)&&interval>0&&Number.isFinite(intervalDays)&&intervalDays>0)safe.serviceSettings[id]={interval,intervalDays};
+  });
+  // فیلد model نسخه‌های قدیمی عمداً نادیده گرفته می‌شود.
+  return safe;
+}
+
 function applyBackup(data){
-  if (!data || typeof data !== 'object' || !('services' in data)){
-    throw new Error('ساختار فایل پشتیبان نامعتبر است');
+  const candidate=validateBackupData(data),previous=state;
+  state=candidate;
+  if(!save()){
+    state=previous;
+    throw new Error('ذخیره نسخه پشتیبان انجام نشد؛ اطلاعات قبلی دست‌نخورده باقی ماند');
   }
-  state = Object.assign(defaultState(), data);
-  if (!state.history) state.history = [];
-  if (!state.services) state.services = {};
-  save();
-  applyTheme();
-  renderAll();
+  applyTheme();renderAll();
 }
 
 function importBackupFile(file){
