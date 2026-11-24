@@ -1177,6 +1177,26 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .s-item-heading .s-icon{width:39px!important;height:39px!important;flex-basis:39px!important}
 .s-item-heading .s-icon .material-symbols-rounded{font-size:21px!important}
 .s-actions-inline .detail-btn,.s-actions-inline .history-btn{height:33px!important;min-width:52px!important;padding:0 12px!important;font-size:11px!important;flex:0 0 auto!important}
+
+/* جستجو و ویرایش تفکیکی جزئیات سرویس */
+.service-search-result{cursor:default}
+.service-search-actions{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.search-action{display:inline-flex;align-items:center;justify-content:center;gap:3px;min-height:34px;padding:0 8px;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface);color:var(--text);font:700 10px Vazirmatn;white-space:nowrap}
+.search-action .material-symbols-rounded{font-size:15px}
+.search-add{background:var(--primary);border-color:var(--primary);color:#fff}
+.search-details{color:var(--primary-text);border-color:var(--primary)}
+.panel-edit-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.panel-edit-row{padding:13px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}
+.panel-edit-summary{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.panel-edit-summary>div{display:flex;flex-direction:column;gap:5px;min-width:0}
+.panel-edit-summary small{font-size:11px;color:var(--text-2)}
+.panel-edit-summary strong{font-size:13px;line-height:1.9}
+.panel-edit-btn{height:34px;min-width:68px;padding:0 12px;border:1px solid var(--primary);border-radius:9px;background:var(--primary-soft);color:var(--primary-text);font:700 11px Vazirmatn;flex:0 0 auto}
+.panel-inline-editor{padding-top:10px}
+.panel-inline-editor[hidden]{display:none}
+.panel-inline-editor .btn{width:100%;margin-top:10px}
+@media(max-width:420px){.service-search-result{gap:7px;padding:9px 3px}.service-search-icon{width:32px;height:32px}.service-search-actions{gap:4px}.search-action{padding:0 6px;font-size:9px}.search-action .material-symbols-rounded{font-size:13px}}
+
 </style>
 </head>
 
@@ -1766,6 +1786,54 @@ function saveServiceDetails(serviceId){
   toast('اطلاعات سرویس ذخیره شد ✓');
 }
 
+function saveServiceDetailSection(serviceId,section){
+  const service=SERVICES.concat(state.customServices||[]).find(x=>x.id===serviceId);
+  if(!service)return;
+  const current=state.services[serviceId]||{};
+  const settings=state.serviceSettings&&state.serviceSettings[serviceId]||{};
+  const currentStatus=getStatus(service);
+  let interval=currentStatus.interval;
+  let duration=currentStatus.duration||durationPartsFromDays(currentStatus.daysInterval);
+  let lastKm=current.lastKm==null?null:Number(current.lastKm);
+  let lastDate=current.lastDate||'';
+
+  if(section==='interval'){
+    interval=parseNum($('#editIntervalKm').value);
+    duration=normalizeDurationParts(parseNum($('#editIntervalYears').value),parseNum($('#editIntervalMonths').value),parseNum($('#editIntervalDays').value));
+    if(interval<1||durationPartsToDays(duration)<1){toast('فاصله سرویس را درست وارد کنید');return;}
+    state.serviceSettings=state.serviceSettings||{};
+    state.serviceSettings[serviceId]={interval,intervalDays:durationPartsToDays(duration),intervalYears:duration.years,intervalMonths:duration.months,intervalDayPart:duration.days};
+    const custom=(state.customServices||[]).find(x=>x.id===serviceId);
+    if(custom){custom.interval=interval;custom.intervalDays=durationPartsToDays(duration);custom.intervalYears=duration.years;custom.intervalMonths=duration.months;custom.intervalDayPart=duration.days;}
+  }else if(section==='km'){
+    const raw=toEnDigits($('#editRemainingKm').value).replace(/,/g,'').replace(/٬/g,'').trim();
+    if(!/^-?\d+$/.test(raw)){toast('مانده کیلومتری معتبر نیست');return;}
+    const remaining=Number(raw);
+    lastKm=(Number(state.km)||0)+interval-remaining;
+    if(lastKm<0){toast('مقدار واردشده با کیلومتر فعلی سازگار نیست');return;}
+    if(!lastDate){toast('برای ویرایش موعد کیلومتری ابتدا تاریخ آخرین سرویس را از طریق ثبت سرویس وارد کنید');return;}
+    state.services=state.services||{};
+    state.services[serviceId]={...current,lastKm};
+  }else if(section==='time'){
+    const parts=normalizeDurationParts(parseNum($('#editRemainingYears').value),parseNum($('#editRemainingMonths').value),parseNum($('#editRemainingDays').value));
+    const days=durationPartsToDays(parts);
+    if(days<0){toast('زمان واردشده معتبر نیست');return;}
+    const overdue=$('#editTimeOverdue').checked;
+    const offset=(overdue?-days:days)-durationPartsToDays(duration);
+    const base=new Date();base.setHours(12,0,0,0);base.setDate(base.getDate()-offset);
+    const p=jalaliParts(base);
+    if(!p){toast('محاسبه تاریخ سرویس ناموفق بود');return;}
+    lastDate=jalaliString(p.year,p.month,p.day);
+    if(lastKm===null)lastKm=Number(state.km)||0;
+    state.services=state.services||{};
+    state.services[serviceId]={...current,lastKm,lastDate};
+  }
+  if(!save()){toast('ذخیره اطلاعات انجام نشد');return;}
+  openServicePanel(serviceId,'details');
+  renderAll();
+  toast('بخش موردنظر ذخیره شد ✓');
+}
+
 function openServicePanel(serviceId, mode){
   const service = SERVICES.concat(state.customServices || []).find(x => x.id === serviceId);
   if (!service) return;
@@ -1799,23 +1867,33 @@ function openServicePanel(serviceId, mode){
     const current = state.services[serviceId] || {};
     content.innerHTML = `
       <div class="panel-status sc-${st.key}">${statusLabel}</div>
-      <div class="panel-data-grid">
-        <div><small>آخرین تعویض و تعمیر</small><strong>${last}</strong></div>
-        <div><small>فاصله سرویس</small><strong>${fa(st.interval)} کیلومتر ☆ ${formatDurationParts(st.duration||durationPartsFromDays(st.daysInterval))}</strong></div>
-        <div><small>مانده تا موعد کیلومتری</small><strong>${dueKm}</strong></div>
-        <div><small>مانده تا موعد زمانی</small><strong>${dueDays}</strong></div>
-      </div>
-      <div class="panel-section-title" style="margin-top:18px">ویرایش اطلاعات سرویس</div>
-      <label class="lbl" for="editServiceInterval">فاصله تعویض/تعمیر (کیلومتر)</label>
-      <input class="txt number-input" id="editServiceInterval" type="text" inputmode="numeric" value="${fa(st.interval)}">
-      <label class="lbl">فاصله زمانی سرویس</label>
-      <div class="duration-input-row"><label><span>سال</span><input class="txt duration-part" id="editServiceYears" type="number" min="0" max="99" step="1" inputmode="numeric" value="${(st.duration||durationPartsFromDays(st.daysInterval)).years}"></label><label><span>ماه</span><input class="txt duration-part" id="editServiceMonths" type="number" min="0" max="12" step="1" inputmode="numeric" value="${(st.duration||durationPartsFromDays(st.daysInterval)).months}"></label><label><span>روز</span><input class="txt duration-part" id="editServiceDays" type="number" min="0" max="30" step="1" inputmode="numeric" value="${(st.duration||durationPartsFromDays(st.daysInterval)).days}"></label></div>
-      <div class="duration-preview" id="editServiceDaysPreview">مجموع: ${formatDurationParts(st.duration||durationPartsFromDays(st.daysInterval))}</div>
-      <label class="lbl" for="editServiceLastKm">آخرین کیلومتر انجام سرویس</label>
-      <input class="txt number-input" id="editServiceLastKm" type="text" inputmode="numeric" value="${current.lastKm == null ? '' : fa(current.lastKm)}" placeholder="ثبت نشده">
-      <label class="lbl" for="editServiceLastDate">تاریخ آخرین تعویض/تعمیر</label>
-      <div class="input-with-action"><input class="txt" id="editServiceLastDate" type="text" value="${esc(current.lastDate ? displayJalaliDate(current.lastDate) : '')}" placeholder="۱۴۰۵/۰۸/۰۲" autocomplete="off"><button type="button" class="btn btn-outline date-btn" data-jalali-date="editServiceLastDate">تقویم</button></div>
-      <button type="button" class="btn btn-primary panel-history-link" id="btnSaveServiceDetails" data-service-id="${esc(serviceId)}">ذخیره اطلاعات</button>`;
+      <div class="panel-edit-list">
+        <section class="panel-edit-row" data-edit-section="interval">
+          <div class="panel-edit-summary"><div><small>فاصله سرویس</small><strong>${fa(st.interval)} کیلومتر و ${formatDurationParts(st.duration||durationPartsFromDays(st.daysInterval))}</strong></div><button type="button" class="panel-edit-btn" data-edit-toggle="interval">ویرایش</button></div>
+          <div class="panel-inline-editor" id="editor-interval" hidden>
+            <label class="lbl">فاصله کیلومتری</label><input class="txt" id="editIntervalKm" inputmode="numeric" value="${fa(st.interval)}">
+            <label class="lbl">فاصله زمانی</label>
+            <div class="duration-input-row"><label><span>سال</span><input class="txt duration-part" id="editIntervalYears" type="number" min="0" max="99" value="${(st.duration||durationPartsFromDays(st.daysInterval)).years}"></label><label><span>ماه</span><input class="txt duration-part" id="editIntervalMonths" type="number" min="0" max="12" value="${(st.duration||durationPartsFromDays(st.daysInterval)).months}"></label><label><span>روز</span><input class="txt duration-part" id="editIntervalDays" type="number" min="0" max="30" value="${(st.duration||durationPartsFromDays(st.daysInterval)).days}"></label></div>
+            <button type="button" class="btn btn-primary" data-edit-save="interval" data-service-id="${esc(serviceId)}">ذخیره</button>
+          </div>
+        </section>
+        <section class="panel-edit-row" data-edit-section="km">
+          <div class="panel-edit-summary"><div><small>مانده تا موعد کیلومتری</small><strong>${dueKm}</strong></div><button type="button" class="panel-edit-btn" data-edit-toggle="km">ویرایش</button></div>
+          <div class="panel-inline-editor" id="editor-km" hidden>
+            <label class="lbl">مانده تا موعد کیلومتری (عدد منفی برای دیرکرد)</label><input class="txt" id="editRemainingKm" inputmode="numeric" value="${st.remaining==null?'':fa(st.remaining)}">
+            <button type="button" class="btn btn-primary" data-edit-save="km" data-service-id="${esc(serviceId)}">ذخیره</button>
+          </div>
+        </section>
+        <section class="panel-edit-row" data-edit-section="time">
+          <div class="panel-edit-summary"><div><small>مانده تا موعد زمانی</small><strong>${dueDays}</strong></div><button type="button" class="panel-edit-btn" data-edit-toggle="time">ویرایش</button></div>
+          <div class="panel-inline-editor" id="editor-time" hidden>
+            <label class="lbl">مانده تا موعد زمانی</label>
+            <div class="duration-input-row"><label><span>سال</span><input class="txt duration-part" id="editRemainingYears" type="number" min="0" max="99" value="${st.daysRemaining===null?0:durationPartsFromDays(Math.abs(st.daysRemaining)).years}"></label><label><span>ماه</span><input class="txt duration-part" id="editRemainingMonths" type="number" min="0" max="12" value="${st.daysRemaining===null?0:durationPartsFromDays(Math.abs(st.daysRemaining)).months}"></label><label><span>روز</span><input class="txt duration-part" id="editRemainingDays" type="number" min="0" max="30" value="${st.daysRemaining===null?0:durationPartsFromDays(Math.abs(st.daysRemaining)).days}"></label></div>
+            <label class="lbl"><input type="checkbox" id="editTimeOverdue" ${st.daysRemaining!==null&&st.daysRemaining<0?'checked':''}> موعد زمانی گذشته است</label>
+            <button type="button" class="btn btn-primary" data-edit-save="time" data-service-id="${esc(serviceId)}">ذخیره</button>
+          </div>
+        </section>
+      </div>`;
   }
   const saveDetailsButton=content.querySelector('#btnSaveServiceDetails');
   if(saveDetailsButton){
@@ -1854,11 +1932,14 @@ function renderServiceSearch(query=''){
   box.innerHTML=matches.map(service=>{
     const st=getStatus(service);
     const label=st.key==='none'?'ثبت نشده':st.key==='overdue'?'گذشته از موعد':st.key==='near'?'نزدیک موعد':'به‌روز';
-    return `<button type="button" class="service-search-result" data-search-service="${esc(service.id)}">
+    return `<article class="service-search-result">
       <span class="service-search-icon"><span class="material-symbols-rounded">${esc(service.icon||'build')}</span></span>
       <span class="service-search-name"><strong>${esc(service.name)}</strong><small>${label}</small></span>
-      <span class="material-symbols-rounded service-search-arrow">chevron_left</span>
-    </button>`;
+      <span class="service-search-actions">
+        <button type="button" class="search-action search-add" data-search-add="${esc(service.id)}"><span class="material-symbols-rounded">add</span>اضافه کردن</button>
+        <button type="button" class="search-action search-details" data-search-details="${esc(service.id)}"><span class="material-symbols-rounded">edit</span>جزئیات</button>
+      </span>
+    </article>`;
   }).join('');
 }
 function openServiceSearch(){
@@ -2458,8 +2539,14 @@ function bindEvents(){
   /* --- جستجوی سرویس --- */
   document.addEventListener('click', e => {
     if(e.target.closest('#btnServiceSearch')){openServiceSearch();return;}
-    const searchItem=e.target.closest('[data-search-service]');
-    if(searchItem){const id=searchItem.dataset.searchService;$('#serviceSearchModal').classList.remove('show');openServicePanel(id,'details');return;}
+    const searchAdd=e.target.closest('[data-search-add]');
+    if(searchAdd){const id=searchAdd.dataset.searchAdd;$('#serviceSearchModal').classList.remove('show');openModal(id);return;}
+    const searchDetails=e.target.closest('[data-search-details]');
+    if(searchDetails){const id=searchDetails.dataset.searchDetails;$('#serviceSearchModal').classList.remove('show');openServicePanel(id,'details');return;}
+    const editToggle=e.target.closest('[data-edit-toggle]');
+    if(editToggle){const editor=$('#editor-'+editToggle.dataset.editToggle);if(editor)editor.hidden=!editor.hidden;return;}
+    const editSave=e.target.closest('[data-edit-save]');
+    if(editSave){saveServiceDetailSection(editSave.dataset.serviceId,editSave.dataset.editSave);return;}
     /* --- دکمه ثبت سرویس (رویداد واگذارشده) --- */
     const detail=e.target.closest('[data-details]');
     if(detail){ openServicePanel(detail.dataset.details, 'details'); const sm=$('#serviceSearchModal');if(sm)sm.classList.remove('show'); return; }
