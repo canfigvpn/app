@@ -1220,6 +1220,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   transform:translateX(3px);
 }
 
+.nav-search-item{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 3px;border:0;background:transparent;border-radius:14px;color:var(--text-2);font:inherit;transition:color .25s,background .25s,transform .18s}.nav-search-item .material-symbols-rounded{font-size:22px}.nav-search-item .nav-lbl{font-size:10.5px;font-weight:700;white-space:nowrap}.nav-search-item:active{transform:scale(.95)}.add-service-status-btn{flex:0 0 auto;min-width:0;height:34px;padding:0 11px;border-radius:10px;font-size:11.5px;white-space:nowrap}.add-service-status-btn .material-symbols-rounded{font-size:17px}@media(max-width:380px){.add-service-status-btn{padding:0 8px;font-size:10.5px}}
 </style>
 </head>
 
@@ -1258,7 +1259,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <h1>وضعیت سرویس‌ها</h1>
       <p>بر اساس کیلومتر فعلی خودرو و دوره‌های نگهداری</p>
     </div>
-    <div class="custom-service-row home-service-tools"><button class="btn btn-outline" id="btnServiceSearch" type="button"><span class="material-symbols-rounded">search</span> جستجوی سرویس</button><button class="btn btn-primary" id="btnAddCustomService" type="button"><span class="material-symbols-rounded">add</span> افزودن سرویس</button></div><div class="status-grid" id="statusGrid"></div>
+    <div class="status-grid" id="statusGrid"></div>
   </section>
 
   <!-- ───────── صفحه تاریخچه ───────── -->
@@ -1417,6 +1418,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   <button class="nav-item active" data-page="home">
     <span class="material-symbols-rounded">home</span>
     <span class="nav-lbl">خانه</span>
+  </button>
+  <button class="nav-search-item" id="btnServiceSearch" type="button" aria-label="جستجوی سرویس" title="جستجوی سرویس">
+    <span class="material-symbols-rounded">search</span>
+    <span class="nav-lbl">جستجو</span>
   </button>
   <button class="nav-item" data-page="history">
     <span class="material-symbols-rounded">history</span>
@@ -1985,7 +1990,7 @@ function renderHome(){
       <section class="status-card sc-${key}">
         <header class="sc-head">
           <div class="sc-title"><span class="material-symbols-rounded">${meta.icon}</span><h2>${meta.title}<span class="sc-count">${fa(items.length)}</span></h2></div>
-
+          ${key === "none" ? '<button class="btn btn-primary add-service-status-btn" id="btnAddCustomService" type="button"><span class="material-symbols-rounded">add</span> افزودن سرویس</button>' : ""}
         </header>
         <div class="sc-body">${body}</div>
       </section>`;
