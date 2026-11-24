@@ -1958,13 +1958,15 @@ function parseJalaliDate(value){
   return persianPartsToDate(p)?{year:p[0],month:p[1],day:p[2]}:null;
 }
 function jalaliMonthLength(y,m){
-  if(!Number.isInteger(Number(y))||m<1||m>12)return 0;
-  let count=0;
-  for(let d=1;d<=31;d++){
-    if(persianPartsToDate([Number(y),Number(m),d]))count=d;
-    else break;
-  }
-  return count;
+  y=Number(y);m=Number(m);
+  if(!Number.isInteger(y)||!Number.isInteger(m)||m<1||m>12)return 0;
+  if(m<=6)return 31;
+  if(m<=11)return 30;
+  const currentYearStart=persianPartsToDate([y,1,1]);
+  const nextYearStart=persianPartsToDate([y+1,1,1]);
+  if(!currentYearStart||!nextYearStart)return 29;
+  const yearLength=Math.round((nextYearStart.getTime()-currentYearStart.getTime())/86400000);
+  return yearLength-336;
 }
 function normalizeJalaliPickerMonth(){while(jalaliPickerState.month<1){jalaliPickerState.month=12;jalaliPickerState.year--;}while(jalaliPickerState.month>12){jalaliPickerState.month=1;jalaliPickerState.year++;}}
 function openJalaliPicker(inputId){
