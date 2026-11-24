@@ -1197,6 +1197,29 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .panel-inline-editor .btn{width:100%;margin-top:10px}
 @media(max-width:420px){.service-search-result{gap:7px;padding:9px 3px}.service-search-icon{width:32px;height:32px}.service-search-actions{gap:4px}.search-action{padding:0 6px;font-size:9px}.search-action .material-symbols-rounded{font-size:13px}}
 
+
+/* حذف کادر آبی هنگام ویرایش پلاک، کیلومتر و جستجو */
+.plate-field:focus-within,
+.km-field:focus-within{
+  border-color:var(--border)!important;
+  box-shadow:none!important;
+}
+.service-search-input:focus-within{
+  border-color:var(--border-strong)!important;
+  box-shadow:none!important;
+}
+.plate-field input:focus,
+.km-field input:focus,
+.service-search-input input:focus{
+  outline:none!important;
+  box-shadow:none!important;
+}
+/* تنظیم خط جداکننده پلاک */
+.plate-sep{
+  height:32px!important;
+  transform:translateX(3px);
+}
+
 </style>
 </head>
 
