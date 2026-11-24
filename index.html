@@ -1167,6 +1167,16 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .s-actions-inline .s-btn{width:33px!important;height:33px!important;min-width:33px!important;flex:0 0 33px!important}
 .s-actions-inline .detail-btn{height:33px!important;min-width:52px!important;padding:0 12px!important;font-size:11px!important;flex:0 0 auto!important;white-space:nowrap}
 @media(max-width:340px){.s-actions-inline .detail-btn{padding:0 12px!important;font-size:11px!important;min-width:52px!important}}
+
+/* اصلاحات چیدمان ورودی هزینه و اندازه دکمه‌ها */
+.cost-input-control{display:flex;align-items:center;gap:6px;direction:rtl;width:100%}
+.cost-input-control .txt{flex:1 1 auto;min-width:0;text-align:center}
+.cost-step-btn{width:42px;height:44px;flex:0 0 42px;border:1.5px solid var(--border-strong);border-radius:12px;background:var(--surface-2);color:var(--primary);font:700 23px/1 Vazirmatn;display:grid;place-items:center;transition:background .2s,transform .18s}
+.cost-step-btn:active{transform:scale(.94);background:var(--primary-soft)}
+.last-service-btn{width:100%;margin-top:8px;height:38px;font-size:10.5px}
+.s-item-heading .s-icon{width:39px!important;height:39px!important;flex-basis:39px!important}
+.s-item-heading .s-icon .material-symbols-rounded{font-size:21px!important}
+.s-actions-inline .detail-btn,.s-actions-inline .history-btn{height:33px!important;min-width:52px!important;padding:0 12px!important;font-size:11px!important;flex:0 0 auto!important}
 </style>
 </head>
 
@@ -1384,7 +1394,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     <h3 id="modalTitle">ثبت سرویس</h3>
     <p class="m-sub" id="modalSub">اطلاعات سرویس انجام‌شده را وارد کنید</p>
 
-    <div class="grid-2"><div><label class="lbl" for="mKm">کیلومتر انجام سرویس</label><div class="input-with-action"><input class="txt number-input" id="mKm" type="text" inputmode="numeric" placeholder="کیلومتر واقعی"><button type="button" class="btn btn-outline current-km-btn" id="btnCurrentKm">کیلومتر فعلی</button></div></div><div><label class="lbl" for="mCost">هزینه (تومان)</label><input class="txt number-input" id="mCost" type="text" inputmode="numeric" placeholder="۰"></div></div><div class="grid-2"><div><label class="lbl" for="mDate">تاریخ انجام سرویس</label><div class="input-with-action date-controls"><input class="txt" id="mDate" type="text" placeholder="۱۴۰۵/۰۸/۰۲" autocomplete="off"><button type="button" class="btn btn-outline date-btn" id="btnToday">امروز</button><button type="button" class="btn btn-outline date-btn" id="btnPickDate">تقویم</button><button type="button" class="btn btn-outline date-btn" id="btnLastService">آخرین</button></div></div><div><label class="lbl" for="mNote">توضیحات</label><textarea class="txt note-area" id="mNote" placeholder="توضیحات اختیاری"></textarea></div></div>
+    <div class="grid-2"><div><label class="lbl" for="mKm">کیلومتر انجام سرویس</label><div class="input-with-action"><input class="txt number-input" id="mKm" type="text" inputmode="numeric" placeholder="کیلومتر واقعی"><button type="button" class="btn btn-outline current-km-btn" id="btnCurrentKm">کیلومتر فعلی</button></div></div><div><label class="lbl" for="mCost">هزینه (تومان)</label><div class="cost-input-control"><button type="button" class="cost-step-btn" id="btnCostMinus" aria-label="کاهش هزینه">−</button><input class="txt number-input" id="mCost" type="text" inputmode="numeric" placeholder="۰"><button type="button" class="cost-step-btn" id="btnCostPlus" aria-label="افزایش هزینه">+</button></div></div></div><div class="grid-2"><div><label class="lbl" for="mDate">تاریخ انجام سرویس</label><div class="input-with-action date-controls"><input class="txt" id="mDate" type="text" placeholder="۱۴۰۵/۰۸/۰۲" autocomplete="off"><button type="button" class="btn btn-outline date-btn" id="btnToday">امروز</button><button type="button" class="btn btn-outline date-btn" id="btnPickDate">تقویم</button></div></div><div><label class="lbl" for="mNote">توضیحات</label><textarea class="txt note-area" id="mNote" placeholder="توضیحات اختیاری"></textarea><button type="button" class="btn btn-outline date-btn last-service-btn" id="btnLastService">نمایش آخرین سرویس ثبت شده</button></div></div>
 
     <div class="modal-actions">
       <button class="btn btn-outline" id="btnCancelModal">انصراف</button>
@@ -1750,7 +1760,9 @@ function saveServiceDetails(serviceId){
     return;
   }
   renderAll();
-  openServicePanel(serviceId,'details');
+  const panel=document.getElementById('servicePanel');
+  if(panel)panel.classList.remove('show');
+  document.body.classList.remove('panel-open');
   toast('اطلاعات سرویس ذخیره شد ✓');
 }
 
@@ -2506,6 +2518,9 @@ function bindEvents(){
   $('#btnToday').addEventListener('click',()=>{$('#mDate').value=todayFa();});
   $('#btnPickDate').addEventListener('click',()=>openJalaliPicker('mDate'));
   $('#btnLastService').addEventListener('click',fillLastServiceRecord);
+  const adjustCost=amount=>{const input=$('#mCost');const current=parseNum(input.value);const next=Math.max(0,current+amount);input.value=next?Number(next).toLocaleString('fa-IR'):'';};
+  $('#btnCostPlus').addEventListener('click',()=>adjustCost(100000));
+  $('#btnCostMinus').addEventListener('click',()=>adjustCost(-100000));
   document.addEventListener('click',e=>{
     const dateButton=e.target.closest('[data-jalali-date]');if(dateButton)openJalaliPicker(dateButton.dataset.jalaliDate);
     const nav=e.target.closest('[data-jalali-nav]');if(nav){jalaliPickerState.month+=Number(nav.dataset.jalaliNav);normalizeJalaliPickerMonth();renderJalaliPicker();}
