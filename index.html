@@ -1390,7 +1390,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- تقویم داخلی؛ بدون وابستگی به jQuery و افزونه تاریخ آنلاین -->
+<!-- تقویم شمسی Azar Datepicker -->
+<script src="https://raw.githubusercontent.com/saeedvir/azar-datepicker/refs/heads/main/datepicker.js"></script>
 <script>
 /* ================================================================
    ۱) ابزارهای کمکی
@@ -1886,17 +1887,40 @@ function jalaliMonthLength(y,m){
 }
 function normalizeJalaliPickerMonth(){while(jalaliPickerState.month<1){jalaliPickerState.month=12;jalaliPickerState.year--;}while(jalaliPickerState.month>12){jalaliPickerState.month=1;jalaliPickerState.year++;}}
 function openJalaliPicker(inputId){
-  const input=document.getElementById(inputId);if(!input)return;
-  const today=jalaliParts(new Date()),selected=parseJalaliDate(input.value)||today;
-  jalaliPickerState={inputId,year:selected.year,month:selected.month,selected:input.value?displayJalaliDate(input.value):'',today:jalaliString(today.year,today.month,today.day)};
-  let backdrop=document.getElementById('jalaliPickerBackdrop');
-  if(!backdrop){
-    backdrop=document.createElement('div');backdrop.id='jalaliPickerBackdrop';backdrop.className='jalali-picker-backdrop';
-    backdrop.innerHTML='<section class="jalali-picker" role="dialog" aria-modal="true" aria-label="تقویم شمسی"><header class="jalali-picker-head"><button type="button" data-jalali-nav="-1" aria-label="ماه قبل"><span class="material-symbols-rounded">chevron_right</span></button><strong id="jalaliPickerTitle"></strong><button type="button" data-jalali-nav="1" aria-label="ماه بعد"><span class="material-symbols-rounded">chevron_left</span></button></header><div class="jalali-weekdays">'+JALALI_WEEKDAYS.map(x=>'<span>'+x+'</span>').join('')+'</div><div class="jalali-days" id="jalaliPickerDays"></div><footer class="jalali-picker-foot"><button type="button" data-jalali-close>بستن</button><button type="button" id="jalaliPickerToday">امروز</button></footer></section>';
-    document.body.appendChild(backdrop);
-    backdrop.querySelector('#jalaliPickerToday').addEventListener('click',()=>{const input=document.getElementById(jalaliPickerState.inputId);if(input)input.value=jalaliPickerState.today;closeJalaliPicker();});
+  const input=document.getElementById(inputId);
+  if(!input)return;
+  if(typeof window.AzarDatepicker!=='function'){
+    toast('کتابخانه تقویم بارگذاری نشده است');
+    return;
   }
-  renderJalaliPicker();backdrop.classList.add('show');
+  let picker=input._azarDatepickerInstance;
+  if(!picker){
+    picker=window.AzarDatepicker.init({
+      selector:input,
+      calendar:'jalali',
+      mode:'date',
+      inputFormat:'YYYY/MM/DD',
+      outputFormat:'YYYY/MM/DD',
+      rtl:true,
+      darkMode:'auto',
+      closeOnSelect:true,
+      showCalendarToggle:false,
+      showClearButton:true,
+      onSelect:function(data){
+        input.value=String(data.formatted||'').replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[Number(d)];});
+        input.dispatchEvent(new Event('change',{bubbles:true}));
+      },
+      onChange:function(data){
+        if(data&&data.formatted){
+          input.value=String(data.formatted).replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[Number(d)];});
+        }
+      }
+    });
+    input._azarDatepickerInstance=picker;
+  }
+  picker.setValueFromString(toEnDigits(String(input.value||'').trim()));
+  picker.refresh();
+  picker.open();
 }
 function renderJalaliPicker(){
   const title=document.getElementById('jalaliPickerTitle'),days=document.getElementById('jalaliPickerDays');if(!title||!days)return;
