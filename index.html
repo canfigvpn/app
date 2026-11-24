@@ -1414,7 +1414,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       const script=document.createElement('script');
       script.src=sources[index++];
       script.async=true;
-      script.onload=()=>resolve(typeof window.AzarDatepicker==='function');
+      script.onload=()=>{
+        if(typeof window.AzarDatepicker==='function')resolve(true);
+        else{script.remove();loadNext();}
+      };
       script.onerror=()=>{script.remove();loadNext();};
       document.head.appendChild(script);
     }
