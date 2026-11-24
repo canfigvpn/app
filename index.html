@@ -1707,7 +1707,7 @@ function openServicePanel(serviceId, mode){
       <div class="panel-status sc-${st.key}">${statusLabel}</div>
       <div class="panel-data-grid">
         <div><small>آخرین تعویض و تعمیر</small><strong>${last}</strong></div>
-        <div><small>فاصله سرویس</small><strong>${fa(st.interval)} کیلومتر ☆ ${fa(st.daysInterval)} روز</strong></div>
+        <div><small>فاصله سرویس</small><strong>${fa(st.interval)} کیلومتر ☆ ${formatDurationParts(st.duration||durationPartsFromDays(st.daysInterval))}</strong></div>
         <div><small>مانده تا موعد کیلومتری</small><strong>${dueKm}</strong></div>
         <div><small>مانده تا موعد زمانی</small><strong>${dueDays}</strong></div>
       </div>
@@ -2417,6 +2417,13 @@ function bindEvents(){
     }
   });
   document.addEventListener('change',e=>{
+    if(e.target.matches('#editServiceYears,#editServiceMonths,#editServiceDays')){
+      const limits={editServiceYears:99,editServiceMonths:12,editServiceDays:30};
+      const max=limits[e.target.id],value=parseNum(e.target.value);
+      e.target.value=String(Math.min(max,value));
+      const duration=normalizeDurationParts(parseNum($('#editServiceYears').value),parseNum($('#editServiceMonths').value),parseNum($('#editServiceDays').value));
+      $('#editServiceDaysPreview').textContent='مجموع: '+formatDurationParts(duration);
+    }
     if(e.target.matches('[data-select-history]')){const id=e.target.dataset.selectHistory;e.target.checked?selectedHistoryIds.add(id):selectedHistoryIds.delete(id);renderHistory();return;}
     if(e.target.matches('[data-history-select-all]')){const rows=historyTrashView?(state.trash||[]):state.history;if(e.target.checked)rows.forEach(r=>selectedHistoryIds.add(r.id));else rows.forEach(r=>selectedHistoryIds.delete(r.id));renderHistory();}
   });
