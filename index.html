@@ -1477,8 +1477,10 @@ function persianPartsToDate(parts){
 
 /** تاریخ امروز به شمسی */
 function todayFa(){
-  try { return new Date().toLocaleDateString('fa-IR'); }
-  catch(e){ return ''; }
+  try {
+    const parts=jalaliParts(new Date());
+    return jalaliString(parts.year,parts.month,parts.day);
+  } catch(e){ return ''; }
 }
 
 /* ================================================================
@@ -1944,8 +1946,9 @@ function jalaliParts(date){
 }
 function jalaliString(y,m,d){
   const digits='۰۱۲۳۴۵۶۷۸۹';
-  const pad=n=>String(n).padStart(2,'0').replace(/\d/g,x=>digits[Number(x)]);
-  return fa(y)+'/'+pad(m)+'/'+pad(d);
+  const toFaDigits=value=>String(value).replace(/\d/g,x=>digits[Number(x)]);
+  const pad=n=>toFaDigits(String(n).padStart(2,'0'));
+  return toFaDigits(String(y).padStart(4,'0'))+'/'+pad(m)+'/'+pad(d);
 }
 function parseJalaliDate(value){
   const raw=toEnDigits(String(value||'')).trim();
