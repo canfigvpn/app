@@ -1160,6 +1160,14 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media(max-width:340px){.topbar{flex-wrap:wrap}.tb-group{flex:1 1 100%}.tb-left{justify-content:stretch}.km-field{width:100%}.s-actions-inline .detail-btn{padding:0 5px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
+/* عنوان سرویس و دکمه‌های ثابت در یک ردیف */
+.s-item-heading{display:flex;align-items:center;gap:9px;min-width:0;width:100%}
+.s-name-fit{flex:1 1 auto;min-width:0;overflow:visible}
+.s-name-fit .s-name{display:inline-block;width:max-content;max-width:none;white-space:nowrap;overflow:visible;text-overflow:clip;line-height:1.35;font-size:16px}
+.s-actions-inline{display:flex;align-items:center;justify-content:flex-start;direction:rtl;gap:5px;flex:0 0 auto;margin:0;white-space:nowrap}
+.s-actions-inline .s-btn{width:33px!important;height:33px!important;min-width:33px!important;flex:0 0 33px!important}
+.s-actions-inline .detail-btn{height:33px!important;min-width:52px!important;padding:0 12px!important;font-size:11px!important;flex:0 0 auto!important;white-space:nowrap}
+@media(max-width:340px){.s-actions-inline .detail-btn{padding:0 12px!important;font-size:11px!important;min-width:52px!important}}
 </style>
 </head>
 
@@ -1391,7 +1399,29 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 <div class="toast" id="toast"></div>
 
 <!-- تقویم شمسی Azar Datepicker -->
-<script src="https://raw.githubusercontent.com/saeedvir/azar-datepicker/refs/heads/main/datepicker.js"></script>
+<script>
+(function(){
+  const sources=[
+    'https://cdn.jsdelivr.net/gh/saeedvir/azar-datepicker@main/datepicker.js',
+    'https://raw.githack.com/saeedvir/azar-datepicker/main/datepicker.js',
+    'https://raw.githubusercontent.com/saeedvir/azar-datepicker/main/datepicker.js'
+  ];
+  window.AzarDatepickerReady=new Promise(resolve=>{
+    let index=0;
+    function loadNext(){
+      if(typeof window.AzarDatepicker==='function'){resolve(true);return;}
+      if(index>=sources.length){resolve(false);return;}
+      const script=document.createElement('script');
+      script.src=sources[index++];
+      script.async=true;
+      script.onload=()=>resolve(typeof window.AzarDatepicker==='function');
+      script.onerror=()=>{script.remove();loadNext();};
+      document.head.appendChild(script);
+    }
+    loadNext();
+  });
+})();
+</script>
 <script>
 /* ================================================================
    ۱) ابزارهای کمکی
@@ -1664,9 +1694,8 @@ function serviceItemHTML(service,st){
  const lastText=none?'':'آخرین تعویض و تعمیر: '+fa(st.lastKm)+' کیلومتر · '+esc(st.lastDate||'تاریخ نامشخص');
  const progress=none?'':'<div class="s-progress" role="progressbar" aria-label="میزان مصرف بازه سرویس" aria-valuenow="'+st.progressPct.toFixed(0)+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+st.progressPct.toFixed(1)+'%"></i></div>';
  const actions='<button class="s-btn" data-register="'+esc(service.id)+'" title="ثبت تعویض یا تعمیر" aria-label="ثبت تعویض یا تعمیر"><span class="material-symbols-rounded">add</span></button><button class="detail-btn" data-details="'+esc(service.id)+'">جزئیات</button><button class="detail-btn history-btn" data-service-history="'+esc(service.id)+'">سوابق</button>';
- return '<article class="s-item"><div class="s-item-main"><div class="s-item-heading"><div class="s-icon"><span class="material-symbols-rounded">'+esc(service.icon||'build')+'</span></div><div class="s-name">'+esc(service.name)+'</div></div><div class="s-info">'+(none?'<div class="s-due s-due-with-actions"><div class="s-actions s-actions-inline">'+actions+'</div><span>'+kmText+'</span></div>':'<div class="s-last">'+lastText+'</div><div class="s-due"><span>'+kmText+'</span>'+(dayText?'<span class="due-sep">/</span><span>'+dayText+'</span>':'')+'</div>')+progress+'</div></div>'+(none?'':'<div class="s-actions">'+actions+'</div>')+'</article>';
+ return '<article class="s-item"><div class="s-item-main"><div class="s-item-heading"><div class="s-icon"><span class="material-symbols-rounded">'+esc(service.icon||'build')+'</span></div><div class="s-name-fit"><div class="s-name">'+esc(service.name)+'</div></div><div class="s-actions-inline">'+actions+'</div></div><div class="s-info">'+(none?'<div class="s-due"><span>'+kmText+'</span></div>':'<div class="s-last">'+lastText+'</div><div class="s-due"><span>'+kmText+'</span>'+(dayText?'<span class="due-sep">/</span><span>'+dayText+'</span>':'')+'</div>')+progress+'</div></div></article>';
 }
-
 function historyTimestamp(record){
   if(Number(record.createdAt))return Number(record.createdAt);
   try{const raw=toEnDigits(record.date||'').trim();if(/^\d{4}-\d{2}-\d{2}$/.test(raw)){const d=new Date(raw+'T12:00:00');return Number.isNaN(d.getTime())?0:d.getTime();}const p=raw.split(/[\/.-]/).map(Number);const d=p[0]>1700?new Date(p[0],p[1]-1,p[2],12):persianPartsToDate(p);return d&&!Number.isNaN(d.getTime())?d.getTime():0;}catch(e){return 0;}
@@ -1769,7 +1798,22 @@ function openServiceSearch(){
   modal.classList.add('show');const input=$('#serviceSearchInput');input.value='';renderServiceSearch('');requestAnimationFrame(()=>{input.focus({preventScroll:true});modal.scrollTop=0;});
 }
 
+function fitServiceTitles(root){
+  if(!root)return;
+  root.querySelectorAll('.s-name-fit').forEach(box=>{
+    const label=box.querySelector('.s-name');
+    if(!label)return;
+    label.style.fontSize='16px';
+    const available=box.clientWidth;
+    const needed=label.getBoundingClientRect().width;
+    if(available>0&&needed>available)label.style.fontSize=Math.max(8,16*available/needed).toFixed(2)+'px';
+  });
+}
 function renderHome(){
+  if(!window.__serviceTitleResizeBound){
+    window.__serviceTitleResizeBound=true;
+    window.addEventListener('resize',()=>requestAnimationFrame(()=>fitServiceTitles($('#statusGrid'))),{passive:true});
+  }
   const groups = { overdue:[], near:[], ok:[], none:[] };
   (SERVICES.concat(state.customServices || [])).forEach(service => {
     const st = getStatus(service);
@@ -1789,6 +1833,7 @@ function renderHome(){
         <div class="sc-body">${body}</div>
       </section>`;
   }).join('');
+  requestAnimationFrame(()=>fitServiceTitles(grid));
 }
 
 
@@ -1929,41 +1974,39 @@ function jalaliMonthLength(y,m){
   return count;
 }
 function normalizeJalaliPickerMonth(){while(jalaliPickerState.month<1){jalaliPickerState.month=12;jalaliPickerState.year--;}while(jalaliPickerState.month>12){jalaliPickerState.month=1;jalaliPickerState.year++;}}
-function openJalaliPicker(inputId){
+async function openJalaliPicker(inputId){
   const input=document.getElementById(inputId);
   if(!input)return;
-  if(typeof window.AzarDatepicker!=='function'){
-    toast('کتابخانه تقویم بارگذاری نشده است');
-    return;
-  }
-  let picker=input._azarDatepickerInstance;
-  if(!picker){
-    picker=window.AzarDatepicker.init({
-      selector:input,
-      calendar:'jalali',
-      mode:'date',
-      inputFormat:'YYYY/MM/DD',
-      outputFormat:'YYYY/MM/DD',
-      rtl:true,
-      darkMode:'auto',
-      closeOnSelect:true,
-      showCalendarToggle:false,
-      showClearButton:true,
-      onSelect:function(data){
-        input.value=String(data.formatted||'').replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[Number(d)];});
-        input.dispatchEvent(new Event('change',{bubbles:true}));
-      },
-      onChange:function(data){
-        if(data&&data.formatted){
-          input.value=String(data.formatted).replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[Number(d)];});
+  try{
+    const ready=await (window.AzarDatepickerReady||Promise.resolve(typeof window.AzarDatepicker==='function'));
+    if(!ready||typeof window.AzarDatepicker!=='function'){
+      toast('بارگذاری کتابخانه تقویم ناموفق بود؛ اتصال اینترنت را بررسی کنید');
+      return;
+    }
+    let picker=input._azarDatepickerInstance;
+    if(!picker){
+      picker=window.AzarDatepicker.init({
+        selector:input,calendar:'jalali',mode:'date',
+        inputFormat:'YYYY/MM/DD',outputFormat:'YYYY/MM/DD',
+        rtl:true,darkMode:'auto',closeOnSelect:true,
+        showCalendarToggle:false,showClearButton:true,
+        onSelect:function(data){
+          input.value=String(data.formatted||'').replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[Number(d)];});
+          input.dispatchEvent(new Event('change',{bubbles:true}));
+        },
+        onChange:function(data){
+          if(data&&data.formatted)input.value=String(data.formatted).replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[Number(d)];});
         }
-      }
-    });
-    input._azarDatepickerInstance=picker;
+      });
+      input._azarDatepickerInstance=picker;
+    }
+    picker.setValueFromString(toEnDigits(String(input.value||'').trim()));
+    picker.refresh();
+    picker.open();
+  }catch(error){
+    console.error('Azar Datepicker error:',error);
+    toast('خطا در راه‌اندازی تقویم شمسی');
   }
-  picker.setValueFromString(toEnDigits(String(input.value||'').trim()));
-  picker.refresh();
-  picker.open();
 }
 function renderJalaliPicker(){
   const title=document.getElementById('jalaliPickerTitle'),days=document.getElementById('jalaliPickerDays');if(!title||!days)return;
