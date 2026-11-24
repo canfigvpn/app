@@ -1221,6 +1221,25 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 }
 
 .nav-search-item{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 3px;border:0;background:transparent;border-radius:14px;color:var(--text-2);font:inherit;transition:color .25s,background .25s,transform .18s}.nav-search-item .material-symbols-rounded{font-size:22px}.nav-search-item .nav-lbl{font-size:10.5px;font-weight:700;white-space:nowrap}.nav-search-item:active{transform:scale(.95)}.add-service-status-btn{flex:0 0 auto;min-width:0;height:34px;padding:0 11px;border-radius:10px;font-size:11.5px;white-space:nowrap}.add-service-status-btn .material-symbols-rounded{font-size:17px}@media(max-width:380px){.add-service-status-btn{padding:0 8px;font-size:10.5px}}
+
+/* نوار حساب کاربری و انتخاب آواتار */
+.account-bar{width:calc(100% - 24px);max-width:900px;margin:10px auto 0;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--glass);border:1px solid var(--border);border-radius:17px;box-shadow:var(--shadow);backdrop-filter:blur(20px) saturate(165%);-webkit-backdrop-filter:blur(20px) saturate(165%)}
+.account-bar-copy{display:flex;align-items:center;gap:9px;min-width:0}.account-bar-copy .material-symbols-rounded{font-size:22px;color:var(--primary)}
+.account-bar-copy strong{display:block;font-size:12px;font-weight:850}.account-bar-copy small{display:block;margin-top:2px;font-size:10px;color:var(--text-2)}
+.account-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}.account-action{height:36px;padding:0 12px;border:1px solid var(--border-strong);border-radius:11px;background:var(--surface);color:var(--text);font:700 11px Vazirmatn;white-space:nowrap}.account-action.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.account-profile-btn{display:flex;align-items:center;gap:8px;height:40px;padding:3px 10px 3px 5px;border:1px solid var(--border);border-radius:13px;background:var(--surface);color:var(--text);font:800 11px Vazirmatn}
+.account-avatar{width:32px;height:32px;display:grid;place-items:center;flex:0 0 32px;border-radius:10px;background:var(--primary-soft);font-size:20px;overflow:hidden}.account-avatar img{width:100%;height:100%;object-fit:cover}
+.account-modal-backdrop{position:fixed;inset:0;z-index:1500;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(2,6,23,.68);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.account-modal-backdrop.show{display:flex}.account-modal{width:min(430px,100%);max-height:90dvh;overflow:auto;padding:20px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow-lg)}
+.account-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}.account-modal-head h2{margin:0;font-size:16px;font-weight:900}.account-modal-close{width:34px;height:34px;border:1px solid var(--border);border-radius:10px;background:var(--surface-2);color:var(--text);font-size:20px}
+.account-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;padding:4px;border-radius:12px;background:var(--surface-2)}.account-tab{height:37px;border:0;border-radius:9px;background:transparent;color:var(--text-2);font:800 11px Vazirmatn}.account-tab.active{background:var(--surface);color:var(--primary);box-shadow:var(--shadow)}
+.account-form label{display:block;margin:10px 0 5px;font-size:11px;font-weight:800;color:var(--text-2)}.account-form input{width:100%;height:43px;padding:0 12px;border:1px solid var(--border-strong);border-radius:11px;background:var(--surface-2);color:var(--text);font:600 13px Vazirmatn;outline:none}.account-form input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.account-submit{width:100%;height:43px;margin-top:15px;border:0;border-radius:12px;background:var(--primary);color:#fff;font:800 12px Vazirmatn}
+.account-note{margin-top:10px;padding:9px 11px;border-radius:10px;background:var(--surface-2);color:var(--text-2);font-size:10px;line-height:1.9}.account-message{display:none;margin-top:10px;font-size:11px;line-height:1.8}.account-message.show{display:block}.account-message.error{color:var(--overdue-fg)}.account-message.success{color:var(--ok-fg)}
+.avatar-picker{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}.avatar-option{height:48px;border:1px solid var(--border);border-radius:13px;background:var(--surface-2);font-size:25px}.avatar-option.selected{border:2px solid var(--primary);background:var(--primary-soft)}
+.account-profile-summary{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2)}.account-profile-summary .account-avatar{width:48px;height:48px;flex-basis:48px;font-size:28px}.account-profile-summary strong{font-size:13px}.account-profile-summary small{display:block;margin-top:3px;color:var(--text-2);font-size:10px}
+@media(max-width:520px){.account-bar{width:calc(100% - 14px);margin-top:6px;padding:8px;border-radius:14px}.account-bar-copy small{font-size:9px}.account-action{height:34px;padding:0 9px;font-size:10px}.account-profile-btn{font-size:10px}}
+
 </style>
 </head>
 
@@ -1242,6 +1261,12 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 <main class="app">
 
   <!-- ───────── صفحه خانه ───────── -->
+
+  <section class="account-bar" id="accountBar" aria-label="حساب کاربری">
+    <div class="account-bar-copy"><span class="material-symbols-rounded">account_circle</span><div><strong>حساب کاربری</strong><small>برای ساخت پروفایل وارد شوید یا ثبت‌نام کنید</small></div></div>
+    <div class="account-actions" id="accountActions"><button class="account-action" type="button" data-account-open="login">ورود</button><button class="account-action primary" type="button" data-account-open="register">ثبت‌نام</button></div>
+  </section>
+
   <section class="page active" id="page-home">
     <header class="topbar home-only" id="homeTopbar">
   <div class="tb-group tb-right"><div class="plate-field field"><span class="material-symbols-rounded">directions_car</span><div class="plate-inputs" dir="ltr"><input id="plateA" class="plate-part" maxlength="2" inputmode="numeric" placeholder="۱۲"><select id="plateLetter" class="plate-letter"><option value="">حرف</option><option>الف</option><option>ب</option><option>پ</option><option>ت</option><option>ث</option><option>ج</option><option>چ</option><option>ح</option><option>خ</option><option>د</option><option>ر</option><option>ز</option><option>س</option><option>ش</option><option>ص</option><option>ط</option><option>ع</option><option>ف</option><option>ق</option><option>ک</option><option>گ</option><option>ل</option><option>م</option><option>ن</option><option>و</option><option>ه</option><option>ی</option></select><input id="plateB" class="plate-part" maxlength="3" inputmode="numeric" placeholder="۳۴۵"><span class="plate-sep" aria-hidden="true"></span><input id="plateC" class="plate-part plate-city" maxlength="2" inputmode="numeric" placeholder="۶۷"></div></div></div>
@@ -1549,27 +1574,27 @@ function todayFa(){
    ۲) داده‌های پایه : مدل خودروها و سرویس‌ها
    ================================================================ */
 const SERVICES = [
-  { id:'oil', name:'تعویض روغن موتور', icon:'oil_barrel', interval:5000, intervalDays:180 },
-  { id:'oil_filter', name:'تعویض فیلتر روغن', icon:'filter_alt', interval:5000, intervalDays:180 },
-  { id:'air_filter', name:'تعویض فیلتر هوا', icon:'air', interval:15000, intervalDays:365 },
-  { id:'fuel_filter', name:'تعویض فیلتر بنزین', icon:'local_gas_station', interval:30000, intervalDays:365 },
-  { id:'spark_plug', name:'تعویض شمع‌ها', icon:'bolt', interval:30000, intervalDays:365 },
-  { id:'timing_belt', name:'تعویض تسمه تایم', icon:'settings', interval:70000, intervalDays:1095 },
-  { id:'alt_belt', name:'تعویض تسمه دینام', icon:'sync', interval:40000, intervalDays:730 },
-  { id:'brake_front', name:'تعویض لنت ترمز جلو', icon:'disc_full', interval:30000, intervalDays:365 },
-  { id:'brake_rear', name:'تعویض لنت ترمز عقب', icon:'album', interval:40000, intervalDays:730 },
-  { id:'brake_disc', name:'تعویض دیسک ترمز', icon:'radio_button_unchecked', interval:60000, intervalDays:1095 },
-  { id:'brake_fluid', name:'تعویض روغن ترمز', icon:'water_drop', interval:40000, intervalDays:730 },
-  { id:'coolant', name:'تعویض مایع خنک‌کننده', icon:'thermostat', interval:50000, intervalDays:730 },
-  { id:'gearbox_oil', name:'تعویض روغن گیربکس', icon:'settings_input_component', interval:60000, intervalDays:1095 },
-  { id:'battery', name:'تعویض باتری', icon:'battery_charging_full', interval:60000, intervalDays:1095 },
-  { id:'tires', name:'تعویض لاستیک‌ها', icon:'tire_repair', interval:50000, intervalDays:730 },
-  { id:'shock', name:'تعویض کمک‌فنرها', icon:'vertical_align_center', interval:80000, intervalDays:1095 },
-  { id:'suspension', name:'تعمیر جلوبندی', icon:'build', interval:80000, intervalDays:1095 },
-  { id:'clutch', name:'تعویض کیت کلاچ', icon:'settings_backup_restore', interval:80000, intervalDays:1095 },
-  { id:'water_pump', name:'تعویض واتر پمپ', icon:'water', interval:80000, intervalDays:1095 },
-  { id:'alternator', name:'تعمیر دینام و استارت', icon:'electric_bolt', interval:100000, intervalDays:1460 },
-  { id:'steering_oil', name:'تعویض روغن هیدرولیک', icon:'water_drop', interval:50000, intervalDays:730 }
+  { id:'oil', name:'روغن موتور', icon:'oil_barrel', interval:5000, intervalDays:180 },
+  { id:'oil_filter', name:'فیلتر روغن', icon:'filter_alt', interval:5000, intervalDays:180 },
+  { id:'air_filter', name:'فیلتر هوا', icon:'air', interval:15000, intervalDays:365 },
+  { id:'fuel_filter', name:'فیلتر بنزین', icon:'local_gas_station', interval:30000, intervalDays:365 },
+  { id:'spark_plug', name:'شمع‌ها', icon:'bolt', interval:30000, intervalDays:365 },
+  { id:'timing_belt', name:'تسمه تایم', icon:'settings', interval:70000, intervalDays:1095 },
+  { id:'alt_belt', name:'تسمه دینام', icon:'sync', interval:40000, intervalDays:730 },
+  { id:'brake_front', name:'لنت ترمز جلو', icon:'disc_full', interval:30000, intervalDays:365 },
+  { id:'brake_rear', name:'لنت ترمز عقب', icon:'album', interval:40000, intervalDays:730 },
+  { id:'brake_disc', name:'دیسک ترمز', icon:'radio_button_unchecked', interval:60000, intervalDays:1095 },
+  { id:'brake_fluid', name:'روغن ترمز', icon:'water_drop', interval:40000, intervalDays:730 },
+  { id:'coolant', name:'مایع خنک‌کننده', icon:'thermostat', interval:50000, intervalDays:730 },
+  { id:'gearbox_oil', name:'روغن گیربکس', icon:'settings_input_component', interval:60000, intervalDays:1095 },
+  { id:'battery', name:'باتری', icon:'battery_charging_full', interval:60000, intervalDays:1095 },
+  { id:'tires', name:'لاستیک‌ها', icon:'tire_repair', interval:50000, intervalDays:730 },
+  { id:'shock', name:'کمک‌فنرها', icon:'vertical_align_center', interval:80000, intervalDays:1095 },
+  { id:'suspension', name:'جلوبندی', icon:'build', interval:80000, intervalDays:1095 },
+  { id:'clutch', name:'کیت کلاچ', icon:'settings_backup_restore', interval:80000, intervalDays:1095 },
+  { id:'water_pump', name:'واتر پمپ', icon:'water', interval:80000, intervalDays:1095 },
+  { id:'alternator', name:'دینام و استارت', icon:'electric_bolt', interval:100000, intervalDays:1460 },
+  { id:'steering_oil', name:'روغن هیدرولیک', icon:'water_drop', interval:50000, intervalDays:730 }
 ];
 const SERVICE_MAP = Object.fromEntries(SERVICES.map(s => [s.id, s]));
 
@@ -2516,6 +2541,7 @@ async function driveRestore(){
    ۱۷) رویدادها
    ================================================================ */
 function bindEvents(){
+  bindAccountEvents();
 
   $('#btnServiceSearch').addEventListener('click',openServiceSearch);
 
@@ -2699,6 +2725,28 @@ function bindEvents(){
   });
 }
 
+
+/* ================================================================
+   حساب محلی و پروفایل کاربر
+   توجه: این حساب‌بندی فقط روی همین دستگاه است و احراز هویت سروری نیست.
+   ================================================================ */
+const ACCOUNT_STORAGE_KEY='carServiceAccounts.local.v1';
+const ACCOUNT_SESSION_KEY='carServiceSession.local.v1';
+const ACCOUNT_AVATARS=['🚘','🏎️','🚗','🛠️','⚙️','🦁','🐺','🔥','⭐','👤'];
+let accountMode='login';
+let selectedAccountAvatar='🚘';
+function readAccounts(){try{const value=JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY)||'{}');return value&&typeof value==='object'&&!Array.isArray(value)?value:{}}catch(e){return {}}}
+function currentAccount(){const email=localStorage.getItem(ACCOUNT_SESSION_KEY);if(!email)return null;const accounts=readAccounts();return accounts[email]||null}
+function showAccountMessage(id,message,type){const el=document.getElementById(id);if(!el)return;el.textContent=message;el.className='account-message show '+(type||'')}
+function openAccountModal(mode='login'){accountMode=mode;const modal=$('#accountModal');if(!modal)return;$('#accountAuthView').hidden=false;$('#accountProfileView').hidden=true;$('#accountModalTitle').textContent=mode==='register'?'ساخت حساب کاربری':'ورود به حساب';$('#accountNameField').hidden=mode!=='register';$('#accountSubmit').textContent=mode==='register'?'ثبت‌نام و ساخت حساب':'ورود به حساب';$('#accountPassword').autocomplete=mode==='register'?'new-password':'current-password';$('#accountMessage').className='account-message';document.querySelectorAll('[data-account-tab]').forEach(b=>b.classList.toggle('active',b.dataset.accountTab===mode));modal.classList.add('show')}
+function renderAccountBar(){const account=currentAccount(),actions=$('#accountActions'),bar=$('#accountBar');if(!actions||!bar)return;if(!account){actions.innerHTML='<button class="account-action" type="button" data-account-open="login">ورود</button><button class="account-action primary" type="button" data-account-open="register">ثبت‌نام</button>';return}const avatar=account.avatar||'🚘';actions.innerHTML='<button class="account-profile-btn" type="button" data-account-profile><span class="account-avatar">'+esc(avatar)+'</span><span>'+esc(account.name||'پروفایل من')+'</span></button>'}
+function showProfileEditor(){const account=currentAccount();if(!account)return;selectedAccountAvatar=ACCOUNT_AVATARS.includes(account.avatar)?account.avatar:'🚘';$('#accountAuthView').hidden=true;$('#accountProfileView').hidden=false;$('#accountModalTitle').textContent='پروفایل من';$('#profileNamePreview').textContent=account.name||'کاربر';$('#profileEmailPreview').textContent=account.email;$('#profileDisplayName').value=account.name||'';$('#profileAvatarPreview').textContent=selectedAccountAvatar;document.querySelectorAll('[data-avatar]').forEach(b=>b.classList.toggle('selected',b.dataset.avatar===selectedAccountAvatar));$('#profileMessage').className='account-message';$('#accountModal').classList.add('show')}
+async function accountPasswordHash(password){if(!window.crypto||!crypto.subtle)throw new Error('مرورگر امن برای ساخت حساب در دسترس نیست. صفحه را با HTTPS باز کنید.');const bytes=new TextEncoder().encode(password);const digest=await crypto.subtle.digest('SHA-256',bytes);return Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('')}
+async function submitAccountForm(event){event.preventDefault();const email=$('#accountEmail').value.trim().toLowerCase(),password=$('#accountPassword').value,name=$('#accountName').value.trim();if(!email||!password)return;try{const accounts=readAccounts(),hash=await accountPasswordHash(password);if(accountMode==='register'){if(!name){showAccountMessage('accountMessage','نام نمایشی را وارد کنید.','error');return}if(accounts[email]){showAccountMessage('accountMessage','این ایمیل قبلاً در همین دستگاه ثبت شده است.','error');return}accounts[email]={email,name,avatar:'🚘',passwordHash:hash,createdAt:new Date().toISOString()};localStorage.setItem(ACCOUNT_STORAGE_KEY,JSON.stringify(accounts));localStorage.setItem(ACCOUNT_SESSION_KEY,email);$('#accountModal').classList.remove('show');renderAccountBar();toast('حساب محلی ساخته شد');return}if(!accounts[email]||accounts[email].passwordHash!==hash){showAccountMessage('accountMessage','ایمیل یا رمز عبور نادرست است.','error');return}localStorage.setItem(ACCOUNT_SESSION_KEY,email);$('#accountModal').classList.remove('show');renderAccountBar();toast('وارد حساب شدید');}catch(error){showAccountMessage('accountMessage',error.message||'خطا در ثبت اطلاعات.','error')}}
+function saveAccountProfile(){const account=currentAccount();if(!account)return;const name=$('#profileDisplayName').value.trim();if(!name){showAccountMessage('profileMessage','نام نمایشی را وارد کنید.','error');return}const accounts=readAccounts();account.name=name;account.avatar=selectedAccountAvatar;accounts[account.email]=account;localStorage.setItem(ACCOUNT_STORAGE_KEY,JSON.stringify(accounts));$('#profileAvatarPreview').textContent=selectedAccountAvatar;$('#profileNamePreview').textContent=name;renderAccountBar();showAccountMessage('profileMessage','پروفایل ذخیره شد.','success')}
+function bindAccountEvents(){document.addEventListener('click',event=>{const open=event.target.closest('[data-account-open]');if(open){openAccountModal(open.dataset.accountOpen);return}if(event.target.closest('[data-account-close]')){$('#accountModal').classList.remove('show');return}const tab=event.target.closest('[data-account-tab]');if(tab){openAccountModal(tab.dataset.accountTab);return}if(event.target.closest('[data-account-profile]')){showProfileEditor();return}const avatar=event.target.closest('[data-avatar]');if(avatar){selectedAccountAvatar=avatar.dataset.avatar;document.querySelectorAll('[data-avatar]').forEach(b=>b.classList.toggle('selected',b===avatar));$('#profileAvatarPreview').textContent=selectedAccountAvatar;return}});$('#accountForm').addEventListener('submit',submitAccountForm);$('#saveProfileBtn').addEventListener('click',saveAccountProfile);$('#logoutBtn').addEventListener('click',()=>{localStorage.removeItem(ACCOUNT_SESSION_KEY);$('#accountModal').classList.remove('show');renderAccountBar();toast('از حساب خارج شدید')});$('#accountModal').addEventListener('click',event=>{if(event.target.id==='accountModal')event.target.classList.remove('show')})}
+
+
 function runAppSelfTests(){
   const results=[];
   const check=(name,fn)=>{try{if(!fn())throw new Error('شرط برقرار نشد');results.push({name,passed:true});}catch(error){results.push({name,passed:false,error:error.message});}};
@@ -2760,6 +2808,34 @@ if (document.readyState === 'interactive' || document.readyState === 'complete')
   init();
 }
 </script>
+
+
+<div class="account-modal-backdrop" id="accountModal" role="dialog" aria-modal="true" aria-label="حساب کاربری">
+  <div class="account-modal">
+    <div class="account-modal-head"><h2 id="accountModalTitle">حساب کاربری</h2><button class="account-modal-close" type="button" data-account-close aria-label="بستن">×</button></div>
+    <div id="accountAuthView">
+      <div class="account-tabs"><button class="account-tab active" type="button" data-account-tab="login">ورود</button><button class="account-tab" type="button" data-account-tab="register">ثبت‌نام</button></div>
+      <form class="account-form" id="accountForm">
+        <div id="accountNameField" hidden><label for="accountName">نام نمایشی</label><input id="accountName" autocomplete="name" maxlength="40" placeholder="نام شما"></div>
+        <label for="accountEmail">ایمیل</label><input id="accountEmail" type="email" autocomplete="email" required maxlength="120" placeholder="example@email.com">
+        <label for="accountPassword">رمز عبور</label><input id="accountPassword" type="password" autocomplete="current-password" required minlength="6" maxlength="100" placeholder="حداقل ۶ کاراکتر">
+        <button class="account-submit" type="submit" id="accountSubmit">ورود به حساب</button>
+      </form>
+      <div class="account-message" id="accountMessage" role="status"></div>
+      <div class="account-note">این نسخه حساب را فقط روی همین دستگاه ذخیره می‌کند؛ ورود، رمز عبور و پروفایل هنوز به سرور یا GitHub متصل نیستند و بین دستگاه‌ها همگام نمی‌شوند.</div>
+    </div>
+    <div id="accountProfileView" hidden>
+      <div class="account-profile-summary"><div class="account-avatar" id="profileAvatarPreview">🚘</div><div><strong id="profileNamePreview"></strong><small id="profileEmailPreview"></small></div></div>
+      <label class="lbl">انتخاب آواتار</label>
+      <div class="avatar-picker" id="avatarPicker">
+        <button type="button" class="avatar-option selected" data-avatar="🚘">🚘</button><button type="button" class="avatar-option" data-avatar="🏎️">🏎️</button><button type="button" class="avatar-option" data-avatar="🚗">🚗</button><button type="button" class="avatar-option" data-avatar="🛠️">🛠️</button><button type="button" class="avatar-option" data-avatar="⚙️">⚙️</button><button type="button" class="avatar-option" data-avatar="🦁">🦁</button><button type="button" class="avatar-option" data-avatar="🐺">🐺</button><button type="button" class="avatar-option" data-avatar="🔥">🔥</button><button type="button" class="avatar-option" data-avatar="⭐">⭐</button><button type="button" class="avatar-option" data-avatar="👤">👤</button>
+      </div>
+      <label for="profileDisplayName">نام نمایشی</label><input id="profileDisplayName" class="txt" maxlength="40" placeholder="نام شما">
+      <div class="btn-row"><button type="button" class="btn btn-primary" id="saveProfileBtn">ذخیره پروفایل</button><button type="button" class="btn btn-outline" id="logoutBtn">خروج از حساب</button></div>
+      <div class="account-message" id="profileMessage" role="status"></div>
+    </div>
+  </div>
+</div>
 
 </body>
         </html>
