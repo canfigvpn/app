@@ -947,6 +947,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 @media(max-width:320px){.plate-field{padding:0 2px}.plate-part{width:20px!important;font-size:8px!important}.plate-city{width:18px!important}.plate-letter{width:27px;font-size:8px}.field>.material-symbols-rounded{display:none}.km-field input{font-size:9px}}
 @media(min-width:701px) and (max-width:1280px){.topbar,.app{max-width:1000px}}
 
+.app>#page-home>.topbar{margin:0 auto 14px;width:100%;max-width:none;position:relative;top:auto}
 /* بازطراحی نوار ثابت صفحه خانه، پلاک و کارت سرویس‌ها */
 .topbar{position:relative;top:auto;backdrop-filter:none;-webkit-backdrop-filter:none}
 .home-only{flex-wrap:nowrap}
@@ -1063,21 +1064,21 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 
 .number-input{font-variant-numeric:tabular-nums;direction:ltr;text-align:right}.duration-input-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:7px 0;direction:rtl}.duration-input-row label{display:flex;flex-direction:column;gap:5px;min-width:0}.duration-input-row label>span{font-size:10px;font-weight:800;color:var(--text-2);text-align:center}.duration-input-row .txt{text-align:center;direction:ltr;min-width:0;padding-inline:5px}.duration-input-row label>span{white-space:nowrap}.duration-preview{margin-top:5px;font-size:11px;color:var(--primary-text);font-weight:700;line-height:1.8;direction:rtl}.report-month-list{margin-top:10px}.jalali-picker-backdrop{position:fixed;inset:0;z-index:1200;background:rgba(2,6,23,.62);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:12px}.jalali-picker-backdrop.show{display:flex}.jalali-picker{width:min(370px,100%);padding:16px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:21px;box-shadow:var(--shadow-lg)}.jalali-picker-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:13px}.jalali-picker-head strong{font-size:14px;font-weight:900}.jalali-picker-head button{width:36px;height:36px;border:1px solid var(--border);border-radius:11px;background:var(--surface-2);color:var(--primary);display:grid;place-items:center}.jalali-weekdays,.jalali-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center}.jalali-weekdays{margin-bottom:7px;color:var(--text-2);font-size:10px;font-weight:800}.jalali-day{height:39px;border:0;border-radius:10px;background:var(--surface-2);color:var(--text);font:700 12px Vazirmatn}.jalali-day.selected{background:var(--primary);color:#fff}.jalali-day.today{outline:1px solid var(--primary)}.jalali-day:disabled{opacity:0;pointer-events:none}.jalali-picker-foot{display:flex;justify-content:space-between;gap:8px;margin-top:13px}.jalali-picker-foot button{height:36px;padding:0 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface-2);color:var(--text);font:700 11px Vazirmatn}
 
-/* تقویم شمسی شخصی‌سازی‌شده */
-.datepicker-plot-area{font-family:'Vazirmatn',sans-serif!important;border:1px solid var(--border)!important;border-radius:20px!important;background:var(--surface)!important;color:var(--text)!important;box-shadow:0 22px 65px rgba(2,6,23,.24)!important;overflow:hidden!important;padding:12px!important}
-.datepicker-plot-area .datepicker-navigator{height:42px!important;margin-bottom:8px!important}
-.datepicker-plot-area .datepicker-navigator .pwt-btn{border-radius:11px!important;color:var(--primary)!important}
-.datepicker-plot-area .datepicker-navigator .pwt-btn:hover{background:var(--primary-soft)!important}
-.datepicker-plot-area .datepicker-navigator .datepicker-month-view,.datepicker-plot-area .datepicker-navigator .datepicker-year-view{font-weight:900!important;color:var(--text)!important}
-.datepicker-plot-area .datepicker-day-view .table-days td span{border-radius:10px!important;font-family:'Vazirmatn',sans-serif!important;font-weight:600!important}
-.datepicker-plot-area .datepicker-day-view .table-days td span:hover{background:var(--primary-soft)!important;color:var(--primary)!important}
-.datepicker-plot-area .datepicker-day-view .table-days td span.selected{background:var(--primary)!important;color:#fff!important;box-shadow:0 5px 14px rgba(37,99,235,.25)!important}
-.datepicker-plot-area .datepicker-day-view .table-days th{color:var(--text-2)!important;font-weight:800!important}
-.datepicker-plot-area .datepicker-time-view,.datepicker-plot-area .datepicker-footer{border-color:var(--border)!important;background:var(--surface-2)!important}
-.datepicker-plot-area .datepicker-footer .pwt-btn-today{color:var(--primary)!important;font-family:'Vazirmatn',sans-serif!important;font-weight:800!important}
-.datepicker-plot-area *{font-family:'Vazirmatn',sans-serif!important}
-[data-theme="dark"] .datepicker-plot-area{background:#0b1422!important;color:#e6edf7!important;border-color:#26354d!important}
-[data-theme="dark"] .datepicker-plot-area .datepicker-day-view .table-days td span{color:#dbeafe!important}
+/* تقویم شمسی داخلی؛ بدون وابستگی خارجی */
+.jalali-picker-backdrop{position:fixed;inset:0;z-index:1200;background:rgba(2,6,23,.62);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:12px}
+.jalali-picker-backdrop.show{display:flex}
+.jalali-picker{width:min(370px,100%);padding:16px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:21px;box-shadow:var(--shadow-lg)}
+.jalali-picker-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:13px}
+.jalali-picker-head strong{font-size:14px;font-weight:900}
+.jalali-picker-head button{width:36px;height:36px;border:1px solid var(--border);border-radius:11px;background:var(--surface-2);color:var(--primary);display:grid;place-items:center}
+.jalali-weekdays,.jalali-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center}
+.jalali-weekdays{margin-bottom:7px;color:var(--text-2);font-size:10px;font-weight:800}
+.jalali-day{height:39px;border:0;border-radius:10px;background:var(--surface-2);color:var(--text);font:700 12px Vazirmatn}
+.jalali-day.selected{background:var(--primary);color:#fff}
+.jalali-day.today{outline:1px solid var(--primary)}
+.jalali-day:disabled{opacity:0;pointer-events:none}
+.jalali-picker-foot{display:flex;justify-content:space-between;gap:8px;margin-top:13px}
+.jalali-picker-foot button{height:36px;padding:0 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface-2);color:var(--text);font:700 11px Vazirmatn}
 /* پنجره جستجوی سرویس */
 .service-search-backdrop{position:fixed;inset:0;z-index:700;display:none;align-items:flex-start;justify-content:center;padding:max(18px,env(safe-area-inset-top)) 12px 14px;background:rgba(2,6,23,.68);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow:hidden}.service-search-backdrop.show{display:flex}.service-search-box{position:relative;width:min(700px,100%);max-height:calc(100dvh - max(32px,env(safe-area-inset-top)) - 14px);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-radius:23px;background:var(--surface);box-shadow:var(--shadow-lg);padding:18px;margin:0 auto;min-height:0}
 .service-search-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
@@ -1181,7 +1182,16 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 <!-- ══════════════════════════════════════════════
      نوار بالایی : پلاک (راست) + کیلومتر (چپ)
      ══════════════════════════════════════════════ -->
-<header class="topbar home-only" id="homeTopbar">
+
+
+<!-- ══════════════════════════════════════════════
+     محتوای اصلی
+     ══════════════════════════════════════════════ -->
+<main class="app">
+
+  <!-- ───────── صفحه خانه ───────── -->
+  <section class="page active" id="page-home">
+    <header class="topbar home-only" id="homeTopbar">
   <div class="tb-group tb-right"><div class="plate-field field"><span class="material-symbols-rounded">directions_car</span><div class="plate-inputs" dir="ltr"><input id="plateA" class="plate-part" maxlength="2" inputmode="numeric" placeholder="۱۲"><select id="plateLetter" class="plate-letter"><option value="">حرف</option><option>الف</option><option>ب</option><option>پ</option><option>ت</option><option>ث</option><option>ج</option><option>چ</option><option>ح</option><option>خ</option><option>د</option><option>ر</option><option>ز</option><option>س</option><option>ش</option><option>ص</option><option>ط</option><option>ع</option><option>ف</option><option>ق</option><option>ک</option><option>گ</option><option>ل</option><option>م</option><option>ن</option><option>و</option><option>ه</option><option>ی</option></select><input id="plateB" class="plate-part" maxlength="3" inputmode="numeric" placeholder="۳۴۵"><span class="plate-sep">/</span><input id="plateC" class="plate-part plate-city" maxlength="2" inputmode="numeric" placeholder="۶۷"></div></div></div>
 
   <div class="tb-group tb-left">
@@ -1193,13 +1203,6 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   </div>
 </header>
 
-<!-- ══════════════════════════════════════════════
-     محتوای اصلی
-     ══════════════════════════════════════════════ -->
-<main class="app">
-
-  <!-- ───────── صفحه خانه ───────── -->
-  <section class="page active" id="page-home">
     <div class="page-head">
       <h1>وضعیت سرویس‌ها</h1>
       <p>بر اساس کیلومتر فعلی خودرو و دوره‌های نگهداری</p>
@@ -1397,8 +1400,22 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
+<div class="jalali-picker-backdrop" id="jalaliPickerBackdrop" role="dialog" aria-modal="true" aria-label="تقویم شمسی" onclick="if(event.target===this)closeJalaliPicker()">
+  <section class="jalali-picker" dir="rtl">
+    <div class="jalali-picker-head">
+      <button type="button" data-jalali-nav="-1" aria-label="ماه قبل"><span class="material-symbols-rounded">chevron_right</span></button>
+      <strong id="jalaliPickerTitle">فروردین ۱۴۰۵</strong>
+      <button type="button" data-jalali-nav="1" aria-label="ماه بعد"><span class="material-symbols-rounded">chevron_left</span></button>
+    </div>
+    <div class="jalali-weekdays"><span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span></div>
+    <div class="jalali-days" id="jalaliPickerDays"></div>
+    <div class="jalali-picker-foot">
+      <button type="button" data-jalali-today>امروز</button>
+      <button type="button" data-jalali-close>بستن</button>
+    </div>
+  </section>
+</div>
 
-<!-- تقویم شمسی Azar Datepicker -->
 <script>
 (function(){
   const sources=[
@@ -1977,39 +1994,22 @@ function jalaliMonthLength(y,m){
   return count;
 }
 function normalizeJalaliPickerMonth(){while(jalaliPickerState.month<1){jalaliPickerState.month=12;jalaliPickerState.year--;}while(jalaliPickerState.month>12){jalaliPickerState.month=1;jalaliPickerState.year++;}}
-async function openJalaliPicker(inputId){
+function openJalaliPicker(inputId){
   const input=document.getElementById(inputId);
-  if(!input)return;
-  try{
-    const ready=await (window.AzarDatepickerReady||Promise.resolve(typeof window.AzarDatepicker==='function'));
-    if(!ready||typeof window.AzarDatepicker!=='function'){
-      toast('بارگذاری کتابخانه تقویم ناموفق بود؛ اتصال اینترنت را بررسی کنید');
-      return;
-    }
-    let picker=input._azarDatepickerInstance;
-    if(!picker){
-      picker=window.AzarDatepicker.init({
-        selector:input,calendar:'jalali',mode:'date',
-        inputFormat:'YYYY/MM/DD',outputFormat:'YYYY/MM/DD',
-        rtl:true,darkMode:'auto',closeOnSelect:true,
-        showCalendarToggle:false,showClearButton:true,
-        onSelect:function(data){
-          input.value=String(data.formatted||'').replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[Number(d)];});
-          input.dispatchEvent(new Event('change',{bubbles:true}));
-        },
-        onChange:function(data){
-          if(data&&data.formatted)input.value=String(data.formatted).replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[Number(d)];});
-        }
-      });
-      input._azarDatepickerInstance=picker;
-    }
-    picker.setValueFromString(toEnDigits(String(input.value||'').trim()));
-    picker.refresh();
-    picker.open();
-  }catch(error){
-    console.error('Azar Datepicker error:',error);
-    toast('خطا در راه‌اندازی تقویم شمسی');
-  }
+  const backdrop=document.getElementById('jalaliPickerBackdrop');
+  if(!input||!backdrop)return;
+  const parsed=parseJalaliDate(input.value);
+  const now=jalaliParts(new Date());
+  jalaliPickerState={
+    inputId,
+    year:parsed?parsed.year:now.year,
+    month:parsed?parsed.month:now.month,
+    selected:parsed?jalaliString(parsed.year,parsed.month,parsed.day):'',
+    today:jalaliString(now.year,now.month,now.day)
+  };
+  normalizeJalaliPickerMonth();
+  renderJalaliPicker();
+  backdrop.classList.add('show');
 }
 function renderJalaliPicker(){
   const title=document.getElementById('jalaliPickerTitle'),days=document.getElementById('jalaliPickerDays');if(!title||!days)return;
@@ -2488,7 +2488,8 @@ function bindEvents(){
   document.addEventListener('click',e=>{
     const dateButton=e.target.closest('[data-jalali-date]');if(dateButton)openJalaliPicker(dateButton.dataset.jalaliDate);
     const nav=e.target.closest('[data-jalali-nav]');if(nav){jalaliPickerState.month+=Number(nav.dataset.jalaliNav);normalizeJalaliPickerMonth();renderJalaliPicker();}
-    const day=e.target.closest('[data-jalali-day]');if(day){const target=document.getElementById(jalaliPickerState.inputId);if(target)target.value=day.dataset.jalaliDay;closeJalaliPicker();}
+    const day=e.target.closest('[data-jalali-day]');if(day){const target=document.getElementById(jalaliPickerState.inputId);if(target){target.value=day.dataset.jalaliDay;target.dispatchEvent(new Event('change',{bubbles:true}));}closeJalaliPicker();return;}
+    if(e.target.closest('[data-jalali-today]')){const target=document.getElementById(jalaliPickerState.inputId);if(target){target.value=jalaliPickerState.today;target.dispatchEvent(new Event('change',{bubbles:true}));}closeJalaliPicker();return;}
     if(e.target.closest('[data-jalali-close]')||e.target.id==='jalaliPickerBackdrop')closeJalaliPicker();
   });
   document.addEventListener('input',e=>{
