@@ -2680,7 +2680,7 @@ function runAppSelfTests(){
   check('خواندن عدد با جداکننده',()=>parseNum('۱۲۳٬۴۵۶')===123456);
   check('فرار HTML برای متن',()=>esc('<img src=x onerror=1>')==='&lt;img src=x onerror=1&gt;');
   check('فاصله پیش‌فرض روغن بدون وابستگی به مدل',()=>SERVICE_MAP.oil.interval===5000&&!('modelAware' in SERVICE_MAP.oil));
-  check('آستانه نزدیک موعد کیلومتری ۵۰۰۰',()=>{const previous=state;state=Object.assign(defaultState(),{km:0,services:{oil:{lastKm:0,lastDate:''}}});const result=getStatus(SERVICE_MAP.oil).key==='near';state=previous;return result;});
+  check('آستانه هشدار نزدیک موعد کیلومتری ۲۰۰۰',()=>{const previous=state;state=Object.assign(defaultState(),{km:3000,services:{oil:{lastKm:0,lastDate:''}}});const result=getStatus(SERVICE_MAP.oil).key==='near';state=previous;return result;});
   check('پذیرش بکاپ معتبر',()=>validateBackupData({services:{},history:[]}).history.length===0);
   check('رد تاریخچه نامعتبر',()=>{try{validateBackupData({services:{},history:{}});return false;}catch(e){return true;}});
   check('رد کیلومتر منفی',()=>validateBackupData({services:{x:{lastKm:-1}}}).services.x===undefined);
