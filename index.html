@@ -1696,6 +1696,64 @@ function historyTimestamp(record){
   try{const raw=toEnDigits(record.date||'').trim();if(/^\d{4}-\d{2}-\d{2}$/.test(raw)){const d=new Date(raw+'T12:00:00');return Number.isNaN(d.getTime())?0:d.getTime();}const p=raw.split(/[\/.-]/).map(Number);const d=p[0]>1700?new Date(p[0],p[1]-1,p[2],12):persianPartsToDate(p);return d&&!Number.isNaN(d.getTime())?d.getTime():0;}catch(e){return 0;}
 }
 
+function saveServiceDetails(serviceId){
+  const interval=parseNum($('#editServiceInterval').value);
+  const duration=normalizeDurationParts(
+    parseNum($('#editServiceYears').value),
+    parseNum($('#editServiceMonths').value),
+    parseNum($('#editServiceDays').value)
+  );
+  const intervalDays=durationPartsToDays(duration);
+  const lastKmRaw=$('#editServiceLastKm').value.trim();
+  const lastDateRaw=$('#editServiceLastDate').value.trim();
+  let lastKm=null;
+
+  if(!interval||interval<1||intervalDays<1){
+    toast('فاصله کیلومتری و زمانی را درست وارد کنید');
+    return;
+  }
+  if(lastKmRaw!==''){
+    lastKm=parseNum(lastKmRaw);
+    if(!Number.isFinite(lastKm)||lastKm<0){
+      toast('کیلومتر آخرین سرویس معتبر نیست');
+      return;
+    }
+  }
+
+  const intervalYears=duration.years;
+  const intervalMonths=duration.months;
+  const intervalDayPart=duration.days;
+  state.serviceSettings=state.serviceSettings||{};
+  state.serviceSettings[serviceId]={interval,intervalDays,intervalYears,intervalMonths,intervalDayPart};
+
+  state.services=state.services||{};
+  if(lastKm===null){
+    delete state.services[serviceId];
+  }else{
+    state.services[serviceId]={
+      lastKm,
+      lastDate:lastDateRaw?displayJalaliDate(lastDateRaw):''
+    };
+  }
+
+  const custom=(state.customServices||[]).find(x=>x.id===serviceId);
+  if(custom){
+    custom.interval=interval;
+    custom.intervalDays=intervalDays;
+    custom.intervalYears=intervalYears;
+    custom.intervalMonths=intervalMonths;
+    custom.intervalDayPart=intervalDayPart;
+  }
+
+  if(!save()){
+    toast('ذخیره اطلاعات انجام نشد؛ حافظه دستگاه را بررسی کنید');
+    return;
+  }
+  renderAll();
+  openServicePanel(serviceId,'details');
+  toast('اطلاعات سرویس ذخیره شد ✓');
+}
+
 function openServicePanel(serviceId, mode){
   const service = SERVICES.concat(state.customServices || []).find(x => x.id === serviceId);
   if (!service) return;
@@ -1745,8 +1803,11 @@ function openServicePanel(serviceId, mode){
       <input class="txt number-input" id="editServiceLastKm" type="text" inputmode="numeric" value="${current.lastKm == null ? '' : fa(current.lastKm)}" placeholder="ثبت نشده">
       <label class="lbl" for="editServiceLastDate">تاریخ آخرین تعویض/تعمیر</label>
       <div class="input-with-action"><input class="txt" id="editServiceLastDate" type="text" value="${esc(current.lastDate ? displayJalaliDate(current.lastDate) : '')}" placeholder="۱۴۰۵/۰۸/۰۲" autocomplete="off"><button type="button" class="btn btn-outline date-btn" data-jalali-date="editServiceLastDate">تقویم</button></div>
-      <button type="button" class="btn btn-primary panel-history-link" id="btnSaveServiceDetails" data-service-id="${esc(serviceId)}">ذخیره تغییرات</button>
-      <button type="button" class="btn btn-outline panel-history-link" data-service-history="${esc(serviceId)}">مشاهده تمام سوابق این قطعه</button>`;
+      <button type="button" class="btn btn-primary panel-history-link" id="btnSaveServiceDetails" data-service-id="${esc(serviceId)}">ذخیره اطلاعات</button>`;
+  }
+  const saveDetailsButton=content.querySelector('#btnSaveServiceDetails');
+  if(saveDetailsButton){
+    saveDetailsButton.addEventListener('click',()=>saveServiceDetails(serviceId));
   }
   panel.classList.add('show');
   document.body.classList.add('panel-open');
@@ -2390,24 +2451,6 @@ function bindEvents(){
     /* --- دکمه ثبت سرویس (رویداد واگذارشده) --- */
     const detail=e.target.closest('[data-details]');
     if(detail){ openServicePanel(detail.dataset.details, 'details'); const sm=$('#serviceSearchModal');if(sm)sm.classList.remove('show'); return; }
-    const saveDetails=e.target.closest('#btnSaveServiceDetails');
-    if(saveDetails){
-      const id=saveDetails.dataset.serviceId;
-      const interval=parseNum($('#editServiceInterval').value);
-      const duration=normalizeDurationParts(parseNum($('#editServiceYears').value),parseNum($('#editServiceMonths').value),parseNum($('#editServiceDays').value));
-      const intervalYears=duration.years,intervalMonths=duration.months,intervalDayPart=duration.days;
-      const intervalDays=durationPartsToDays(duration);
-      const lastKmRaw=$('#editServiceLastKm').value.trim();
-      const lastDate=displayJalaliDate($('#editServiceLastDate').value.trim());
-      if(!interval||interval<1||intervalDays<1){toast('فاصله کیلومتری و زمانی را درست وارد کنید');return;}
-      state.serviceSettings=state.serviceSettings||{};
-      state.serviceSettings[id]={interval,intervalDays,intervalYears,intervalMonths,intervalDayPart};
-      if(lastKmRaw===''){delete state.services[id];}
-      else {const lastKm=parseNum(lastKmRaw);if(!Number.isFinite(lastKm)||lastKm<0){toast('کیلومتر آخرین سرویس معتبر نیست');return;}state.services[id]={lastKm,lastDate};}
-      const custom=(state.customServices||[]).find(x=>x.id===id);
-      if(custom){custom.interval=interval;custom.intervalDays=intervalDays;custom.intervalYears=intervalYears;custom.intervalMonths=intervalMonths;custom.intervalDayPart=intervalDayPart;}
-      save();renderAll();openServicePanel(id,'details');toast('اطلاعات سرویس ذخیره شد ✓');return;
-    }
     const serviceHistory=e.target.closest('[data-service-history]');
     if(serviceHistory){ openServicePanel(serviceHistory.dataset.serviceHistory, 'history'); return; }
     const add=e.target.closest('#btnAddCustomService');
