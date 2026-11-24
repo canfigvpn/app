@@ -1811,7 +1811,6 @@ function saveServiceDetailSection(serviceId,section){
     const remaining=Number(raw);
     lastKm=(Number(state.km)||0)+interval-remaining;
     if(lastKm<0){toast('مقدار واردشده با کیلومتر فعلی سازگار نیست');return;}
-    if(!lastDate){toast('برای ویرایش موعد کیلومتری ابتدا تاریخ آخرین سرویس را از طریق ثبت سرویس وارد کنید');return;}
     state.services=state.services||{};
     state.services[serviceId]={...current,lastKm};
   }else if(section==='time'){
@@ -1820,7 +1819,7 @@ function saveServiceDetailSection(serviceId,section){
     if(days<0){toast('زمان واردشده معتبر نیست');return;}
     const overdue=$('#editTimeOverdue').checked;
     const offset=(overdue?-days:days)-durationPartsToDays(duration);
-    const base=new Date();base.setHours(12,0,0,0);base.setDate(base.getDate()-offset);
+    const base=new Date();base.setHours(12,0,0,0);base.setDate(base.getDate()+offset);
     const p=jalaliParts(base);
     if(!p){toast('محاسبه تاریخ سرویس ناموفق بود');return;}
     lastDate=jalaliString(p.year,p.month,p.day);
