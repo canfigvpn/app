@@ -977,6 +977,11 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 .s-progress>i{background:var(--sc-fg)}
 .s-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin-top:10px;flex-wrap:wrap}
 .s-actions .detail-btn{height:33px;padding:0 12px;font-size:11px}
+.s-due-with-actions{direction:ltr;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:8px;width:100%}
+.s-due-with-actions>span{direction:rtl;text-align:right;flex:1 1 auto;min-width:0;line-height:1.8}
+.s-actions-inline{direction:ltr;display:flex;align-items:center;justify-content:flex-start;gap:5px;flex:0 0 auto;margin:0}
+.s-actions-inline .detail-btn{height:31px;padding:0 9px;font-size:10px}
+.s-actions-inline .s-btn{width:31px;height:31px}
 .s-actions .history-btn{border-color:var(--sc-bd)}
 .sc-title h2{display:flex;align-items:center;gap:8px}
 .sc-count{display:inline-flex;vertical-align:middle;min-width:25px;justify-content:center;font-size:11px;padding:2px 8px}
@@ -1056,7 +1061,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 @keyframes loaderProgress{0%{transform:translateX(180%)}100%{transform:translateX(-280%)}}
 @keyframes loaderDot{50%{opacity:1;transform:translateY(-4px)}}
 
-.number-input{font-variant-numeric:tabular-nums;direction:ltr;text-align:right}.duration-input-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:7px 0}.duration-input-row label{display:flex;flex-direction:column;gap:5px;min-width:0}.duration-input-row label>span{font-size:10px;font-weight:800;color:var(--text-2);text-align:center}.duration-input-row .txt{text-align:center;direction:ltr;min-width:0;padding-inline:5px}.duration-preview{margin-top:5px;font-size:11px;color:var(--primary-text);font-weight:700;line-height:1.8}.report-month-list{margin-top:10px}.jalali-picker-backdrop{position:fixed;inset:0;z-index:1200;background:rgba(2,6,23,.62);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:12px}.jalali-picker-backdrop.show{display:flex}.jalali-picker{width:min(370px,100%);padding:16px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:21px;box-shadow:var(--shadow-lg)}.jalali-picker-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:13px}.jalali-picker-head strong{font-size:14px;font-weight:900}.jalali-picker-head button{width:36px;height:36px;border:1px solid var(--border);border-radius:11px;background:var(--surface-2);color:var(--primary);display:grid;place-items:center}.jalali-weekdays,.jalali-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center}.jalali-weekdays{margin-bottom:7px;color:var(--text-2);font-size:10px;font-weight:800}.jalali-day{height:39px;border:0;border-radius:10px;background:var(--surface-2);color:var(--text);font:700 12px Vazirmatn}.jalali-day.selected{background:var(--primary);color:#fff}.jalali-day.today{outline:1px solid var(--primary)}.jalali-day:disabled{opacity:0;pointer-events:none}.jalali-picker-foot{display:flex;justify-content:space-between;gap:8px;margin-top:13px}.jalali-picker-foot button{height:36px;padding:0 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface-2);color:var(--text);font:700 11px Vazirmatn}
+.number-input{font-variant-numeric:tabular-nums;direction:ltr;text-align:right}.duration-input-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:7px 0;direction:rtl}.duration-input-row label{display:flex;flex-direction:column;gap:5px;min-width:0}.duration-input-row label>span{font-size:10px;font-weight:800;color:var(--text-2);text-align:center}.duration-input-row .txt{text-align:center;direction:ltr;min-width:0;padding-inline:5px}.duration-input-row label>span{white-space:nowrap}.duration-preview{margin-top:5px;font-size:11px;color:var(--primary-text);font-weight:700;line-height:1.8;direction:rtl}.report-month-list{margin-top:10px}.jalali-picker-backdrop{position:fixed;inset:0;z-index:1200;background:rgba(2,6,23,.62);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:12px}.jalali-picker-backdrop.show{display:flex}.jalali-picker{width:min(370px,100%);padding:16px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:21px;box-shadow:var(--shadow-lg)}.jalali-picker-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:13px}.jalali-picker-head strong{font-size:14px;font-weight:900}.jalali-picker-head button{width:36px;height:36px;border:1px solid var(--border);border-radius:11px;background:var(--surface-2);color:var(--primary);display:grid;place-items:center}.jalali-weekdays,.jalali-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center}.jalali-weekdays{margin-bottom:7px;color:var(--text-2);font-size:10px;font-weight:800}.jalali-day{height:39px;border:0;border-radius:10px;background:var(--surface-2);color:var(--text);font:700 12px Vazirmatn}.jalali-day.selected{background:var(--primary);color:#fff}.jalali-day.today{outline:1px solid var(--primary)}.jalali-day:disabled{opacity:0;pointer-events:none}.jalali-picker-foot{display:flex;justify-content:space-between;gap:8px;margin-top:13px}.jalali-picker-foot button{height:36px;padding:0 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface-2);color:var(--text);font:700 11px Vazirmatn}
 
 /* تقویم شمسی شخصی‌سازی‌شده */
 .datepicker-plot-area{font-family:'Vazirmatn',sans-serif!important;border:1px solid var(--border)!important;border-radius:20px!important;background:var(--surface)!important;color:var(--text)!important;box-shadow:0 22px 65px rgba(2,6,23,.24)!important;overflow:hidden!important;padding:12px!important}
@@ -1815,7 +1820,15 @@ function parseJalaliDate(value){
   const p=raw.split(/[\/.-]/).map(Number);
   return p.length>=3&&p[0]>=1200&&p[0]<=1600&&p[1]>=1&&p[1]<=12&&p[2]>=1&&p[2]<=31?{year:p[0],month:p[1],day:p[2]}:null;
 }
-function jalaliMonthLength(y,m){let count=0;for(let d=1;d<=31;d++){if(persianPartsToDate([y,m,d]))count=d;else break;}return count||30;}
+function jalaliMonthLength(y,m){
+  if(!Number.isInteger(Number(y))||m<1||m>12)return 0;
+  let count=0;
+  for(let d=1;d<=31;d++){
+    if(persianPartsToDate([Number(y),Number(m),d]))count=d;
+    else break;
+  }
+  return count;
+}
 function normalizeJalaliPickerMonth(){while(jalaliPickerState.month<1){jalaliPickerState.month=12;jalaliPickerState.year--;}while(jalaliPickerState.month>12){jalaliPickerState.month=1;jalaliPickerState.year++;}}
 function openJalaliPicker(inputId){
   const input=document.getElementById(inputId);if(!input)return;
@@ -1834,16 +1847,20 @@ function renderJalaliPicker(){
   const title=document.getElementById('jalaliPickerTitle'),days=document.getElementById('jalaliPickerDays');if(!title||!days)return;
   const {year,month,selected,today}=jalaliPickerState;title.textContent=JALALI_MONTH_NAMES[month-1]+' '+fa(year);
   const first=persianPartsToDate([year,month,1]),offset=first?(first.getUTCDay()+1)%7:0,total=jalaliMonthLength(year,month);
-  let html='';for(let i=0;i<offset;i++)html+='<button class="jalali-day" disabled></button>';
-  for(let d=1;d<=total;d++){const value=jalaliString(year,month,d),cls='jalali-day'+(value===selected?' selected':'')+(value===today?' today':'');html+='<button type="button" class="'+cls+'" data-jalali-day="'+value+'">'+fa(d)+'</button>';}
+  let html='';
+  for(let i=0;i<offset;i++)html+='<button class="jalali-day" type="button" disabled aria-hidden="true"></button>';
+  for(let d=1;d<=total;d++){
+    const value=jalaliString(year,month,d),cls='jalali-day'+(value===selected?' selected':'')+(value===today?' today':'');
+    html+='<button type="button" class="'+cls+'" data-jalali-day="'+value+'" aria-label="'+fa(d)+' '+JALALI_MONTH_NAMES[month-1]+' '+fa(year)+'">'+fa(d)+'</button>';
+  }
   days.innerHTML=html;
 }
 function closeJalaliPicker(){const el=document.getElementById('jalaliPickerBackdrop');if(el)el.classList.remove('show');}
 function formatDurationDays(value){
-  let days=Math.max(0,Math.floor(Number(value)||0));if(!days)return '۰ روز';
-  const years=Math.floor(days/365);days%=365;const months=Math.floor(days/30);days%=30;
-  const parts=[];if(years)parts.push(fa(years)+' سال');if(months)parts.push(fa(months)+' ماه');if(days)parts.push(fa(days)+' روز');
-  return parts.join(' و ');
+  let days=Math.max(0,Math.floor(Number(value)||0));
+  const years=Math.floor(days/365);days%=365;
+  const months=Math.floor(days/30);days%=30;
+  return fa(years)+' سال، '+fa(months)+' ماه و '+fa(days)+' روز';
 }
 function displayJalaliDate(value){
   const raw=toEnDigits(String(value||'')).trim();
@@ -2391,19 +2408,35 @@ window.runAppSelfTests=runAppSelfTests;
    ================================================================ */
 const APP_LOADER_STARTED_AT=Date.now();
 let appInitialized = false;
+let appLoaderDismissScheduled = false;
+function scheduleAppLoaderDismiss(){
+  if(appLoaderDismissScheduled)return;
+  appLoaderDismissScheduled=true;
+  const remaining=Math.max(0,5000-(Date.now()-APP_LOADER_STARTED_AT));
+  window.setTimeout(()=>{
+    const hide=()=>{const loader=$('#appLoader');if(loader)loader.classList.add('hide');};
+    if(typeof requestAnimationFrame==='function')requestAnimationFrame(hide);else hide();
+  },remaining);
+}
 function init(){
   if(appInitialized)return;
   appInitialized = true;
-  applyTheme();
-  bindEvents();
-  renderAll();
-  runAppSelfTests();
-  const loader=$('#appLoader');
-  const remainingLoaderTime=Math.max(0,5000-(Date.now()-APP_LOADER_STARTED_AT));
-  window.setTimeout(()=>{requestAnimationFrame(()=>{if(loader)loader.classList.add('hide');});},remainingLoaderTime);
+  try{
+    applyTheme();
+    bindEvents();
+    renderAll();
+    runAppSelfTests();
+  }catch(error){
+    console.error('خطا در راه‌اندازی برنامه:',error);
+    const loader=$('#appLoader');
+    if(loader){const message=loader.querySelector('.loader-subtitle');if(message)message.textContent='در حال آماده‌سازی برنامه...';}
+  }finally{
+    scheduleAppLoaderDismiss();
+  }
 }
 
 document.addEventListener('DOMContentLoaded', init);
+window.addEventListener('load',scheduleAppLoaderDismiss);
 
 // اگر DOM از قبل آماده بود
 if (document.readyState === 'interactive' || document.readyState === 'complete'){
