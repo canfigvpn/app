@@ -1237,7 +1237,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .about-support-copy strong{font-size:12px;font-weight:850}
 .about-support-copy small{font-size:10px;line-height:1.7;color:var(--text-2)}
 .about-support-link{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:0 0 auto;padding:8px 10px;border:1px solid var(--primary);border-radius:10px;background:var(--primary-soft);color:var(--primary-text);font-size:11px;font-weight:800;text-decoration:none;direction:ltr}
-.about-support-link .material-symbols-rounded{font-size:16px}
+.about-support-link .material-symbols-rounded{font-size:16px}.about-support-link .telegram-icon{width:17px;height:17px;display:block;flex:0 0 17px;color:#229ed9}
 @keyframes deadlineTrackFlow{to{stroke-dashoffset:-15}}
 @keyframes deadlineBar{0%{transform:translateX(270%)}100%{transform:translateX(-290%)}}
 @keyframes deadlinePulse{to{opacity:.35;transform:scale(.75)}}
@@ -1384,7 +1384,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <div class="about-support">
         <span class="about-support-icon material-symbols-rounded">support_agent</span>
         <div class="about-support-copy"><strong>پشتیبانی</strong><small>برای پرسش یا گزارش مشکل با ما در تلگرام در ارتباط باشید.</small></div>
-        <a class="about-support-link" href="https://t.me/Floki000" target="_blank" rel="noopener noreferrer" aria-label="ارتباط با پشتیبانی تلگرام @Floki000"><span class="material-symbols-rounded">send</span><span dir="ltr">@Floki000</span></a>
+        <a class="about-support-link" href="https://t.me/Floki000" target="_blank" rel="noopener noreferrer" aria-label="ارتباط با پشتیبانی تلگرام @Floki000"><svg class="telegram-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22.1 3.2 18.8 20c-.25 1.18-.94 1.47-1.9.92l-5.25-3.87-2.53 2.44c-.28.28-.51.51-1.05.51l.38-5.35 9.74-8.8c.42-.38-.09-.59-.65-.21L5.52 13.3.38 11.7c-1.12-.35-1.14-1.12.24-1.64L20.73 2.3c.95-.35 1.78.23 1.37.9Z"/></svg><span dir="ltr">@Floki000</span></a>
       </div>
     </div>
 
@@ -2573,9 +2573,13 @@ window.runAppSelfTests=runAppSelfTests;
    ۱۸) راه‌اندازی
    ================================================================ */
 let appInitialized = false;
+let appLoaderDismissTimer=null;
 function scheduleAppLoaderDismiss(){
-  const hide=()=>{const loader=$('#appLoader');if(loader)loader.classList.add('hide');};
-  if(typeof requestAnimationFrame==='function')requestAnimationFrame(hide);else hide();
+  if(appLoaderDismissTimer!==null)return;
+  appLoaderDismissTimer=setTimeout(()=>{
+    const loader=$('#appLoader');
+    if(loader)loader.classList.add('hide');
+  },5000);
 }
 
 function init(){
@@ -2596,7 +2600,7 @@ function init(){
 }
 
 document.addEventListener('DOMContentLoaded', init);
-window.addEventListener('load',scheduleAppLoaderDismiss);
+
 
 // اگر DOM از قبل آماده بود
 if (document.readyState === 'interactive' || document.readyState === 'complete'){
