@@ -1214,54 +1214,31 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
 
 /* Deadline Loading: serpentine track + moving car */
-.app-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:22px;overflow:hidden;padding:24px;background:radial-gradient(ellipse at 50% 45%,rgba(37,99,235,.12),transparent 50%),var(--bg);color:var(--text);transition:opacity .35s ease,visibility .35s ease}
+.app-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:24px;background:radial-gradient(ellipse at 50% 45%,rgba(37,99,235,.12),transparent 50%),var(--bg);color:var(--text);transition:opacity .35s ease,visibility .35s ease}
 .app-loader:before,.app-loader:after{content:"";position:absolute;width:250px;height:250px;border:1px solid rgba(96,165,250,.11);border-radius:50%;pointer-events:none}
 .app-loader:after{width:340px;height:340px;border-style:dashed;opacity:.55}
 .app-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.deadline-loader-head{position:relative;z-index:1;text-align:center;display:flex;flex-direction:column;gap:7px}
-.deadline-loader-kicker{font:800 9px/1.2 system-ui,sans-serif;letter-spacing:2.5px;color:var(--primary);opacity:.85}
-.deadline-loader-head strong{font-size:21px;font-weight:900;letter-spacing:-.5px}
-.deadline-loader-head small{font-size:11px;color:var(--text-2)}
-.deadline-track-wrap{position:relative;z-index:1;width:min(350px,90vw);padding:8px 0}
-.deadline-track{display:block;width:100%;overflow:visible}
-.deadline-track-base{fill:none;stroke:var(--border-strong);stroke-width:8;stroke-linecap:round;opacity:.45}
-.deadline-track-progress{fill:none;stroke:url(#deadlineTrackGradient);stroke-width:4;stroke-linecap:round;stroke-dasharray:5 10;animation:deadlineTrackFlow .6s linear infinite}
-.deadline-car{filter:drop-shadow(0 4px 5px rgba(37,99,235,.25))}
-.deadline-progress{position:relative;z-index:1;width:min(210px,62vw);height:4px;border-radius:99px;overflow:hidden;background:var(--surface-3)}
-.deadline-progress i{display:block;height:100%;width:38%;border-radius:99px;background:linear-gradient(90deg,#d6a84f,var(--primary),#60a5fa);animation:deadlineBar 1.1s ease-in-out infinite}
-.deadline-footnote{position:relative;z-index:1;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text-3)}
-.deadline-pulse{width:6px;height:6px;border-radius:50%;background:var(--primary);box-shadow:0 0 10px var(--primary);animation:deadlinePulse .8s ease-in-out infinite alternate}
+.dual-ring{position:relative;width:64px;height:64px;z-index:1}
+.dual-ring:before,.dual-ring:after{content:"";position:absolute;inset:0;border-radius:50%;border:4px solid transparent}
+.dual-ring:before{border-top-color:#d6a84f;border-right-color:#d6a84f;animation:dualRingSpin .9s linear infinite}
+.dual-ring:after{inset:8px;border-bottom-color:var(--primary);border-left-color:var(--primary);animation:dualRingSpin 1.25s linear infinite reverse}
 .about-support{display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px;border:1px solid var(--border);border-radius:15px;background:var(--surface-2)}
 .about-support-icon{width:38px;height:38px;display:grid;place-items:center;flex:0 0 38px;border-radius:12px;background:var(--primary-soft);color:var(--primary);font-size:21px}
 .about-support-copy{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
 .about-support-copy strong{font-size:12px;font-weight:850}
 .about-support-copy small{font-size:10px;line-height:1.7;color:var(--text-2)}
-.about-support-link{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:0 0 auto;padding:8px 10px;border:1px solid var(--primary);border-radius:10px;background:var(--primary-soft);color:var(--primary-text);font-size:11px;font-weight:800;text-decoration:none;direction:ltr}
-.about-support-link .material-symbols-rounded{font-size:16px}.about-support-link .telegram-icon{width:17px;height:17px;display:block;flex:0 0 17px;color:#229ed9}
-@keyframes deadlineTrackFlow{to{stroke-dashoffset:-15}}
-@keyframes deadlineBar{0%{transform:translateX(270%)}100%{transform:translateX(-290%)}}
-@keyframes deadlinePulse{to{opacity:.35;transform:scale(.75)}}
-@media(max-width:370px){.deadline-loader-head strong{font-size:19px}.about-support{gap:7px;padding:9px}.about-support-link{padding:7px 8px;font-size:10px}.about-support-copy small{font-size:9px}}
-@media(prefers-reduced-motion:reduce){.deadline-track-progress,.deadline-progress i,.deadline-pulse{animation-duration:1ms!important;animation-iteration-count:1!important}}
+.about-support-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:0 0 auto;padding:8px 10px;border:1px solid rgba(34,158,217,.35);border-radius:12px;background:linear-gradient(145deg,#e5f6ff,#d2edff);color:#087fb9;font-size:11px;font-weight:800;text-decoration:none;direction:ltr;box-shadow:0 3px 12px rgba(34,158,217,.14);transition:transform .2s,box-shadow .2s}
+.about-support-link:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(34,158,217,.2)}
+.about-support-link .telegram-icon{width:20px;height:20px;display:block;flex:0 0 20px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.12))}
+@keyframes dualRingSpin{to{transform:rotate(360deg)}}
+@media(max-width:370px){.about-support{gap:7px;padding:9px}.about-support-link{padding:7px 8px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.dual-ring:before,.dual-ring:after{animation-duration:1ms!important;animation-iteration-count:1!important}}
 </style>
 </head>
 
 <body>
 <div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه">
-  <div class="deadline-track-wrap" aria-hidden="true">
-    <svg class="deadline-track" viewBox="0 0 340 112" role="img">
-      <defs><linearGradient id="deadlineTrackGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d6a84f"/><stop offset="1" stop-color="var(--primary)"/></linearGradient></defs>
-      <path class="deadline-track-base" d="M8 56 Q24 53 40 56 T72 56 T104 56 T136 56 T168 56 T200 56 T232 56 T264 56 T296 56 T332 56"/>
-      <path class="deadline-track-progress" d="M8 56 Q24 53 40 56 T72 56 T104 56 T136 56 T168 56 T200 56 T232 56 T264 56 T296 56 T332 56" style="animation:none;stroke-dasharray:none;opacity:.5"/>
-      <g class="deadline-car">
-        <path d="M-17 2 L-12 -6 Q-9 -10 -4 -10 L5 -10 Q10 -10 13 -5 L17 2 L20 4 L20 11 L-20 11 L-20 5 Z" fill="var(--primary)" stroke="var(--surface)" stroke-width="1.5"/>
-        <path d="M-10 -6 L-4 -8 L4 -8 L9 -4 L-11 -4 Z" fill="#bfdbfe"/>
-        <circle cx="-11" cy="11" r="4" fill="var(--text)"/><circle cx="11" cy="11" r="4" fill="var(--text)"/>
-        <animateMotion dur="5s" repeatCount="1" fill="freeze" rotate="auto" path="M8 56 L332 56"/>
-      </g>
-    </svg>
-  </div>
-  
+  <div class="dual-ring" role="status" aria-label="در حال بارگذاری"></div>
 </div>
 
 <!-- ══════════════════════════════════════════════
@@ -1382,7 +1359,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <div class="about-support">
         <span class="about-support-icon material-symbols-rounded">support_agent</span>
         <div class="about-support-copy"><strong>پشتیبانی</strong><small>برای پرسش یا گزارش مشکل با ما در تلگرام در ارتباط باشید.</small></div>
-        <a class="about-support-link" href="https://t.me/Floki000" target="_blank" rel="noopener noreferrer" aria-label="ارتباط با پشتیبانی تلگرام @Floki000"><svg class="telegram-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#229ED9"/><path fill="#fff" d="M18.85 5.45 16.7 17.9c-.16.88-.67 1.1-1.38.66l-3.75-2.77-1.8 1.75c-.2.2-.37.36-.75.36l.27-3.83 6.96-6.29c.3-.27-.07-.42-.47-.15L7.2 11.78l-3.67-1.14c-.8-.25-.82-.8.17-1.17l14.56-5.62c.68-.25 1.27.16.98.6Z"/></svg><span dir="ltr">@Floki000</span></a>
+        <a class="about-support-link" href="https://t.me/Floki000" target="_blank" rel="noopener noreferrer" aria-label="ارتباط با پشتیبانی تلگرام @Floki000"><svg class="telegram-icon" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="telegramModernGradient" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#37B9F4"/><stop offset="1" stop-color="#087FB9"/></linearGradient></defs><circle cx="12" cy="12" r="11.5" fill="url(#telegramModernGradient)"/><path fill="#fff" d="M18.72 5.35 16.4 18.06c-.17.91-.69 1.13-1.42.67l-3.82-2.81-1.84 1.79c-.21.21-.38.37-.77.37l.28-3.91 7.11-6.36c.31-.28-.07-.43-.48-.15L7.22 12.02l-3.75-1.17c-.82-.26-.84-.82.18-1.2l14.88-5.74c.69-.26 1.3.16 1.01.64Z"/></svg><span dir="ltr">@Floki000</span></a>
       </div>
     </div>
 
