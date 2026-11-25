@@ -761,6 +761,21 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 .hint.warn{ background:var(--near-bg); color:var(--near-fg); }
 .hint.info{ background:var(--none-bg); color:var(--none-fg); }
 
+/* انتخاب خودرو در تنظیمات */
+.vehicle-select-card{overflow:hidden;}
+.vehicle-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+.vehicle-option{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1.5px solid var(--border);border-radius:14px;background:var(--surface-2);color:var(--text);text-align:right;transition:.2s;min-height:54px;}
+.vehicle-option:hover{border-color:var(--primary);transform:translateY(-1px);}
+.vehicle-option.active{border-color:var(--primary);background:var(--primary-soft);color:var(--primary-text);box-shadow:0 0 0 2px var(--primary-soft);}
+.vehicle-option .material-symbols-rounded{font-size:22px;color:var(--primary);}
+.vehicle-option .vehicle-label{font-size:12.5px;font-weight:800;}
+.vehicle-option .vehicle-check{margin-right:auto;display:none;font-size:19px;}
+.vehicle-option.active .vehicle-check{display:inline;}
+.vehicle-selected-note{margin-top:10px;color:var(--text-2);font-size:11.5px;line-height:1.8;}
+.vehicle-home-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;margin-top:8px;border-radius:12px;background:var(--primary-soft);color:var(--primary-text);border:1px solid var(--border);font-size:12px;font-weight:800;cursor:default;user-select:none;}
+.vehicle-home-badge .material-symbols-rounded{font-size:18px;}
+.home-page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+@media(max-width:420px){.vehicle-options{grid-template-columns:1fr 1fr;gap:7px}.vehicle-option{padding:9px;min-height:48px}.vehicle-option .vehicle-label{font-size:11.5px;}}
 .about p{
   font-size:12.5px;
   line-height:2.05;
@@ -1256,9 +1271,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   <section class="page active" id="page-home">
     
 
-    <div class="page-head">
-      <h1>وضعیت سرویس‌ها</h1>
-      <p>بر اساس کیلومتر فعلی خودرو و دوره‌های نگهداری</p>
+    <div class="page-head home-page-head">
+      <div><h1>وضعیت سرویس‌ها</h1>
+      <p>بر اساس کیلومتر فعلی خودرو و دوره‌های نگهداری</p></div>
+      <div id="homeVehicleBadge" class="vehicle-home-badge" title="این نشان فقط وضعیت انتخاب خودرو را نمایش می‌دهد"><span class="material-symbols-rounded">directions_car</span><span id="homeVehicleName">خودرو را انتخاب کنید</span></div>
     </div>
 
     <header class="topbar home-only" id="homeTopbar">
@@ -1319,6 +1335,17 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       </div>
     </div>
 
+    <!-- انتخاب خودرو -->
+    <div class="card vehicle-select-card">
+      <div class="card-head">
+        <span class="material-symbols-rounded">directions_car</span>
+        <h3>مشخص کردن خودرو</h3>
+      </div>
+      <p class="card-desc">خودرو را انتخاب کنید تا بازه کیلومتری و زمانی سرویس‌ها متناسب با آن تنظیم شود. سوابق قبلی شما حذف نمی‌شوند.</p>
+      <div class="vehicle-options" id="vehicleOptions" role="listbox" aria-label="انتخاب خودرو"></div>
+      <div class="vehicle-selected-note" id="vehicleSelectedNote"></div>
+    </div>
+
     <!-- پشتیبان آفلاین -->
     <div class="card">
       <div class="card-head">
@@ -1350,12 +1377,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       </div>
       <p><b>مدیریت سرویس خودرو</b> همراهی ساده و هوشمند برای نگهداری بهتر از خودرو است؛ با ثبت سوابق سرویس، یادآوری موعدهای بعدی و نمایش وضعیت نگهداری، کمک می‌کند هیچ سرویس مهمی از قلم نیفتد.</p>
       <p>اطلاعات خودرو و سوابق شما به‌صورت محلی روی دستگاه ذخیره می‌شود و بدون نیاز به حساب کاربری در دسترس است. برای دریافت فونت و آیکون‌های آنلاین، اتصال اینترنت لازم است.</p>
-      <div class="chips">
-        <span class="chip">۲۱ سرویس استاندارد</span>
-        <span class="chip">ذخیره‌سازی محلی</span>
-        <span class="chip">پیگیری کیلومتر و زمان</span>
-        <span class="chip">طراحی ساده و مدرن</span>
-      </div>
+
       <div class="about-support">
         <span class="about-support-icon material-symbols-rounded">support_agent</span>
         <div class="about-support-copy"><strong>پشتیبانی</strong><small>برای پرسش یا گزارش مشکل با ما در تلگرام در ارتباط باشید.</small></div>
@@ -1564,6 +1586,7 @@ function defaultState(){
   return {
     plate: '',
     km: 0,
+    selectedVehicle: '',
     customServices: [],
     serviceSettings: {},
     theme: 'light',
@@ -1610,11 +1633,29 @@ let state = loadState();
 /* ================================================================
    ۴) محاسبه وضعیت سرویس
    ================================================================ */
-function getInterval(service){
-  const saved = state.serviceSettings && state.serviceSettings[service.id];
-  if (saved && Number(saved.interval) > 0) return Number(saved.interval);
-  return service.interval;
+const VEHICLE_LIST=[
+  {id:'pride',name:'پراید',factor:1},
+  {id:'405',name:'پژو ۴۰۵',factor:1.08},
+  {id:'206',name:'پژو ۲۰۶',factor:1},
+  {id:'207',name:'پژو ۲۰۷',factor:1},
+  {id:'pars',name:'پژو پارس',factor:1.05},
+  {id:'samand',name:'سمند',factor:1.08},
+  {id:'tiba',name:'تیبا',factor:1},
+  {id:'saina',name:'ساینا',factor:1},
+  {id:'quick',name:'کوییک',factor:1},
+  {id:'dena',name:'دنا',factor:1.08},
+  {id:'shahin',name:'شاهین',factor:1.1},
+  {id:'personal',name:'شخصی',factor:1}
+];
+function selectedVehicleData(){return VEHICLE_LIST.find(v=>v.id===state.selectedVehicle)||null;}
+function vehicleInterval(service){
+  const saved=state.serviceSettings&&state.serviceSettings[service.id];
+  if(saved&&Number(saved.interval)>0)return Number(saved.interval);
+  const car=selectedVehicleData();
+  const factor=car?car.factor:1;
+  return Math.max(1000,Math.round((Number(service.interval)||10000)*factor/1000)*1000);
 }
+function getInterval(service){return vehicleInterval(service);}
 
 function localCalendarDayNumber(date=new Date()){
   return Math.floor(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())/86400000);
@@ -1659,7 +1700,9 @@ function getStatus(service){
   const rec = state.services[service.id];
   const interval = Number(getInterval(service)) || 1;
   const savedSettings = state.serviceSettings && state.serviceSettings[service.id];
-  const rawDays=Number(savedSettings && savedSettings.intervalDays || service.intervalDays || 180);
+  const car=selectedVehicleData();
+  const defaultVehicleDays=Math.round((Number(service.intervalDays)||180)*(car?car.factor:1));
+  const rawDays=Number(savedSettings && savedSettings.intervalDays || defaultVehicleDays || 180);
   const duration=normalizeDurationParts(
     savedSettings&&savedSettings.intervalYears!=null?savedSettings.intervalYears:durationPartsFromDays(rawDays).years,
     savedSettings&&savedSettings.intervalMonths!=null?savedSettings.intervalMonths:durationPartsFromDays(rawDays).months,
@@ -2035,7 +2078,29 @@ function renderSettings(){
 
   $('#themeToggle').checked = state.theme === 'dark';
   $('#themeLabel').textContent = state.theme === 'dark' ? 'دارک مود' : 'لایت مود';
+  renderVehicleOptions();
 }
+function renderVehicleOptions(){
+  const root=$('#vehicleOptions');if(!root)return;
+  root.innerHTML=VEHICLE_LIST.map(v=>'<button type="button" class="vehicle-option'+(state.selectedVehicle===v.id?' active':'')+'" data-vehicle-select="'+v.id+'" role="option" aria-selected="'+(state.selectedVehicle===v.id)+'"><span class="material-symbols-rounded">directions_car</span><span class="vehicle-label">'+esc(v.name)+'</span><span class="material-symbols-rounded vehicle-check">check_circle</span></button>').join('');
+  const chosen=selectedVehicleData();
+  const note=$('#vehicleSelectedNote');
+  if(note)note.textContent=chosen?'خودروی انتخاب‌شده: '+chosen.name+' · بازه‌های سرویس بر اساس این خودرو محاسبه می‌شوند.':'هنوز خودرویی انتخاب نشده است؛ انتخاب خودرو برای تنظیم بازه‌ها پیشنهاد می‌شود.';
+  const badge=$('#homeVehicleName');
+  if(badge)badge.textContent=chosen?chosen.name:'خودرو را انتخاب کنید';
+}
+function selectVehicle(id){
+  const vehicle=VEHICLE_LIST.find(v=>v.id===id);if(!vehicle)return;
+  if(state.selectedVehicle===id)return;
+  state.selectedVehicle=id;
+  if(!save()){toast('ذخیره انتخاب خودرو انجام نشد');return;}
+  renderAll();
+  const warning=vehicle.id==='personal'?'تنظیمات سرویس به‌صورت پیش‌فرض روی حالت پراید است؛ می‌توانید سرویس‌ها را برای خود شخصی‌سازی کنید.':'بازه‌های سرویس متناسب با '+vehicle.name+' تنظیم شد. برای به‌روزرسانی کامل، برنامه را ببندید و دوباره باز کنید.';
+  toast(warning);
+  clearTimeout(vehicleReloadTimer);
+  vehicleReloadTimer=setTimeout(()=>location.reload(),5000);
+}
+let vehicleReloadTimer=null;
 
 /* ================================================================
    ۱۰) رندر کلی
@@ -2066,7 +2131,7 @@ function toast(msg){
   el.textContent = msg;
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 5000);
 }
 
 /* ================================================================
@@ -2480,6 +2545,11 @@ $('#btnServiceSearch').addEventListener('click',openServiceSearch);
         saveService();
       }
     }
+  });
+
+  document.addEventListener('click',e=>{
+    const pick=e.target.closest('[data-vehicle-select]');
+    if(pick)selectVehicle(pick.dataset.vehicleSelect);
   });
 
   /* --- تم --- */
