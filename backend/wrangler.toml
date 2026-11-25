@@ -1,8 +1,0 @@
-name = "car-app-account-sync"
-main = "worker.js"
-compatibility_date = "2026-11-25"
-
-[[d1_databases]]
-binding = "DB"
-database_name = "car-app-users"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
