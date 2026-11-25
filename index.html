@@ -2345,6 +2345,7 @@ function validateBackupData(data){
   const safe=defaultState();
   safe.plate=typeof data.plate==='string'?data.plate.slice(0,80):'';
   safe.km=Number.isFinite(Number(data.km))&&Number(data.km)>=0?Math.floor(Number(data.km)):0;
+  safe.selectedVehicle=typeof data.selectedVehicle==='string'&&VEHICLE_LIST.some(v=>v.id===data.selectedVehicle)?data.selectedVehicle:'';
   safe.theme=data.theme==='dark'?'dark':'light';
   safe.clientId=typeof data.clientId==='string'?data.clientId.trim().slice(0,300):'';
   safe.services={};
