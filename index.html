@@ -1215,29 +1215,27 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
 /* Five-second automotive loading — clean road animation */
 /* Minimal rounded 5-second loader */
-.auto-loader{position:fixed;inset:10px;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:18px;border-radius:28px;background:#090c12;isolation:isolate;opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease}
+.auto-loader{position:fixed;inset:10px;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:22px;border-radius:28px;background:#080b12;isolation:isolate;opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease}
 .auto-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.loader-ambient{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at 50% 50%,rgba(70,102,151,.17),transparent 58%),linear-gradient(145deg,#101722,#07090d 72%);overflow:hidden}
-.loader-ambient:before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent 0 75%,rgba(140,173,225,.07) 83%,transparent 100%);animation:loaderSweep 8s linear infinite}
-.loader-orbit{position:relative;width:min(66vw,230px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center}
-.loader-orbit:before,.loader-orbit:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(160,183,220,.12)}
-.loader-orbit:before{inset:0}
-.loader-orbit:after{inset:17px;border-color:rgba(160,183,220,.2)}
-.loader-ring{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:#c5d8f6;border-right-color:rgba(119,158,218,.35);filter:drop-shadow(0 0 9px rgba(131,171,231,.3));animation:loaderSpin 1.15s cubic-bezier(.5,.15,.4,.85) infinite}
-.loader-ring.r2{inset:9px;border-width:1px;border-top-color:rgba(176,204,245,.75);border-left-color:rgba(176,204,245,.18);animation:loaderSpin 1.8s linear infinite reverse}
-.loader-ring.r3{inset:28px;border-width:1px;border-bottom-color:rgba(176,204,245,.45);border-right-color:rgba(176,204,245,.16);animation:loaderSpin 2.7s linear infinite}
-.loader-core{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 25%,#26364c,#111722 72%);border:1px solid rgba(191,215,250,.16);box-shadow:0 0 35px rgba(96,143,210,.16),inset 0 0 18px rgba(127,170,231,.1);animation:loaderPulse 1.6s ease-in-out infinite}
-.loader-core:before{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#c9dcf8;box-shadow:0 0 18px 5px rgba(169,202,250,.38)}
-.loader-dot{position:absolute;width:8px;height:8px;top:3px;left:50%;margin-left:-4px;border-radius:50%;background:#e2edff;box-shadow:0 0 12px 3px rgba(190,219,255,.55)}
-@keyframes loaderSpin{to{transform:rotate(360deg)}}
-@keyframes loaderPulse{50%{transform:scale(.94);box-shadow:0 0 48px rgba(96,143,210,.25),inset 0 0 24px rgba(127,170,231,.18)}}
+.loader-ambient{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse at 50% 42%,rgba(73,104,161,.18),transparent 55%),linear-gradient(145deg,#101723,#07090d 76%);overflow:hidden}
+.loader-ambient:before{content:"";position:absolute;inset:-35%;background:conic-gradient(from 0deg,transparent 0 78%,rgba(140,173,225,.08) 87%,transparent 100%);animation:loaderSweep 9s linear infinite}
+.loader-typography{position:relative;z-index:1;width:min(100%,440px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px}
+.loader-welcome{font-weight:800;font-size:clamp(25px,7vw,36px);line-height:1.55;letter-spacing:-.7px;color:#f1f5fb;opacity:0;animation:loaderTextIn .8s cubic-bezier(.2,.8,.2,1) .15s forwards}
+.loader-heart{display:inline-block;color:#ff6b85;filter:drop-shadow(0 0 10px rgba(255,83,120,.35));animation:loaderHeart 1.15s ease-in-out infinite}
+.loader-service{font-weight:600;font-size:clamp(17px,4.7vw,23px);line-height:1.8;color:#a9bddb;opacity:0;animation:loaderTextIn .8s cubic-bezier(.2,.8,.2,1) .55s forwards}
+.loader-car{display:inline-block;margin-inline-start:5px;filter:drop-shadow(0 0 9px rgba(157,194,246,.2))}
+.loader-progress{width:min(190px,65vw);height:3px;border-radius:99px;background:rgba(180,204,238,.12);overflow:hidden;margin-top:8px;opacity:0;animation:loaderTextIn .5s ease .8s forwards}
+.loader-progress:after{content:"";display:block;width:40%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7098d5,#e0ecff);box-shadow:0 0 12px rgba(160,194,244,.4);animation:loaderProgress 5s linear forwards}
+@keyframes loaderTextIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes loaderHeart{50%{transform:scale(1.18)}}
+@keyframes loaderProgress{from{width:0}to{width:100%}}
 @keyframes loaderSweep{to{transform:rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){.loader-ring,.loader-ambient:before,.loader-core{animation-duration:5s}}
-</style>
+@media(prefers-reduced-motion:reduce){.loader-ambient:before,.loader-heart,.loader-progress:after{animation-duration:5s}}
+</style></style>
 </head>
 
 <body>
-<div class="auto-loader" id="appLoader" aria-hidden="true"><div class="loader-ambient"></div><div class="loader-orbit"><div class="loader-ring"></div><div class="loader-ring r2"></div><div class="loader-ring r3"></div><div class="loader-dot"></div><div class="loader-core"></div></div></div>
+<div class="auto-loader" id="appLoader" aria-hidden="true"><div class="loader-ambient"></div><div class="loader-typography"><div class="loader-welcome">خوش آمدید به اپ <span class="loader-heart">❤️</span></div><div class="loader-service">سرویس نگهداری خودرو <span class="loader-car">🚗</span></div><div class="loader-progress" aria-hidden="true"></div></div></div>
 <!-- ══════════════════════════════════════════════
      نوار بالایی : پلاک (راست) + کیلومتر (چپ)
      ══════════════════════════════════════════════ -->
