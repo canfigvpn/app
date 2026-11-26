@@ -1223,11 +1223,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .nebula-cloud.n3{width:45vw;height:45vw;background:radial-gradient(circle,#df4aff 0%,#7432a9 30%,transparent 70%);top:25%;right:5%;opacity:.18;animation-delay:-2s}
 .nebula-stars{position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 20%,#fff 99%,transparent),radial-gradient(1.5px 1.5px at 78% 18%,#c9d9ff 99%,transparent),radial-gradient(1px 1px at 85% 70%,#fff 99%,transparent),radial-gradient(1px 1px at 25% 80%,#a7c7ff 99%,transparent),radial-gradient(2px 2px at 60% 44%,#fff 99%,transparent),radial-gradient(1px 1px at 45% 12%,#fff 99%,transparent),radial-gradient(1px 1px at 8% 62%,#d4e4ff 99%,transparent);opacity:.75}
 .nebula-core{position:relative;z-index:2;width:190px;height:190px;display:grid;place-items:center}
-.nebula-orbit{position:absolute;inset:0;border:1px solid rgba(164,192,255,.25);border-radius:50%;animation:nebulaSpin 8s linear infinite}
+.nebula-orbit{position:absolute;inset:0;border:1px solid rgba(164,192,255,.25);border-radius:50%;animation:nebulaSpin 3.2s linear infinite;will-change:transform}
 .nebula-orbit:before{content:"";position:absolute;left:18px;top:16px;width:9px;height:9px;border-radius:50%;background:#83e5ff;box-shadow:0 0 16px 5px #46baff}
-.nebula-orbit.o2{inset:16px;border-style:dashed;border-color:rgba(195,126,255,.35);animation-direction:reverse;animation-duration:13s}
+.nebula-orbit.o2{inset:16px;border-style:dashed;border-color:rgba(195,126,255,.35);animation-direction:reverse;animation-duration:5.2s}
 .nebula-orbit.o2:before{left:auto;top:50%;right:-4px;background:#d5a5ff;box-shadow:0 0 16px 5px #ae63ff}
-.nebula-orbit.o3{inset:32px;border-color:rgba(110,229,255,.25);animation-duration:5s}
+.nebula-orbit.o3{inset:32px;border-color:rgba(110,229,255,.25);animation-duration:2.2s}
 .nebula-logo{width:76px;height:76px;border-radius:26px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(118,102,255,.3),rgba(22,198,255,.15));border:1px solid rgba(160,205,255,.32);box-shadow:0 0 40px rgba(80,130,255,.25),inset 0 0 24px rgba(120,120,255,.14);backdrop-filter:blur(10px)}
 .nebula-logo .material-symbols-rounded{font-size:38px;color:#d9ecff;text-shadow:0 0 20px #79baff}
 .nebula-copy{position:absolute;top:calc(100% + 28px);width:260px;text-align:center}
@@ -1238,13 +1238,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @keyframes nebulaSpin{to{transform:rotate(360deg)}}
 @keyframes nebulaDrift{to{transform:translate(8%,7%) scale(1.14)}}
 @keyframes nebulaProgress{0%{transform:translateX(-110%)}100%{transform:translateX(340%)}}
-@media(prefers-reduced-motion:reduce){.nebula-orbit,.nebula-cloud,.nebula-progress:after{animation-duration:8s!important}}
+@media(prefers-reduced-motion:reduce){.nebula-orbit{animation-duration:5s!important}.nebula-cloud{animation-duration:9s!important}}
 
 </style>
 </head>
 
 <body>
-<div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه"><div class="nebula-scene" aria-hidden="true"><div class="nebula-cloud n1"></div><div class="nebula-cloud n2"></div><div class="nebula-cloud n3"></div><div class="nebula-stars"></div></div><div class="nebula-core" role="status" aria-label="در حال بارگذاری"><div class="nebula-orbit"></div><div class="nebula-orbit o2"></div><div class="nebula-orbit o3"></div><div class="nebula-logo"><span class="material-symbols-rounded">auto_awesome</span></div><div class="nebula-copy"><div class="nebula-title">NEBULA</div><div class="nebula-subtitle">در حال آماده‌سازی سرویس‌ها</div><div class="nebula-progress"></div></div></div></div>
+<div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه"><div class="nebula-scene" aria-hidden="true"><div class="nebula-cloud n1"></div><div class="nebula-cloud n2"></div><div class="nebula-cloud n3"></div><div class="nebula-stars"></div></div><div class="nebula-core" role="status" aria-label="در حال بارگذاری"><div class="nebula-orbit"></div><div class="nebula-orbit o2"></div><div class="nebula-orbit o3"></div><div class="nebula-logo"><span class="material-symbols-rounded">auto_awesome</span></div></div></div>
 
 <!-- ══════════════════════════════════════════════
      نوار بالایی : پلاک (راست) + کیلومتر (چپ)
