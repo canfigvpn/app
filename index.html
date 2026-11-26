@@ -1213,29 +1213,36 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media(max-width:520px){.account-bar{width:calc(100% - 14px);margin-top:6px;padding:8px;border-radius:14px}.account-bar-copy small{font-size:9px}.account-action{height:34px;padding:0 9px;font-size:10px}.account-profile-btn{font-size:10px}}
 
 
-/* Five-second automotive loading — clean road animation */
-/* Minimal rounded 5-second loader */
-.auto-loader{position:fixed;inset:10px;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:22px;border-radius:28px;background:#080b12;isolation:isolate;opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease}
+/* Five-second kinetic typography loader */
+.auto-loader{position:fixed;inset:10px;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:24px;border-radius:30px;background:#070a12;isolation:isolate;opacity:1;visibility:visible;transition:opacity .5s ease,visibility .5s ease}
 .auto-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.loader-ambient{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse at 50% 42%,rgba(73,104,161,.18),transparent 55%),linear-gradient(145deg,#101723,#07090d 76%);overflow:hidden}
-.loader-ambient:before{content:"";position:absolute;inset:-35%;background:conic-gradient(from 0deg,transparent 0 78%,rgba(140,173,225,.08) 87%,transparent 100%);animation:loaderSweep 9s linear infinite}
-.loader-typography{position:relative;z-index:1;width:min(100%,440px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px}
-.loader-welcome{font-weight:800;font-size:clamp(25px,7vw,36px);line-height:1.55;letter-spacing:-.7px;color:#f1f5fb;opacity:0;animation:loaderTextIn .8s cubic-bezier(.2,.8,.2,1) .15s forwards}
+.loader-ambient{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse at 50% 45%,rgba(99,125,190,.2),transparent 58%),linear-gradient(145deg,#101827,#06080d 75%);overflow:hidden}
+.loader-ambient:before,.loader-ambient:after{content:"";position:absolute;inset:0;pointer-events:none}
+.loader-ambient:before{background:linear-gradient(115deg,transparent 35%,rgba(170,200,255,.07) 50%,transparent 65%);transform:translateX(-100%);animation:loaderShine 3.2s ease-in-out infinite}
+.loader-ambient:after{inset:18px;border:1px solid rgba(160,190,235,.08);border-radius:23px}
+.loader-typography{position:relative;z-index:1;width:min(100%,440px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:15px}
+.loader-welcome,.loader-service{width:100%;overflow:hidden;white-space:nowrap;direction:rtl;display:block;opacity:0;position:relative}
+.loader-welcome{font-weight:850;font-size:clamp(25px,7vw,37px);line-height:1.6;letter-spacing:-.7px;color:#f5f7ff;animation:loaderFade .45s ease .12s forwards}
+.loader-welcome .loader-type-text{display:inline-block;width:0;overflow:hidden;vertical-align:bottom;animation:loaderTypeWelcome 1.65s steps(18,end) .35s forwards}
 .loader-heart{display:inline-block;color:#ff6b85;filter:drop-shadow(0 0 10px rgba(255,83,120,.35));animation:loaderHeart 1.15s ease-in-out infinite}
-.loader-service{font-weight:600;font-size:clamp(17px,4.7vw,23px);line-height:1.8;color:#a9bddb;opacity:0;animation:loaderTextIn .8s cubic-bezier(.2,.8,.2,1) .55s forwards}
-.loader-car{display:inline-block;margin-inline-start:5px;filter:drop-shadow(0 0 9px rgba(157,194,246,.2))}
-.loader-progress{width:min(190px,65vw);height:3px;border-radius:99px;background:rgba(180,204,238,.12);overflow:hidden;margin-top:8px;opacity:0;animation:loaderTextIn .5s ease .8s forwards}
-.loader-progress:after{content:"";display:block;width:40%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7098d5,#e0ecff);box-shadow:0 0 12px rgba(160,194,244,.4);animation:loaderProgress 5s linear forwards}
-@keyframes loaderTextIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.loader-service{font-weight:650;font-size:clamp(17px,4.8vw,23px);line-height:1.8;color:#b8c9e6;animation:loaderFade .5s ease 1.1s forwards}
+.loader-service .loader-type-text{display:inline-block;width:0;overflow:hidden;vertical-align:bottom;animation:loaderTypeService 2s steps(22,end) 1.25s forwards}
+.loader-car{display:inline-block;margin-inline-start:5px;filter:drop-shadow(0 0 9px rgba(157,194,246,.25));animation:loaderCarFloat 1.5s ease-in-out infinite}
+.loader-progress{width:min(220px,70vw);height:4px;border-radius:99px;background:rgba(180,204,238,.12);overflow:hidden;margin-top:12px;opacity:0;animation:loaderFade .4s ease .2s forwards}
+.loader-progress:after{content:"";display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7098d5,#e0ecff);box-shadow:0 0 14px rgba(160,194,244,.45);animation:loaderProgress 5s linear forwards}
+@keyframes loaderFade{to{opacity:1}}
+@keyframes loaderTypeWelcome{to{width:100%}}
+@keyframes loaderTypeService{to{width:100%}}
 @keyframes loaderHeart{50%{transform:scale(1.18)}}
-@keyframes loaderProgress{from{width:0}to{width:100%}}
-@keyframes loaderSweep{to{transform:rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){.loader-ambient:before,.loader-heart,.loader-progress:after{animation-duration:5s}}
+@keyframes loaderCarFloat{50%{transform:translateY(-4px)}}
+@keyframes loaderProgress{to{width:100%}}
+@keyframes loaderShine{50%{transform:translateX(100%)}}
+@media(prefers-reduced-motion:reduce){.loader-ambient:before,.loader-heart,.loader-car,.loader-progress:after,.loader-welcome .loader-type-text,.loader-service .loader-type-text{animation-duration:5s}}
 </style></style>
 </head>
 
 <body>
-<div class="auto-loader" id="appLoader" aria-hidden="true"><div class="loader-ambient"></div><div class="loader-typography"><div class="loader-welcome">خوش آمدید به اپ <span class="loader-heart">❤️</span></div><div class="loader-service">سرویس نگهداری خودرو <span class="loader-car">🚗</span></div><div class="loader-progress" aria-hidden="true"></div></div></div>
+<div class="auto-loader" id="appLoader" aria-hidden="true"><div class="loader-ambient"></div><div class="loader-typography"><div class="loader-welcome"><span class="loader-type-text">خوش آمدید به اپ</span> <span class="loader-heart">❤️</span></div><div class="loader-service"><span class="loader-type-text">سرویس نگهداری خودرو</span> <span class="loader-car">🚗</span></div><div class="loader-progress" aria-hidden="true"></div></div></div>
 <!-- ══════════════════════════════════════════════
      نوار بالایی : پلاک (راست) + کیلومتر (چپ)
      ══════════════════════════════════════════════ -->
