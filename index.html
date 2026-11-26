@@ -1213,38 +1213,40 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media(max-width:520px){.account-bar{width:calc(100% - 14px);margin-top:6px;padding:8px;border-radius:14px}.account-bar-copy small{font-size:9px}.account-action{height:34px;padding:0 9px;font-size:10px}.account-profile-btn{font-size:10px}}
 
 
-/* NEBULA loader — rebuilt from scratch */
-.app-loader{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:24px;background:#050711;color:#eaf1ff;transition:opacity .55s ease,visibility .55s ease}
-.app-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.nebula-scene{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 50% 50%,#101b38 0%,#080d1b 48%,#03050c 100%)}
-.nebula-cloud{position:absolute;width:72vw;height:72vw;max-width:680px;max-height:680px;border-radius:50%;filter:blur(70px);opacity:.35;mix-blend-mode:screen;animation:nebulaDrift 9s ease-in-out infinite alternate}
-.nebula-cloud.n1{background:radial-gradient(circle,#6b42ff 0%,#3a1c8b 30%,transparent 70%);top:-24%;left:-24%}
-.nebula-cloud.n2{background:radial-gradient(circle,#08b9e8 0%,#12558d 32%,transparent 70%);bottom:-25%;right:-25%;animation-delay:-4s}
-.nebula-cloud.n3{width:45vw;height:45vw;background:radial-gradient(circle,#df4aff 0%,#7432a9 30%,transparent 70%);top:25%;right:5%;opacity:.18;animation-delay:-2s}
-.nebula-stars{position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 20%,#fff 99%,transparent),radial-gradient(1.5px 1.5px at 78% 18%,#c9d9ff 99%,transparent),radial-gradient(1px 1px at 85% 70%,#fff 99%,transparent),radial-gradient(1px 1px at 25% 80%,#a7c7ff 99%,transparent),radial-gradient(2px 2px at 60% 44%,#fff 99%,transparent),radial-gradient(1px 1px at 45% 12%,#fff 99%,transparent),radial-gradient(1px 1px at 8% 62%,#d4e4ff 99%,transparent);opacity:.75}
-.nebula-core{position:relative;z-index:2;width:190px;height:190px;display:grid;place-items:center}
-.nebula-orbit{position:absolute;inset:0;border:1px solid rgba(164,192,255,.25);border-radius:50%;animation:nebulaSpin 3.2s linear infinite;will-change:transform}
-.nebula-orbit:before{content:"";position:absolute;left:18px;top:16px;width:9px;height:9px;border-radius:50%;background:#83e5ff;box-shadow:0 0 16px 5px #46baff}
-.nebula-orbit.o2{inset:16px;border-style:dashed;border-color:rgba(195,126,255,.35);animation-direction:reverse;animation-duration:5.2s}
-.nebula-orbit.o2:before{left:auto;top:50%;right:-4px;background:#d5a5ff;box-shadow:0 0 16px 5px #ae63ff}
-.nebula-orbit.o3{inset:32px;border-color:rgba(110,229,255,.25);animation-duration:2.2s}
-.nebula-logo{width:76px;height:76px;border-radius:26px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(118,102,255,.3),rgba(22,198,255,.15));border:1px solid rgba(160,205,255,.32);box-shadow:0 0 40px rgba(80,130,255,.25),inset 0 0 24px rgba(120,120,255,.14);backdrop-filter:blur(10px)}
-.nebula-logo .material-symbols-rounded{font-size:38px;color:#d9ecff;text-shadow:0 0 20px #79baff}
-.nebula-copy{position:absolute;top:calc(100% + 28px);width:260px;text-align:center}
-.nebula-title{font-size:16px;font-weight:800;letter-spacing:4px;color:#e6eeff;text-shadow:0 0 18px rgba(117,170,255,.5)}
-.nebula-subtitle{margin-top:8px;font-size:11px;color:#9aaed1;letter-spacing:.3px}
-.nebula-progress{height:3px;width:150px;margin:17px auto 0;border-radius:99px;background:rgba(153,177,255,.14);overflow:hidden}
-.nebula-progress:after{content:"";display:block;width:45%;height:100%;border-radius:99px;background:linear-gradient(90deg,#7c5cff,#42d8ff);box-shadow:0 0 12px #63baff;animation:nebulaProgress 1.5s ease-in-out infinite}
-@keyframes nebulaSpin{to{transform:rotate(360deg)}}
-@keyframes nebulaDrift{to{transform:translate(8%,7%) scale(1.14)}}
-@keyframes nebulaProgress{0%{transform:translateX(-110%)}100%{transform:translateX(340%)}}
-@media(prefers-reduced-motion:reduce){.nebula-orbit{animation-duration:5s!important}.nebula-cloud{animation-duration:9s!important}}
-
+/* Automotive service loader — Road / Garage */
+.auto-loader{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:24px;background:#080d13;color:#f4f8fc;transition:opacity .45s ease,visibility .45s ease}
+.auto-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
+.auto-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 38%,#203444 0%,#111c27 38%,#070b10 78%);overflow:hidden}
+.auto-bg:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(82,179,255,.07),transparent 70%);animation:autoLight 4s ease-in-out infinite alternate}
+.auto-glow{position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(43,160,255,.18),transparent 68%);top:50%;left:50%;transform:translate(-50%,-50%)}
+.auto-road{position:absolute;left:50%;bottom:-18%;transform:translateX(-50%);width:min(100vw,520px);height:58%;background:linear-gradient(90deg,transparent 0%,#111820 13%,#222d38 50%,#111820 87%,transparent 100%);clip-path:polygon(35% 0,65% 0,100% 100%,0 100%)}
+.auto-road:before,.auto-road:after{content:"";position:absolute;top:0;bottom:0;width:4px;background:repeating-linear-gradient(to bottom,rgba(238,246,255,.7) 0 32px,transparent 32px 64px);animation:autoRoadMove .7s linear infinite}
+.auto-road:before{left:35%}.auto-road:after{right:35%}
+.auto-loader-content{position:relative;z-index:2;width:min(100%,340px);display:flex;flex-direction:column;align-items:center;text-align:center}
+.auto-gauge{width:218px;height:218px;position:relative;display:grid;place-items:center;margin-bottom:24px}
+.auto-gauge svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.auto-track{fill:none;stroke:rgba(255,255,255,.1);stroke-width:5}
+.auto-progress{fill:none;stroke:url(#autoGradient);stroke-width:5;stroke-linecap:round;stroke-dasharray:565;stroke-dashoffset:565;animation:autoFill 5s linear forwards;filter:drop-shadow(0 0 7px rgba(62,183,255,.65))}
+.auto-gauge-inner{position:absolute;inset:18px;border:1px solid rgba(255,255,255,.08);border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,rgba(26,45,59,.65),rgba(7,12,17,.15))}
+.auto-car{font-size:82px!important;color:#eaf6ff;text-shadow:0 0 20px rgba(76,190,255,.45);animation:autoCarPulse 1.4s ease-in-out infinite}
+.auto-gauge-label{position:absolute;bottom:28px;font-size:10px;color:#90a9bc;letter-spacing:1.6px}
+.auto-title{font-size:17px;font-weight:800;letter-spacing:-.3px;color:#f4f8fc}
+.auto-subtitle{margin-top:7px;font-size:12px;color:#9eb2c4}
+.auto-dots{display:flex;gap:7px;margin-top:18px}
+.auto-dots i{width:6px;height:6px;border-radius:50%;background:#48baff;box-shadow:0 0 10px #48baff;animation:autoDot 1s ease-in-out infinite}
+.auto-dots i:nth-child(2){animation-delay:.15s}.auto-dots i:nth-child(3){animation-delay:.3s}
+.auto-road-label{position:absolute;bottom:calc(10% + env(safe-area-inset-bottom));z-index:2;color:rgba(210,228,242,.5);font-size:9px;letter-spacing:2px}
+@keyframes autoFill{to{stroke-dashoffset:0}}
+@keyframes autoRoadMove{to{background-position:0 64px}}
+@keyframes autoCarPulse{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.035)}}
+@keyframes autoDot{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-4px)}}
+@keyframes autoLight{to{transform:translateX(10%);opacity:.5}}
+@media(prefers-reduced-motion:reduce){.auto-progress{animation-duration:5s}.auto-car,.auto-dots i,.auto-road:before,.auto-road:after,.auto-bg:before{animation:none}}
 </style>
 </head>
 
 <body>
-<div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه"><div class="nebula-scene" aria-hidden="true"><div class="nebula-cloud n1"></div><div class="nebula-cloud n2"></div><div class="nebula-cloud n3"></div><div class="nebula-stars"></div></div><div class="nebula-core" role="status" aria-label="در حال بارگذاری"><div class="nebula-orbit"></div><div class="nebula-orbit o2"></div><div class="nebula-orbit o3"></div><div class="nebula-logo"><span class="material-symbols-rounded">auto_awesome</span></div></div></div>
+<div class="auto-loader" id="appLoader" aria-label="در حال آماده‌سازی سرویس خودرو"><div class="auto-bg"><div class="auto-glow"></div><div class="auto-road"></div></div><div class="auto-loader-content" role="status" aria-label="بارگذاری برنامه"><div class="auto-gauge"><svg viewBox="0 0 200 200" aria-hidden="true"><defs><linearGradient id="autoGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#32d5ff"/><stop offset="100%" stop-color="#55ffad"/></linearGradient></defs><circle class="auto-track" cx="100" cy="100" r="90"/><circle class="auto-progress" cx="100" cy="100" r="90"/></svg><div class="auto-gauge-inner"><span class="material-symbols-rounded auto-car">directions_car</span></div><div class="auto-gauge-label">CAR CARE SYSTEM</div></div><div class="auto-title">در حال آماده‌سازی سرویس خودرو</div><div class="auto-subtitle">بررسی و تنظیم اطلاعات نگهداری خودرو</div><div class="auto-dots" aria-hidden="true"><i></i><i></i><i></i></div></div><div class="auto-road-label">DRIVE SAFE · MAINTENANCE</div></div>
 
 <!-- ══════════════════════════════════════════════
      نوار بالایی : پلاک (راست) + کیلومتر (چپ)
