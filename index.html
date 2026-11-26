@@ -1244,12 +1244,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .loader-progress i{display:block;width:100%;height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);transform:scaleX(0);transform-origin:right;animation:loaderProgress 5s linear forwards}
 @keyframes roadRotate{to{transform:rotate(360deg)}}
 @keyframes loaderProgress{to{transform:scaleX(1)}}
-.page{display:none;opacity:0;transform:translateY(8px)}
-.page.active{display:block;animation:pageSoftIn .48s cubic-bezier(.22,.61,.36,1) forwards}
-.page.page-leaving{display:block;animation:pageSoftOut .16s ease forwards}
-@keyframes pageSoftIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pageSoftOut{to{opacity:0;transform:translateY(-4px)}}
-@media(prefers-reduced-motion:reduce){.road-circle:before,.road-car-orbit,.loader-progress i{animation-duration:1ms!important;animation-iteration-count:1!important}.app-loader,.page{transition:none!important;animation-duration:1ms!important}}
+.page{display:none}
+.page.active{display:block}
+@media(prefers-reduced-motion:reduce){.road-circle:before,.road-car-orbit,.loader-progress i{animation-duration:1ms!important;animation-iteration-count:1!important}.app-loader{transition:none!important}}
 .about-support{display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px;border:1px solid var(--border);border-radius:15px;background:var(--surface-2)}
 .about-support-icon{width:38px;height:38px;display:grid;place-items:center;flex:0 0 38px;border-radius:12px;background:var(--primary-soft);color:var(--primary);font-size:21px}
 .about-support-copy{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
@@ -2416,25 +2413,16 @@ function bindEvents(){
 $('#btnServiceSearch').addEventListener('click',openServiceSearch);
 
   /* --- نوار پایینی --- */
-  let pageSwitchBusy=false;
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.addEventListener('click', () => {
       const targetPage=document.getElementById('page-'+btn.dataset.page);
-      const currentPage=document.querySelector('.page.active');
-      if(!targetPage||targetPage===currentPage||pageSwitchBusy)return;
-      pageSwitchBusy=true;
-      document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      if(currentPage){
-        currentPage.classList.add('page-leaving');
-        setTimeout(()=>{
-          currentPage.classList.remove('active','page-leaving');
-          targetPage.classList.add('active');
-          pageSwitchBusy=false;
-        },160);
-      }else{targetPage.classList.add('active');pageSwitchBusy=false;}
-      $('#homeTopbar').style.display=btn.dataset.page==='home'?'flex':'none';
-      window.scrollTo({top:0,behavior:'smooth'});
+      if(!targetPage)return;
+      document.querySelectorAll('.page').forEach(page=>page.classList.remove('active','page-leaving'));
+      targetPage.classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b===btn));
+      const topbar=$('#homeTopbar');
+      if(topbar)topbar.style.display=btn.dataset.page==='home'?'flex':'none';
+      window.scrollTo({top:0,behavior:'auto'});
     });
   });
 
@@ -2645,7 +2633,13 @@ function init(){
 }
 
 document.addEventListener('DOMContentLoaded', init);
+window.addEventListener('load', init);
 
+// Fail-safe: loader را حتی در صورت بروز خطای راه‌اندازی، بعد از ۵ ثانیه از صفحه کنار بزن
+setTimeout(()=>{
+  const loader=$('#appLoader');
+  if(loader)loader.classList.add('hide');
+},5000);
 
 // اگر DOM از قبل آماده بود
 if (document.readyState === 'interactive' || document.readyState === 'complete'){
