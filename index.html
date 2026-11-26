@@ -1214,36 +1214,30 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
 
 /* Five-second automotive loading — clean road animation */
-.auto-loader{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:22px;background:#101317;color:#f4f6f8;isolation:isolate;transition:opacity .45s ease,visibility .45s ease}
+/* Minimal rounded 5-second loader */
+.auto-loader{position:fixed;inset:10px;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:18px;border-radius:28px;background:#090c12;isolation:isolate;opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease}
 .auto-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.garage-loader-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,#202831 0%,#14181d 48%,#0d0f12 100%)}
-.garage-loader-bg:before{content:"";position:absolute;inset:0;opacity:.18;background-image:linear-gradient(transparent 95%,rgba(255,255,255,.07) 95%),linear-gradient(90deg,transparent 95%,rgba(255,255,255,.07) 95%);background-size:32px 32px;mask-image:radial-gradient(ellipse,black,transparent 78%)}
-.garage-loader-content{position:relative;z-index:1;width:min(100%,360px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px}
-.garage-loader-brand{font-size:10px;font-weight:700;letter-spacing:.28em;color:#aab5c0}
-.garage-loader-brand span{color:#e4b85c}
-.garage-road{width:min(82vw,300px);height:124px;position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(180deg,#1b2025,#121519);border:1px solid rgba(255,255,255,.07);box-shadow:0 16px 40px rgba(0,0,0,.24)}
-.garage-road:before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:repeating-linear-gradient(90deg,rgba(225,232,239,.5) 0 24px,transparent 24px 43px);animation:garageRoad 1s linear infinite}
-.garage-road:after{content:"";position:absolute;left:0;right:0;bottom:0;height:22px;background:linear-gradient(0deg,rgba(0,0,0,.22),transparent)}
-.garage-car{position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);width:74px;height:48px;display:grid;place-items:center;color:#f4c86a;filter:drop-shadow(0 0 12px rgba(244,200,106,.22));animation:garageCarBob .55s ease-in-out infinite alternate}
-.garage-car .material-symbols-rounded{font-size:56px;font-variation-settings:'FILL' 1,'wght' 300}
-.garage-light{position:absolute;top:50%;left:50%;width:115px;height:36px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(244,200,106,.15),transparent 70%);animation:garageGlow 1.4s ease-in-out infinite}
-.garage-road-lines{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px}
-.garage-road-lines i{width:4px;height:4px;border-radius:50%;background:#68737d;box-shadow:0 0 6px rgba(255,255,255,.15)}
-.garage-loader-title{font-size:18px;font-weight:800;letter-spacing:-.3px}
-.garage-loader-sub{margin-top:-17px;font-size:12px;color:#99a4ae}
-.garage-progress{width:min(76vw,260px);height:4px;border-radius:9px;overflow:hidden;background:rgba(255,255,255,.09)}
-.garage-progress:before{content:"";display:block;width:100%;height:100%;transform:scaleX(0);transform-origin:right;background:linear-gradient(90deg,#f4c86a,#ffe5a0);box-shadow:0 0 12px rgba(244,200,106,.4);animation:garageFill 5s linear forwards}
-.garage-time{font-size:10px;color:#6e7a85;letter-spacing:.16em;margin-top:-17px}
-@keyframes garageRoad{to{background-position:-43px 0}}
-@keyframes garageCarBob{to{transform:translate(-50%,-62%)}}
-@keyframes garageGlow{50%{opacity:.55;transform:translate(-50%,-50%) scale(1.12)}}
-@keyframes garageFill{to{transform:scaleX(1)}}
-@media(prefers-reduced-motion:reduce){.garage-road:before,.garage-car,.garage-light{animation-duration:5s}}
+.loader-ambient{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at 50% 50%,rgba(70,102,151,.17),transparent 58%),linear-gradient(145deg,#101722,#07090d 72%);overflow:hidden}
+.loader-ambient:before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent 0 75%,rgba(140,173,225,.07) 83%,transparent 100%);animation:loaderSweep 8s linear infinite}
+.loader-orbit{position:relative;width:min(66vw,230px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center}
+.loader-orbit:before,.loader-orbit:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(160,183,220,.12)}
+.loader-orbit:before{inset:0}
+.loader-orbit:after{inset:17px;border-color:rgba(160,183,220,.2)}
+.loader-ring{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:#c5d8f6;border-right-color:rgba(119,158,218,.35);filter:drop-shadow(0 0 9px rgba(131,171,231,.3));animation:loaderSpin 1.15s cubic-bezier(.5,.15,.4,.85) infinite}
+.loader-ring.r2{inset:9px;border-width:1px;border-top-color:rgba(176,204,245,.75);border-left-color:rgba(176,204,245,.18);animation:loaderSpin 1.8s linear infinite reverse}
+.loader-ring.r3{inset:28px;border-width:1px;border-bottom-color:rgba(176,204,245,.45);border-right-color:rgba(176,204,245,.16);animation:loaderSpin 2.7s linear infinite}
+.loader-core{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 25%,#26364c,#111722 72%);border:1px solid rgba(191,215,250,.16);box-shadow:0 0 35px rgba(96,143,210,.16),inset 0 0 18px rgba(127,170,231,.1);animation:loaderPulse 1.6s ease-in-out infinite}
+.loader-core:before{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#c9dcf8;box-shadow:0 0 18px 5px rgba(169,202,250,.38)}
+.loader-dot{position:absolute;width:8px;height:8px;top:3px;left:50%;margin-left:-4px;border-radius:50%;background:#e2edff;box-shadow:0 0 12px 3px rgba(190,219,255,.55)}
+@keyframes loaderSpin{to{transform:rotate(360deg)}}
+@keyframes loaderPulse{50%{transform:scale(.94);box-shadow:0 0 48px rgba(96,143,210,.25),inset 0 0 24px rgba(127,170,231,.18)}}
+@keyframes loaderSweep{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.loader-ring,.loader-ambient:before,.loader-core{animation-duration:5s}}
 </style>
 </head>
 
 <body>
-<div class="auto-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه"><div class="garage-loader-bg"></div><div class="garage-loader-content"><div class="garage-loader-brand">CAR <span>•</span> SERVICE</div><div class="garage-road"><div class="garage-road-lines"><i></i><i></i><i></i><i></i><i></i></div><div class="garage-light"></div><div class="garage-car"><span class="material-symbols-rounded">directions_car</span></div></div><div class="garage-loader-title">آماده‌سازی خودرو</div><div class="garage-loader-sub">در حال بررسی و آماده‌سازی سرویس‌ها</div><div class="garage-progress"></div><div class="garage-time">STARTING · 5 SECONDS</div></div></div>
+<div class="auto-loader" id="appLoader" aria-hidden="true"><div class="loader-ambient"></div><div class="loader-orbit"><div class="loader-ring"></div><div class="loader-ring r2"></div><div class="loader-ring r3"></div><div class="loader-dot"></div><div class="loader-core"></div></div></div>
 <!-- ══════════════════════════════════════════════
      نوار بالایی : پلاک (راست) + کیلومتر (چپ)
      ══════════════════════════════════════════════ -->
