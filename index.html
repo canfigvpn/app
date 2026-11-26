@@ -1663,9 +1663,7 @@ function getStatus(service){
   const rec = state.services[service.id];
   const interval = Number(getInterval(service)) || 1;
   const savedSettings = state.serviceSettings && state.serviceSettings[service.id];
-  const car=selectedVehicleData();
-  const defaultVehicleDays=Math.round((Number(service.intervalDays)||180)*(car?car.factor:1));
-  const rawDays=Number(savedSettings && savedSettings.intervalDays || defaultVehicleDays || 180);
+  const rawDays=Number(savedSettings && savedSettings.intervalDays || service.intervalDays || 180);
   const duration=normalizeDurationParts(
     savedSettings&&savedSettings.intervalYears!=null?savedSettings.intervalYears:durationPartsFromDays(rawDays).years,
     savedSettings&&savedSettings.intervalMonths!=null?savedSettings.intervalMonths:durationPartsFromDays(rawDays).months,
@@ -2291,7 +2289,7 @@ function validateBackupData(data){
   const safe=defaultState();
   safe.plate=typeof data.plate==='string'?data.plate.slice(0,80):'';
   safe.km=Number.isFinite(Number(data.km))&&Number(data.km)>=0?Math.floor(Number(data.km)):0;
-  safe.selectedVehicle=typeof data.selectedVehicle==='string'&&VEHICLE_LIST.some(v=>v.id===data.selectedVehicle)?data.selectedVehicle:'';
+  safe.selectedVehicle='';
   safe.theme=data.theme==='dark'?'dark':'light';
   safe.clientId=typeof data.clientId==='string'?data.clientId.trim().slice(0,300):'';
   safe.services={};
