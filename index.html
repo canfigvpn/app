@@ -1214,12 +1214,12 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
 
 /* Five-second kinetic typography loader */
-.auto-loader{position:fixed;inset:10px;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:24px;border-radius:30px;background:#070a12;isolation:isolate;opacity:1;visibility:visible;transition:opacity .5s ease,visibility .5s ease}
+.auto-loader{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:24px;border-radius:0;background:#070a12;isolation:isolate;opacity:1;visibility:visible;transition:opacity .5s ease,visibility .5s ease}
 .auto-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
 .loader-ambient{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse at 50% 45%,rgba(99,125,190,.2),transparent 58%),linear-gradient(145deg,#101827,#06080d 75%);overflow:hidden}
 .loader-ambient:before,.loader-ambient:after{content:"";position:absolute;inset:0;pointer-events:none}
 .loader-ambient:before{background:linear-gradient(115deg,transparent 35%,rgba(170,200,255,.07) 50%,transparent 65%);transform:translateX(-100%);animation:loaderShine 3.2s ease-in-out infinite}
-.loader-ambient:after{inset:18px;border:1px solid rgba(160,190,235,.08);border-radius:23px}
+.loader-ambient:after{inset:18px;border:0;border-radius:0}
 .loader-typography{position:relative;z-index:1;width:min(100%,440px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:15px}
 .loader-welcome,.loader-service{width:100%;overflow:hidden;white-space:nowrap;direction:rtl;display:block;opacity:0;position:relative}
 .loader-welcome{font-weight:850;font-size:clamp(25px,7vw,37px);line-height:1.6;letter-spacing:-.7px;color:#f5f7ff;animation:loaderFade .45s ease .12s forwards}
