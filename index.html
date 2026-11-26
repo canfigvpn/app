@@ -1214,21 +1214,21 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
 
 /* Automotive service loader — Road / Garage */
-.auto-loader{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:20px;background:#03060c;color:#f4f8fc;transition:opacity .45s ease,visibility .45s ease}
+.auto-loader{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:clamp(14px,4vw,24px);background:#030712;color:#f4f8fc;isolation:isolate;transition:opacity .45s ease,visibility .45s ease}
 .auto-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.auto-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,#102b40 0%,#091522 46%,#02040a 82%);overflow:hidden}
-.auto-bg:before{content:"";position:absolute;inset:-25%;background:linear-gradient(115deg,transparent 16%,rgba(65,190,255,.12),rgba(110,90,255,.07),transparent 80%);animation:autoLight 3.2s ease-in-out infinite alternate}
+.auto-bg{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,#112b43 0%,#091524 42%,#030711 78%)}
+.auto-bg:before{content:"";position:absolute;inset:-20%;background:linear-gradient(115deg,transparent 22%,rgba(65,190,255,.10),rgba(110,90,255,.08),transparent 78%);animation:autoLight 3.2s ease-in-out infinite alternate}.auto-bg:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at center,transparent 34%,rgba(0,0,0,.26) 72%,rgba(0,0,0,.72) 100%),linear-gradient(rgba(95,180,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(95,180,255,.035) 1px,transparent 1px);background-size:auto,36px 36px,36px 36px;mask-image:radial-gradient(ellipse at center,black 10%,transparent 86%);pointer-events:none}
 .auto-glow{position:absolute;width:min(92vw,460px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(35,155,255,.22),rgba(75,90,255,.08) 43%,transparent 72%);top:50%;left:50%;transform:translate(-50%,-50%);filter:blur(3px)}
 .auto-road{display:none}
-.auto-loader-content{position:relative;z-index:2;width:min(100%,360px);display:flex;align-items:center;justify-content:center}
-.auto-gauge{width:min(86vw,340px);aspect-ratio:1;position:relative;display:grid;place-items:center;margin:0;isolation:isolate;filter:drop-shadow(0 18px 40px rgba(0,0,0,.4))}
-.auto-gauge svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-95deg);overflow:visible}
+.auto-loader-content{position:relative;z-index:2;width:min(100%,360px);display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 10px 24px rgba(0,0,0,.22))}
+.auto-gauge{width:min(82vw,320px,calc(100dvh - 40px));aspect-ratio:1;position:relative;display:grid;place-items:center;margin:0;isolation:isolate;overflow:hidden;border-radius:50%;filter:drop-shadow(0 18px 40px rgba(0,0,0,.4))}
+.auto-gauge svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-100deg);overflow:hidden}
 .auto-gauge:before{content:"";position:absolute;inset:2.5%;border-radius:50%;border:1px solid rgba(165,220,255,.2);background:radial-gradient(circle at 50% 38%,rgba(27,65,91,.24),rgba(5,10,16,.5) 72%);box-shadow:inset 0 0 36px rgba(30,155,255,.1),0 0 34px rgba(15,130,255,.12);z-index:0}
 .auto-gauge:after{content:"";position:absolute;inset:7%;border-radius:50%;border:1px solid rgba(80,190,255,.13);box-shadow:0 0 0 7px rgba(80,190,255,.025),inset 0 0 18px rgba(60,160,255,.04);z-index:0}
 .auto-tick{stroke:rgba(220,244,255,.7);stroke-width:1.6;stroke-linecap:round}
 .auto-tick.major{stroke:#f3fbff;stroke-width:2.5}
 .auto-number{fill:#eaf6ff;font:700 8px 'Vazirmatn',sans-serif;text-anchor:middle;dominant-baseline:middle;opacity:.95}
-.auto-gauge svg{overflow:visible;border-radius:0;z-index:1}
+.auto-gauge svg{overflow:hidden;border-radius:50%;z-index:1}
 .auto-gauge-inner{position:absolute;inset:14%;border:1px solid rgba(255,255,255,.09);border-radius:50%;background:radial-gradient(circle,rgba(26,45,59,.5),rgba(7,12,17,.2))}
 .auto-car{display:none}
 .auto-gauge-label{position:absolute;inset:0;display:grid;place-items:center;color:#eaf6ff;font-size:clamp(35px,10vw,52px);font-weight:800;letter-spacing:1px;text-shadow:0 0 24px rgba(76,190,255,.42);font-variant-numeric:tabular-nums}
