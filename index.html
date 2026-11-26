@@ -2586,7 +2586,13 @@ window.runAppSelfTests=runAppSelfTests;
    ۱۸) راه‌اندازی
    ================================================================ */
 let appInitialized = false;
-function hideAppLoader(){const loader=$('#appLoader');if(loader)loader.classList.add('hide');}
+const appLoaderStartTime = Date.now();
+function hideAppLoader(){
+  const loader=$('#appLoader');
+  if(!loader)return;
+  const remaining=Math.max(0,5000-(Date.now()-appLoaderStartTime));
+  setTimeout(()=>loader.classList.add('hide'),remaining);
+}
 
 function init(){
   if(appInitialized)return;
