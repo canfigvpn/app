@@ -1213,37 +1213,38 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media(max-width:520px){.account-bar{width:calc(100% - 14px);margin-top:6px;padding:8px;border-radius:14px}.account-bar-copy small{font-size:9px}.account-action{height:34px;padding:0 9px;font-size:10px}.account-profile-btn{font-size:10px}}
 
 
-/* Premium circular road loading */
-.app-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:24px;background:radial-gradient(ellipse at 50% 45%,rgba(37,99,235,.14),transparent 54%),var(--bg);color:var(--text);transition:opacity .4s ease,visibility .4s ease}
-.app-loader:before,.app-loader:after{content:"";position:absolute;width:230px;height:230px;border:1px solid rgba(96,165,250,.14);border-radius:50%;pointer-events:none}
-.app-loader:after{width:310px;height:310px;border-style:dashed;opacity:.45}
+/* NEBULA loader — rebuilt from scratch */
+.app-loader{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;padding:24px;background:#050711;color:#eaf1ff;transition:opacity .55s ease,visibility .55s ease}
 .app-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.dual-ring{position:relative;width:116px;height:116px;border-radius:50%;border:10px solid rgba(120,140,170,.15);box-shadow:0 12px 40px rgba(37,99,235,.12);z-index:1}
-.dual-ring:before{content:"";position:absolute;inset:-10px;border-radius:50%;border:3px dashed var(--text-3);opacity:.7;animation:dualRingSpin 3s linear infinite}
-.dual-ring:after{content:"";position:absolute;inset:-10px;border-radius:50%;border:4px solid transparent;border-top-color:#d6a84f;border-right-color:#d6a84f;animation:dualRingSpin 1.1s linear infinite}
-.loader-car{position:absolute;left:50%;top:-21px;transform:translateX(-50%);width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,#d6a84f,#f4d58c);color:#18202c;box-shadow:0 4px 15px rgba(214,168,79,.35);animation:loaderCarOrbit 2.2s linear infinite;transform-origin:50% 79px}
-.loader-car .material-symbols-rounded{font-size:23px;font-variation-settings:'FILL' 1}
-.loader-caption{position:absolute;top:calc(100% + 28px);width:220px;text-align:center;font-size:12px;font-weight:700;color:var(--text-2);letter-spacing:.1px}
-@keyframes loaderCarOrbit{to{transform:translateX(-50%) rotate(360deg)}}
-@keyframes dualRingSpin{to{transform:rotate(360deg)}}
-.about-support{display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px;border:1px solid var(--border);border-radius:15px;background:var(--surface-2)}
-.about-support-icon{width:38px;height:38px;display:grid;place-items:center;flex:0 0 38px;border-radius:12px;background:var(--primary-soft);color:var(--primary);font-size:21px}
-.about-support-copy{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
-.about-support-copy strong{font-size:12px;font-weight:850}
-.about-support-copy small{font-size:10px;line-height:1.7;color:var(--text-2)}
-.about-support-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:0 0 auto;padding:8px 10px;border:1px solid rgba(34,158,217,.35);border-radius:12px;background:linear-gradient(145deg,#e5f6ff,#d2edff);color:#087fb9;font-size:11px;font-weight:800;text-decoration:none;direction:ltr;box-shadow:0 3px 12px rgba(34,158,217,.14);transition:transform .2s,box-shadow .2s}
-.about-support-link:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(34,158,217,.2)}
-.about-support-link .telegram-icon{width:20px;height:20px;display:block;flex:0 0 20px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.12))}
-@keyframes dualRingSpin{to{transform:rotate(360deg)}}
-@media(max-width:370px){.about-support{gap:7px;padding:9px}.about-support-link{padding:7px 8px;font-size:10px}}
-@media(prefers-reduced-motion:reduce){.dual-ring:before,.dual-ring:after{animation-duration:1ms!important;animation-iteration-count:1!important}}
+.nebula-scene{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 50% 50%,#101b38 0%,#080d1b 48%,#03050c 100%)}
+.nebula-cloud{position:absolute;width:72vw;height:72vw;max-width:680px;max-height:680px;border-radius:50%;filter:blur(70px);opacity:.35;mix-blend-mode:screen;animation:nebulaDrift 9s ease-in-out infinite alternate}
+.nebula-cloud.n1{background:radial-gradient(circle,#6b42ff 0%,#3a1c8b 30%,transparent 70%);top:-24%;left:-24%}
+.nebula-cloud.n2{background:radial-gradient(circle,#08b9e8 0%,#12558d 32%,transparent 70%);bottom:-25%;right:-25%;animation-delay:-4s}
+.nebula-cloud.n3{width:45vw;height:45vw;background:radial-gradient(circle,#df4aff 0%,#7432a9 30%,transparent 70%);top:25%;right:5%;opacity:.18;animation-delay:-2s}
+.nebula-stars{position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 20%,#fff 99%,transparent),radial-gradient(1.5px 1.5px at 78% 18%,#c9d9ff 99%,transparent),radial-gradient(1px 1px at 85% 70%,#fff 99%,transparent),radial-gradient(1px 1px at 25% 80%,#a7c7ff 99%,transparent),radial-gradient(2px 2px at 60% 44%,#fff 99%,transparent),radial-gradient(1px 1px at 45% 12%,#fff 99%,transparent),radial-gradient(1px 1px at 8% 62%,#d4e4ff 99%,transparent);opacity:.75}
+.nebula-core{position:relative;z-index:2;width:190px;height:190px;display:grid;place-items:center}
+.nebula-orbit{position:absolute;inset:0;border:1px solid rgba(164,192,255,.25);border-radius:50%;animation:nebulaSpin 8s linear infinite}
+.nebula-orbit:before{content:"";position:absolute;left:18px;top:16px;width:9px;height:9px;border-radius:50%;background:#83e5ff;box-shadow:0 0 16px 5px #46baff}
+.nebula-orbit.o2{inset:16px;border-style:dashed;border-color:rgba(195,126,255,.35);animation-direction:reverse;animation-duration:13s}
+.nebula-orbit.o2:before{left:auto;top:50%;right:-4px;background:#d5a5ff;box-shadow:0 0 16px 5px #ae63ff}
+.nebula-orbit.o3{inset:32px;border-color:rgba(110,229,255,.25);animation-duration:5s}
+.nebula-logo{width:76px;height:76px;border-radius:26px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(118,102,255,.3),rgba(22,198,255,.15));border:1px solid rgba(160,205,255,.32);box-shadow:0 0 40px rgba(80,130,255,.25),inset 0 0 24px rgba(120,120,255,.14);backdrop-filter:blur(10px)}
+.nebula-logo .material-symbols-rounded{font-size:38px;color:#d9ecff;text-shadow:0 0 20px #79baff}
+.nebula-copy{position:absolute;top:calc(100% + 28px);width:260px;text-align:center}
+.nebula-title{font-size:16px;font-weight:800;letter-spacing:4px;color:#e6eeff;text-shadow:0 0 18px rgba(117,170,255,.5)}
+.nebula-subtitle{margin-top:8px;font-size:11px;color:#9aaed1;letter-spacing:.3px}
+.nebula-progress{height:3px;width:150px;margin:17px auto 0;border-radius:99px;background:rgba(153,177,255,.14);overflow:hidden}
+.nebula-progress:after{content:"";display:block;width:45%;height:100%;border-radius:99px;background:linear-gradient(90deg,#7c5cff,#42d8ff);box-shadow:0 0 12px #63baff;animation:nebulaProgress 1.5s ease-in-out infinite}
+@keyframes nebulaSpin{to{transform:rotate(360deg)}}
+@keyframes nebulaDrift{to{transform:translate(8%,7%) scale(1.14)}}
+@keyframes nebulaProgress{0%{transform:translateX(-110%)}100%{transform:translateX(340%)}}
+@media(prefers-reduced-motion:reduce){.nebula-orbit,.nebula-cloud,.nebula-progress:after{animation-duration:8s!important}}
+
 </style>
 </head>
 
 <body>
-<div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه">
-  <div class="dual-ring" role="status" aria-label="در حال بارگذاری"><div class="loader-car"><span class="material-symbols-rounded">directions_car</span></div><div class="loader-caption">در حال آماده‌سازی سرویس‌ها</div></div>
-</div>
+<div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه"><div class="nebula-scene" aria-hidden="true"><div class="nebula-cloud n1"></div><div class="nebula-cloud n2"></div><div class="nebula-cloud n3"></div><div class="nebula-stars"></div></div><div class="nebula-core" role="status" aria-label="در حال بارگذاری"><div class="nebula-orbit"></div><div class="nebula-orbit o2"></div><div class="nebula-orbit o3"></div><div class="nebula-logo"><span class="material-symbols-rounded">auto_awesome</span></div><div class="nebula-copy"><div class="nebula-title">NEBULA</div><div class="nebula-subtitle">در حال آماده‌سازی سرویس‌ها</div><div class="nebula-progress"></div></div></div></div>
 
 <!-- ══════════════════════════════════════════════
      نوار بالایی : پلاک (راست) + کیلومتر (چپ)
@@ -1359,7 +1360,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <div class="about-support">
         <span class="about-support-icon material-symbols-rounded">support_agent</span>
         <div class="about-support-copy"><strong>پشتیبانی</strong><small>برای پرسش یا گزارش مشکل با ما در تلگرام در ارتباط باشید.</small></div>
-        <a class="about-support-link" href="https://t.me/Floki000" target="_blank" rel="noopener noreferrer" aria-label="ارتباط با پشتیبانی تلگرام @Floki000"><svg class="telegram-icon" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="telegramModernGradient" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#37B9F4"/><stop offset="1" stop-color="#087FB9"/></linearGradient></defs><circle cx="12" cy="12" r="11.5" fill="url(#telegramModernGradient)"/><path fill="#fff" d="M18.72 5.35 16.4 18.06c-.17.91-.69 1.13-1.42.67l-3.82-2.81-1.84 1.79c-.21.21-.38.37-.77.37l.28-3.91 7.11-6.36c.31-.28-.07-.43-.48-.15L7.22 12.02l-3.75-1.17c-.82-.26-.84-.82.18-1.2l14.88-5.74c.69-.26 1.3.16 1.01.64Z"/></svg><span dir="ltr">@Floki000</span></a>
+        <a class="about-support-link" href="https://t.me/Floki000" target="_blank" rel="noopener noreferrer" aria-label="ارتباط با پشتیبانی @Floki000">@Floki000</a>
       </div>
     </div>
 
