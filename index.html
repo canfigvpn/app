@@ -1228,15 +1228,28 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media(max-width:520px){.account-bar{width:calc(100% - 14px);margin-top:6px;padding:8px;border-radius:14px}.account-bar-copy small{font-size:9px}.account-action{height:34px;padding:0 9px;font-size:10px}.account-profile-btn{font-size:10px}}
 
 
-/* Modern Radar loader */
-.app-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:24px;background:radial-gradient(ellipse at 50% 45%,rgba(37,99,235,.14),transparent 58%),var(--bg);color:var(--text);transition:opacity .24s ease,visibility .24s ease}
+/* BMW-inspired road-circle loader */
+.app-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:24px;background:radial-gradient(ellipse at 50% 45%,rgba(37,99,235,.12),transparent 60%),var(--bg);color:var(--text);opacity:1;visibility:visible;transition:opacity .72s cubic-bezier(.22,.61,.36,1),visibility .72s ease}
 .app-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.radar{position:relative;width:112px;height:112px;border-radius:50%;border:1px solid rgba(96,165,250,.32);background:radial-gradient(circle,rgba(37,99,235,.08) 0 2px,transparent 3px),repeating-radial-gradient(circle,rgba(96,165,250,.18) 0 1px,transparent 1px 22px);overflow:hidden;box-shadow:0 0 30px rgba(37,99,235,.08),inset 0 0 22px rgba(37,99,235,.07)}
-.radar:before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 75%,rgba(37,99,235,.03) 78%,rgba(37,99,235,.45) 100%);animation:radarSweep 1.7s linear infinite}
-.radar:after{content:"";position:absolute;width:7px;height:7px;top:31%;left:67%;border-radius:50%;background:#22c55e;box-shadow:0 0 12px #22c55e;animation:radarPulse 1.4s ease-in-out infinite}
-.radar-center{position:absolute;width:8px;height:8px;left:calc(50% - 4px);top:calc(50% - 4px);border-radius:50%;background:var(--primary);box-shadow:0 0 12px var(--primary);z-index:2}
-@keyframes radarSweep{to{transform:rotate(360deg)}}
-@keyframes radarPulse{0%,100%{opacity:.35;transform:scale(.75)}50%{opacity:1;transform:scale(1.35)}}
+.loader-content{display:flex;flex-direction:column;align-items:center;gap:25px}
+.road-circle{position:relative;width:178px;height:178px;border-radius:50%;border:10px solid rgba(120,130,145,.18);box-shadow:inset 0 0 0 1px rgba(120,130,145,.15),0 0 38px rgba(37,99,235,.08)}
+.road-circle:before{content:"";position:absolute;inset:-10px;border-radius:50%;border:2px dashed rgba(125,135,150,.52);animation:roadRotate 5s linear infinite}
+.road-circle:after{content:"";position:absolute;inset:19px;border-radius:50%;border:1px solid rgba(37,99,235,.12);background:radial-gradient(circle,rgba(37,99,235,.07),transparent 70%)}
+.road-car-orbit{position:absolute;inset:-2px;z-index:2;border-radius:50%;animation:roadRotate 5s linear infinite}
+.road-car{position:absolute;top:-18px;left:50%;width:46px;height:46px;transform:translateX(-50%);filter:drop-shadow(0 5px 6px rgba(0,0,0,.24))}
+.loader-bmw-mark{position:absolute;left:50%;top:50%;width:58px;height:58px;transform:translate(-50%,-50%);border-radius:50%;border:3px solid #8794a8;background:#111827;display:grid;place-items:center;box-shadow:0 0 18px rgba(37,99,235,.2);z-index:1}
+.loader-bmw-mark svg{width:44px;height:44px}
+.loader-caption{font-size:13px;font-weight:800;letter-spacing:.1px;color:var(--text-2)}
+.loader-progress{width:160px;height:3px;border-radius:9px;background:var(--border);overflow:hidden}
+.loader-progress i{display:block;width:100%;height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);transform:scaleX(0);transform-origin:right;animation:loaderProgress 5s linear forwards}
+@keyframes roadRotate{to{transform:rotate(360deg)}}
+@keyframes loaderProgress{to{transform:scaleX(1)}}
+.page{display:none;opacity:0;transform:translateY(8px)}
+.page.active{display:block;animation:pageSoftIn .48s cubic-bezier(.22,.61,.36,1) forwards}
+.page.page-leaving{display:block;animation:pageSoftOut .16s ease forwards}
+@keyframes pageSoftIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pageSoftOut{to{opacity:0;transform:translateY(-4px)}}
+@media(prefers-reduced-motion:reduce){.road-circle:before,.road-car-orbit,.loader-progress i{animation-duration:1ms!important;animation-iteration-count:1!important}.app-loader,.page{transition:none!important;animation-duration:1ms!important}}
 .about-support{display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px;border:1px solid var(--border);border-radius:15px;background:var(--surface-2)}
 .about-support-icon{width:38px;height:38px;display:grid;place-items:center;flex:0 0 38px;border-radius:12px;background:var(--primary-soft);color:var(--primary);font-size:21px}
 .about-support-copy{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
@@ -1252,8 +1265,19 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 </head>
 
 <body>
-<div class="app-loader" id="appLoader" aria-label="رادار">
-  <div class="radar" role="status" aria-label="Radar"><span class="radar-center"></span></div>
+<div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه">
+  <div class="loader-content" role="status" aria-label="Loading">
+    <div class="road-circle">
+      <div class="loader-bmw-mark" aria-hidden="true">
+        <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg"><circle cx="22" cy="22" r="20" fill="#111827" stroke="#e5e7eb" stroke-width="1.5"/><circle cx="22" cy="22" r="16" fill="#e5e7eb"/><path d="M22 6A16 16 0 0 0 6 22h16Z" fill="#1684d6"/><path d="M22 6a16 16 0 0 1 16 16H22Z" fill="#fff"/><path d="M22 38A16 16 0 0 0 38 22H22Z" fill="#1684d6"/><path d="M22 38A16 16 0 0 1 6 22h16Z" fill="#fff"/><circle cx="22" cy="22" r="16" fill="none" stroke="#111827" stroke-width="1.5"/></svg>
+      </div>
+      <div class="road-car-orbit" aria-hidden="true">
+        <svg class="road-car" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg"><g stroke="#111827" stroke-width="1.5" stroke-linejoin="round"><path d="M10 19 14 10.5Q16 7 20 7h12q4 0 6 3.5L42 19l4 4v13q0 3-3 3h-3v-4H15v4h-4q-3 0-3-3V23Z" fill="#e7edf5"/><path d="M16 12.5q1-2 4-2h12q3 0 4 2l3.2 6.5H12.8Z" fill="#24354c"/><path d="M12 21h28l3 3v9H9v-9Z" fill="#c6d3e2"/><path d="M12 23h28M17 33v-4q0-2 2-2h14q2 0 2 2v4" fill="none"/><rect x="7" y="23" width="4" height="7" rx="1.5" fill="#f8fafc"/><rect x="41" y="23" width="4" height="7" rx="1.5" fill="#f8fafc"/><rect x="11" y="34" width="5" height="7" rx="2" fill="#111827"/><rect x="36" y="34" width="5" height="7" rx="2" fill="#111827"/></g></svg>
+      </div>
+    </div>
+    <div class="loader-caption">در حال آماده‌سازی</div>
+    <div class="loader-progress"><i></i></div>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════════
@@ -2392,17 +2416,25 @@ function bindEvents(){
 $('#btnServiceSearch').addEventListener('click',openServiceSearch);
 
   /* --- نوار پایینی --- */
+  let pageSwitchBusy=false;
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      const targetPage=document.getElementById('page-'+btn.dataset.page);
+      const currentPage=document.querySelector('.page.active');
+      if(!targetPage||targetPage===currentPage||pageSwitchBusy)return;
+      pageSwitchBusy=true;
+      document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      const page = document.getElementById('page-' + btn.dataset.page);
-      if (page) page.classList.add('active');
+      if(currentPage){
+        currentPage.classList.add('page-leaving');
+        setTimeout(()=>{
+          currentPage.classList.remove('active','page-leaving');
+          targetPage.classList.add('active');
+          pageSwitchBusy=false;
+        },160);
+      }else{targetPage.classList.add('active');pageSwitchBusy=false;}
       $('#homeTopbar').style.display=btn.dataset.page==='home'?'flex':'none';
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({top:0,behavior:'smooth'});
     });
   });
 
@@ -2587,11 +2619,13 @@ window.runAppSelfTests=runAppSelfTests;
    ================================================================ */
 let appInitialized = false;
 const appLoaderStartTime = Date.now();
+let loaderHideScheduled = false;
 function hideAppLoader(){
   const loader=$('#appLoader');
-  if(!loader)return;
-  const remaining=Math.max(0,5000-(Date.now()-appLoaderStartTime));
-  setTimeout(()=>loader.classList.add('hide'),remaining);
+  if(!loader||loaderHideScheduled)return;
+  loaderHideScheduled=true;
+  const wait=Math.max(0,5000-(Date.now()-appLoaderStartTime));
+  setTimeout(()=>loader.classList.add('hide'),wait);
 }
 
 function init(){
