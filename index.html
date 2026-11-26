@@ -1228,15 +1228,15 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media(max-width:520px){.account-bar{width:calc(100% - 14px);margin-top:6px;padding:8px;border-radius:14px}.account-bar-copy small{font-size:9px}.account-action{height:34px;padding:0 9px;font-size:10px}.account-profile-btn{font-size:10px}}
 
 
-/* Deadline Loading: serpentine track + moving car */
-.app-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:24px;background:radial-gradient(ellipse at 50% 45%,rgba(37,99,235,.12),transparent 50%),var(--bg);color:var(--text);transition:opacity .35s ease,visibility .35s ease}
-.app-loader:before,.app-loader:after{content:"";position:absolute;width:250px;height:250px;border:1px solid rgba(96,165,250,.11);border-radius:50%;pointer-events:none}
-.app-loader:after{width:340px;height:340px;border-style:dashed;opacity:.55}
+/* Modern Radar loader */
+.app-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:24px;background:radial-gradient(ellipse at 50% 45%,rgba(37,99,235,.14),transparent 58%),var(--bg);color:var(--text);transition:opacity .24s ease,visibility .24s ease}
 .app-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.dual-ring{position:relative;width:64px;height:64px;z-index:1}
-.dual-ring:before,.dual-ring:after{content:"";position:absolute;inset:0;border-radius:50%;border:4px solid transparent}
-.dual-ring:before{border-top-color:#d6a84f;border-right-color:#d6a84f;animation:dualRingSpin .9s linear infinite}
-.dual-ring:after{inset:8px;border-bottom-color:var(--primary);border-left-color:var(--primary);animation:dualRingSpin 1.25s linear infinite reverse}
+.radar{position:relative;width:112px;height:112px;border-radius:50%;border:1px solid rgba(96,165,250,.32);background:radial-gradient(circle,rgba(37,99,235,.08) 0 2px,transparent 3px),repeating-radial-gradient(circle,rgba(96,165,250,.18) 0 1px,transparent 1px 22px);overflow:hidden;box-shadow:0 0 30px rgba(37,99,235,.08),inset 0 0 22px rgba(37,99,235,.07)}
+.radar:before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 75%,rgba(37,99,235,.03) 78%,rgba(37,99,235,.45) 100%);animation:radarSweep 1.7s linear infinite}
+.radar:after{content:"";position:absolute;width:7px;height:7px;top:31%;left:67%;border-radius:50%;background:#22c55e;box-shadow:0 0 12px #22c55e;animation:radarPulse 1.4s ease-in-out infinite}
+.radar-center{position:absolute;width:8px;height:8px;left:calc(50% - 4px);top:calc(50% - 4px);border-radius:50%;background:var(--primary);box-shadow:0 0 12px var(--primary);z-index:2}
+@keyframes radarSweep{to{transform:rotate(360deg)}}
+@keyframes radarPulse{0%,100%{opacity:.35;transform:scale(.75)}50%{opacity:1;transform:scale(1.35)}}
 .about-support{display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px;border:1px solid var(--border);border-radius:15px;background:var(--surface-2)}
 .about-support-icon{width:38px;height:38px;display:grid;place-items:center;flex:0 0 38px;border-radius:12px;background:var(--primary-soft);color:var(--primary);font-size:21px}
 .about-support-copy{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
@@ -1245,15 +1245,15 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .about-support-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:0 0 auto;padding:8px 10px;border:1px solid rgba(34,158,217,.35);border-radius:12px;background:linear-gradient(145deg,#e5f6ff,#d2edff);color:#087fb9;font-size:11px;font-weight:800;text-decoration:none;direction:ltr;box-shadow:0 3px 12px rgba(34,158,217,.14);transition:transform .2s,box-shadow .2s}
 .about-support-link:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(34,158,217,.2)}
 .about-support-link .telegram-icon{width:20px;height:20px;display:block;flex:0 0 20px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.12))}
-@keyframes dualRingSpin{to{transform:rotate(360deg)}}
+
 @media(max-width:370px){.about-support{gap:7px;padding:9px}.about-support-link{padding:7px 8px;font-size:10px}}
-@media(prefers-reduced-motion:reduce){.dual-ring:before,.dual-ring:after{animation-duration:1ms!important;animation-iteration-count:1!important}}
+@media(prefers-reduced-motion:reduce){.radar:before,.radar:after{animation-duration:1ms!important;animation-iteration-count:1!important}}
 </style>
 </head>
 
 <body>
-<div class="app-loader" id="appLoader" aria-label="در حال آماده‌سازی برنامه">
-  <div class="dual-ring" role="status" aria-label="در حال بارگذاری"></div>
+<div class="app-loader" id="appLoader" aria-label="رادار">
+  <div class="radar" role="status" aria-label="Radar"><span class="radar-center"></span></div>
 </div>
 
 <!-- ══════════════════════════════════════════════
@@ -1274,7 +1274,6 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     <div class="page-head home-page-head">
       <div><h1>وضعیت سرویس‌ها</h1>
       <p>بر اساس کیلومتر فعلی خودرو و دوره‌های نگهداری</p></div>
-      <div id="homeVehicleBadge" class="vehicle-home-badge" title="این نشان فقط وضعیت انتخاب خودرو را نمایش می‌دهد"><span class="material-symbols-rounded">directions_car</span><span id="homeVehicleName">خودرو را انتخاب کنید</span></div>
     </div>
 
     <header class="topbar home-only" id="homeTopbar">
@@ -1333,17 +1332,6 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
           <span class="track"><span class="thumb"></span></span>
         </label>
       </div>
-    </div>
-
-    <!-- انتخاب خودرو -->
-    <div class="card vehicle-select-card">
-      <div class="card-head">
-        <span class="material-symbols-rounded">directions_car</span>
-        <h3>مشخص کردن خودرو</h3>
-      </div>
-      <p class="card-desc">خودرو را انتخاب کنید تا بازه کیلومتری و زمانی سرویس‌ها متناسب با آن تنظیم شود. سوابق قبلی شما حذف نمی‌شوند.</p>
-      <div class="vehicle-options" id="vehicleOptions" role="listbox" aria-label="انتخاب خودرو"></div>
-      <div class="vehicle-selected-note" id="vehicleSelectedNote"></div>
     </div>
 
     <!-- پشتیبان آفلاین -->
@@ -1552,6 +1540,7 @@ const SERVICES = [
   { id:'spark_plug', name:'شمع‌ها', icon:'bolt', interval:30000, intervalDays:365 },
   { id:'timing_belt', name:'تسمه تایم', icon:'settings', interval:70000, intervalDays:1095 },
   { id:'alt_belt', name:'تسمه دینام', icon:'sync', interval:40000, intervalDays:730 },
+  { id:'belt_pulley', name:'هرزگرد تسمه', icon:'settings', interval:40000, intervalDays:730 },
   { id:'brake_front', name:'لنت ترمز جلو', icon:'disc_full', interval:30000, intervalDays:365 },
   { id:'brake_rear', name:'لنت ترمز عقب', icon:'album', interval:40000, intervalDays:730 },
   { id:'brake_disc', name:'دیسک ترمز', icon:'radio_button_unchecked', interval:60000, intervalDays:1095 },
@@ -1565,7 +1554,8 @@ const SERVICES = [
   { id:'clutch', name:'کیت کلاچ', icon:'settings_backup_restore', interval:80000, intervalDays:1095 },
   { id:'water_pump', name:'واتر پمپ', icon:'water', interval:80000, intervalDays:1095 },
   { id:'alternator', name:'دینام و استارت', icon:'electric_bolt', interval:100000, intervalDays:1460 },
-  { id:'steering_oil', name:'روغن هیدرولیک', icon:'water_drop', interval:50000, intervalDays:730 }
+  { id:'steering_oil', name:'روغن هیدرولیک', icon:'water_drop', interval:50000, intervalDays:730 },
+  { id:'insurance', name:'بیمه خودرو', icon:'verified_user', interval:999999, intervalDays:365 }
 ];
 const SERVICE_MAP = Object.fromEntries(SERVICES.map(s => [s.id, s]));
 
@@ -1651,9 +1641,7 @@ function selectedVehicleData(){return VEHICLE_LIST.find(v=>v.id===state.selected
 function vehicleInterval(service){
   const saved=state.serviceSettings&&state.serviceSettings[service.id];
   if(saved&&Number(saved.interval)>0)return Number(saved.interval);
-  const car=selectedVehicleData();
-  const factor=car?car.factor:1;
-  return Math.max(1000,Math.round((Number(service.interval)||10000)*factor/1000)*1000);
+  return Math.max(1000,Number(service.interval)||10000);
 }
 function getInterval(service){return vehicleInterval(service);}
 
@@ -2078,29 +2066,7 @@ function renderSettings(){
 
   $('#themeToggle').checked = state.theme === 'dark';
   $('#themeLabel').textContent = state.theme === 'dark' ? 'دارک مود' : 'لایت مود';
-  renderVehicleOptions();
-}
-function renderVehicleOptions(){
-  const root=$('#vehicleOptions');if(!root)return;
-  root.innerHTML=VEHICLE_LIST.map(v=>'<button type="button" class="vehicle-option'+(state.selectedVehicle===v.id?' active':'')+'" data-vehicle-select="'+v.id+'" role="option" aria-selected="'+(state.selectedVehicle===v.id)+'"><span class="material-symbols-rounded">directions_car</span><span class="vehicle-label">'+esc(v.name)+'</span><span class="material-symbols-rounded vehicle-check">check_circle</span></button>').join('');
-  const chosen=selectedVehicleData();
-  const note=$('#vehicleSelectedNote');
-  if(note)note.textContent=chosen?'خودروی انتخاب‌شده: '+chosen.name+' · بازه‌های سرویس بر اساس این خودرو محاسبه می‌شوند.':'هنوز خودرویی انتخاب نشده است؛ انتخاب خودرو برای تنظیم بازه‌ها پیشنهاد می‌شود.';
-  const badge=$('#homeVehicleName');
-  if(badge)badge.textContent=chosen?chosen.name:'خودرو را انتخاب کنید';
-}
-function selectVehicle(id){
-  const vehicle=VEHICLE_LIST.find(v=>v.id===id);if(!vehicle)return;
-  if(state.selectedVehicle===id)return;
-  state.selectedVehicle=id;
-  if(!save()){toast('ذخیره انتخاب خودرو انجام نشد');return;}
-  renderAll();
-  const warning=vehicle.id==='personal'?'تنظیمات سرویس به‌صورت پیش‌فرض روی حالت پراید است؛ می‌توانید سرویس‌ها را برای خود شخصی‌سازی کنید.':'بازه‌های سرویس متناسب با '+vehicle.name+' تنظیم شد. برای به‌روزرسانی کامل، برنامه را ببندید و دوباره باز کنید.';
-  toast(warning);
-  clearTimeout(vehicleReloadTimer);
-  vehicleReloadTimer=setTimeout(()=>location.reload(),5000);
-}
-let vehicleReloadTimer=null;
+  // بازه‌های سرویس عمومی و قابل استفاده برای ایران‌خودرو و سایپا؛ شخصی‌سازی از تنظیم هر سرویس انجام می‌شود.
 
 /* ================================================================
    ۱۰) رندر کلی
@@ -2293,7 +2259,10 @@ function saveService(){
     createdAt: Date.now()
   });
 
-  save();
+  if(!save()){
+    toast('ذخیره سرویس انجام نشد؛ فضای ذخیره‌سازی دستگاه را بررسی کنید');
+    return;
+  }
   renderAll();
   closeModal();
   toast('سرویس با موفقیت ثبت شد ✓');
@@ -2549,8 +2518,6 @@ $('#btnServiceSearch').addEventListener('click',openServiceSearch);
   });
 
   document.addEventListener('click',e=>{
-    const pick=e.target.closest('[data-vehicle-select]');
-    if(pick)selectVehicle(pick.dataset.vehicleSelect);
   });
 
   /* --- تم --- */
@@ -2619,14 +2586,7 @@ window.runAppSelfTests=runAppSelfTests;
    ۱۸) راه‌اندازی
    ================================================================ */
 let appInitialized = false;
-let appLoaderDismissTimer=null;
-function scheduleAppLoaderDismiss(){
-  if(appLoaderDismissTimer!==null)return;
-  appLoaderDismissTimer=setTimeout(()=>{
-    const loader=$('#appLoader');
-    if(loader)loader.classList.add('hide');
-  },5000);
-}
+function hideAppLoader(){const loader=$('#appLoader');if(loader)loader.classList.add('hide');}
 
 function init(){
   if(appInitialized)return;
@@ -2638,10 +2598,9 @@ function init(){
     runAppSelfTests();
   }catch(error){
     console.error('خطا در راه‌اندازی برنامه:',error);
-    const loader=$('#appLoader');
-    if(loader){const message=loader.querySelector('.loader-subtitle');if(message)message.textContent='در حال آماده‌سازی برنامه...';}
+    hideAppLoader();
   }finally{
-    scheduleAppLoaderDismiss();
+    hideAppLoader();
   }
 }
 
