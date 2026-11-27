@@ -1,0 +1,5 @@
+const CACHE_NAME='car-service-offline-v1';
+const CORE=['./','./index.html','./assets/fonts/vazirmatn.css','./assets/fonts/material-symbols.css'];
+self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE_NAME);await cache.addAll(CORE);await self.skipWaiting();})()));
+self.addEventListener('activate',event=>event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)));await self.clients.claim();})()));
+self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET')return;event.respondWith((async()=>{const cache=await caches.open(CACHE_NAME);const cached=await cache.match(req);if(cached)return cached;try{const res=await fetch(req);if(res.ok&&(req.url.startsWith(self.location.origin)||req.url.includes('fonts.gstatic.com'))){cache.put(req,res.clone());}return res;}catch(err){return cached|| (req.mode==='navigate'?cache.match('./index.html'):Response.error());}})());});
