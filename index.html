@@ -1213,7 +1213,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .auto-loader.hide{opacity:0;visibility:hidden;pointer-events:none}
 .loader-ambient{position:absolute;inset:0;border-radius:0!important;background:radial-gradient(ellipse at 50% 45%,rgba(99,125,190,.2),transparent 58%),linear-gradient(145deg,#101827,#06080d 75%);overflow:hidden}
 .loader-ambient:before,.loader-ambient:after{content:"";position:absolute;inset:0;pointer-events:none}
-.loader-ambient:before{background:linear-gradient(115deg,transparent 35%,rgba(170,200,255,.07) 50%,transparent 65%);transform:translateX(-100%);animation:loaderShine 3.2s ease-in-out infinite}
+.loader-ambient:before{background:radial-gradient(ellipse at 50% 50%,rgba(170,200,255,.11),transparent 68%);opacity:.45;transform:none;animation:loaderGlow 3.8s ease-in-out infinite}
 .loader-ambient:after{inset:18px;border:0;border-radius:0}
 .loader-typography{position:relative;z-index:1;width:min(100%,440px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:15px}
 .loader-welcome,.loader-service{width:100%;max-width:100%;overflow:visible;white-space:normal;direction:rtl;display:flex;align-items:center;justify-content:center;flex-wrap:nowrap;gap:6px;opacity:0;position:relative}
@@ -1230,7 +1230,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @keyframes loaderHeart{50%{transform:scale(1.18)}}
 @keyframes loaderCarFloat{50%{transform:translateY(-4px)}}
 @keyframes loaderProgress{to{width:100%}}
-@keyframes loaderShine{50%{transform:translateX(100%)}}
+@keyframes loaderGlow{0%,100%{opacity:.22}50%{opacity:.72}}
 @media(max-width:360px){.loader-welcome{font-size:clamp(19px,5.8vw,24px)}.loader-service{font-size:clamp(14px,4vw,17px)}.loader-typography{gap:12px}}\n@media(prefers-reduced-motion:reduce){.loader-ambient:before,.loader-heart,.loader-car,.loader-progress:after{animation-duration:5s}}
 /* اصلاح فضای پلاک و بزرگ‌تر کردن جداکننده */
 .plate-field{padding:0 1px!important;gap:2px!important}
