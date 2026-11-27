@@ -9,6 +9,8 @@ on:
       - 'build.gradle'
       - 'settings.gradle'
       - '.github/workflows/build-apk.yml'
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -60,6 +62,13 @@ jobs:
               except Exception as e: print('Font download warning:',raw,e)
           PY
           cp -r assets/fonts app/src/main/assets/assets/fonts
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add assets/fonts
+          if ! git diff --cached --quiet; then
+            git commit -m "Bundle offline fonts and icon assets"
+            git push
+          fi
       - name: Copy HTML app into Android assets
         run: cp index.html app/src/main/assets/index.html
       - name: Build APK
