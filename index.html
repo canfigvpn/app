@@ -1249,6 +1249,41 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .about-support-arrow{font-size:18px;color:var(--text-3);}
 @media(max-width:420px){.about-support{gap:9px;padding:11px}.about-support-icon{width:40px;height:40px;flex-basis:40px}.about-support-copy small{font-size:10px}.about-support-link{font-size:11px;padding:5px 8px}}
 
+
+/* ===== اصلاح نهایی اندازه عنوان سرویس‌ها و روان‌سازی حرکت‌ها ===== */
+.s-name,
+.s-name-fit .s-name,
+.s-item-heading .s-name,
+.status-card .s-name{
+  font-size:10px!important;
+  font-weight:700!important;
+  line-height:1.45!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  overflow-wrap:normal!important;
+  width:auto!important;
+  max-width:100%!important;
+}
+.s-name-fit{min-width:0!important;flex:1 1 0!important;overflow:hidden!important}
+.s-name-fit .s-name{display:block!important;max-width:100%!important}
+.s-item-heading .s-name{font-size:10px!important;white-space:nowrap!important}
+.s-item,.status-card,.h-item,.btn,.nav-item,.s-btn,.report-month-arrow{
+  -webkit-tap-highlight-color:transparent;
+}
+.status-card:hover,.h-item:hover,.s-btn:hover{transform:none!important}
+.s-btn:active,.btn:active,.report-month-arrow:active{transform:scale(.97)!important}
+.page.active{animation:pageIn .24s cubic-bezier(.2,.65,.3,1) both}
+@keyframes pageIn{from{opacity:0;transform:translate3d(0,6px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+.modal-backdrop,.service-panel-backdrop{transition:opacity .22s ease!important}
+.modal-backdrop.show .modal{transition:transform .24s cubic-bezier(.2,.65,.3,1)!important}
+.s-progress>i,.bar-fill{transition:width .32s ease-out!important}
+.loader-heart,.loader-car,.loader-ambient:before{animation-timing-function:ease-in-out!important}
+.loader-progress:after{animation:loaderProgress 5s linear forwards!important}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
 </style>
 </head>
 
