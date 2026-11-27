@@ -51,7 +51,8 @@ jobs:
           for name,url in fonts.items():
             req=urllib.request.Request(url,headers=headers)
             css=urllib.request.urlopen(req,timeout=30).read().decode('utf-8')
-            css_original=css\n            css=re.sub(r'url[(]([^)]*)[)]',lambda m: 'url(./'+os.path.basename(m.group(1).strip(chr(34)+chr(39)))+')',css)
+            css_original=css
+            css=re.sub(r'url[(]([^)]*)[)]',lambda m: 'url(./'+os.path.basename(m.group(1).strip(chr(34)+chr(39)))+')',css)
             open('assets/fonts/'+name,'w',encoding='utf-8').write(css)
             for raw in re.findall(r'https?://[^)\t ]+', css_original):
               raw=raw.strip().strip(chr(34)).strip(chr(39))
