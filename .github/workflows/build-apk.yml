@@ -54,7 +54,7 @@ jobs:
             css_original=css\n            css=re.sub(r'url[(]([^)]*)[)]',lambda m: 'url(./'+os.path.basename(m.group(1).strip(chr(34)+chr(39)))+')',css)
             open('assets/fonts/'+name,'w',encoding='utf-8').write(css)
             for raw in re.findall(r'https?://[^)\t ]+', css_original):
-              raw=raw.strip(' \\\"\\\'')
+              raw=raw.strip().strip(chr(34)).strip(chr(39))
               file=os.path.basename(raw.split('?')[0])
               try:
                 data=urllib.request.urlopen(raw,timeout=30).read()
