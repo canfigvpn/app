@@ -38,38 +38,18 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - name: Download and bundle offline fonts and icon font
+      - name: Bundle already-downloaded fonts and icons for fully offline APK
         run: |
-          mkdir -p assets/fonts app/src/main/assets/assets/fonts
-          python3 - <<'PY'
-          import urllib.request, re, os
-          fonts = {
-            'vazirmatn.css': 'https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap',
-            'material-symbols.css': 'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200'
-          }
-          headers={'User-Agent':'Mozilla/5.0 Chrome/120 Safari/537.36'}
-          for name,url in fonts.items():
-            req=urllib.request.Request(url,headers=headers)
-            css=urllib.request.urlopen(req,timeout=30).read().decode('utf-8')
-            css_original=css
-            css=re.sub(r'url[(]([^)]*)[)]',lambda m: 'url(./'+os.path.basename(m.group(1).strip(chr(34)+chr(39)))+')',css)
-            open('assets/fonts/'+name,'w',encoding='utf-8').write(css)
-            for raw in re.findall(r'https?://[^)\t ]+', css_original):
-              raw=raw.strip().strip(chr(34)).strip(chr(39))
-              file=os.path.basename(raw.split('?')[0])
-              try:
-                data=urllib.request.urlopen(raw,timeout=30).read()
-                open('assets/fonts/'+file,'wb').write(data)
-              except Exception as e: print('Font download warning:',raw,e)
-          PY
-          cp -r assets/fonts app/src/main/assets/assets/fonts
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add assets/fonts
-          if ! git diff --cached --quiet; then
-            git commit -m "Bundle offline fonts and icon assets"
-            git push
-          fi
+          set -e
+          test -f assets/fonts/vazirmatn.css
+          test -f assets/fonts/material-symbols.css
+          test -n "$(find assets/fonts -type f -name '*.ttf' -print -quit)"
+          mkdir -p app/src/main/assets/assets/fonts
+          # Copy CONTENTS of fonts folder (not the folder itself) to the exact CSS-relative path.
+          cp -R assets/fonts/. app/src/main/assets/assets/fonts/
+          test -f app/src/main/assets/assets/fonts/vazirmatn.css
+          test -f app/src/main/assets/assets/fonts/material-symbols.css
+          test -n "$(find app/src/main/assets/assets/fonts -maxdepth 1 -type f -name '*.ttf' -print -quit)"
       - name: Copy HTML app into Android assets
         run: cp index.html app/src/main/assets/index.html
       - name: Build APK
