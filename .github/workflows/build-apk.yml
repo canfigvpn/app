@@ -36,6 +36,30 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
+      - name: Download and bundle offline fonts and icon font
+        run: |
+          mkdir -p assets/fonts app/src/main/assets/assets/fonts
+          python3 - <<'PY'
+          import urllib.request, re, os
+          fonts = {
+            'vazirmatn.css': 'https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap',
+            'material-symbols.css': 'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200'
+          }
+          headers={'User-Agent':'Mozilla/5.0 Chrome/120 Safari/537.36'}
+          for name,url in fonts.items():
+            req=urllib.request.Request(url,headers=headers)
+            css=urllib.request.urlopen(req,timeout=30).read().decode('utf-8')
+            css=re.sub(r'url\\(([^)]+)\\)',lambda m: 'url(./'+os.path.basename(m.group(1).strip(' \\\"\\\'\\\\'))+')',css)
+            open('assets/fonts/'+name,'w',encoding='utf-8').write(css)
+            for raw in re.findall(r'https?://[^)\\s]+', urllib.request.urlopen(req,timeout=30).read().decode('utf-8')):
+              raw=raw.strip(' \\\"\\\'')
+              file=os.path.basename(raw.split('?')[0])
+              try:
+                data=urllib.request.urlopen(raw,timeout=30).read()
+                open('assets/fonts/'+file,'wb').write(data)
+              except Exception as e: print('Font download warning:',raw,e)
+          PY
+          cp -r assets/fonts app/src/main/assets/assets/fonts
       - name: Copy HTML app into Android assets
         run: cp index.html app/src/main/assets/index.html
       - name: Build APK
