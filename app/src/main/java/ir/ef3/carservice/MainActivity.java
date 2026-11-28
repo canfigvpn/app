@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
     }
     private void notifyJsImportError(String message){
         if(webView==null)return;
-        String safe=android.util.JSONObject.quote(message==null?"":message);
+        String safe=JSONObject.quote(message==null?"":message);
         webView.post(() -> webView.evaluateJavascript("window.onNativeBackupSaved&&window.onNativeBackupSaved(false,"+safe+")",null));
     }
 
@@ -111,7 +111,7 @@ public class MainActivity extends Activity {
                     out.write(buffer,0,count);
                 }
                 String json=new String(out.toByteArray(),"UTF-8");
-                String quoted=android.util.JSONObject.quote(json);
+                String quoted=JSONObject.quote(json);
                 webView.post(() -> webView.evaluateJavascript("window.onNativeBackupImported&&window.onNativeBackupImported("+quoted+")",null));
             }catch(Exception e){notifyJsImportError("خواندن فایل JSON ناموفق بود");}
         }
