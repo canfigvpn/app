@@ -172,7 +172,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
   outline:none;
   background:transparent;
   color:var(--text);
-  font-size:14.5px;
+  font-size:13.5px;
   font-weight:600;
 }
 .field input::placeholder{ color:var(--text-3); font-weight:400; }
@@ -213,7 +213,7 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
 @media (max-width:520px){
   .select-field{ max-width:96px; }
   .select-field select{ max-width:86px; font-size:12px; }
-  .field input{ font-size:13.5px; }
+  .field input{ font-size:12.5px; }
   .km-field .unit{ display:none; }
 }
 
@@ -624,6 +624,11 @@ input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0
   color:var(--text-3);
   margin-top:4px;
 }
+
+
+/* رنگ اختصاصی آیکون‌های مدیریت داده */
+.data-management-icon{color:#dc2626!important;}
+.clear-history-icon{color:#f97316!important;}
 
 /* ============================================================
    ۹) تنظیمات
@@ -1405,20 +1410,19 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <a class="about-support" href="https://t.me/FLOKI000" target="_blank" rel="noopener noreferrer" aria-label="ارتباط با پشتیبانی تلگرام @FLOKI000">
         <span class="about-support-copy"><strong><span class="about-support-icon" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path fill="currentColor" d="M21.8 3.2 18.6 20c-.2 1.2-.9 1.5-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.2 9.5-8.6c.4-.4-.1-.6-.6-.2L6 13.5 1.2 12c-1-.3-1-1 .2-1.5L20 3.2c.9-.3 1.7.2 1.8 0Z"/></svg></span> پشتیبانی تلگرام</strong><small>برای پرسش، پیشنهاد یا گزارش مشکل، پیام دهید.</small></span>
         <span class="about-support-link">@FLOKI000</span>
-        <span class="about-support-arrow material-symbols-rounded" aria-hidden="true">arrow_outward</span>
       </a>
     </div>
 
     <!-- منطقه خطر -->
     <div class="card">
       <div class="card-head">
-        <span class="material-symbols-rounded">warning</span>
+        <span class="material-symbols-rounded data-management-icon">warning</span>
         <h3>مدیریت داده‌ها</h3>
       </div>
       <p class="card-desc">با احتیاط استفاده کنید. این عملیات قابل بازگشت نیست.</p>
       <div class="btn-row">
         <button class="btn btn-danger" id="btnClearHistory">
-          <span class="material-symbols-rounded">delete_sweep</span>
+          <span class="material-symbols-rounded clear-history-icon">delete_sweep</span>
           حذف تاریخچه
         </button>
         <button class="btn btn-danger" id="btnResetAll">
