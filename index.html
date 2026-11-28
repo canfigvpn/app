@@ -2335,40 +2335,43 @@ async function downloadBackup(){
   try{
     const backup={...state,backupVersion:1,backupCreatedAt:new Date().toISOString(),appName:'Car Service Manager'};
     const data=JSON.stringify(backup,null,2);
-    const blob=new Blob([data],{type:'application/json'});
     const d=new Date();
     const stamp=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const filename=`car-service-backup-${stamp}.json`;
 
-    // Android WebView/مرورگرهای موبایل: اول فایل را به اشتراک‌گذاری/ذخیره از طریق سیستم ارائه می‌کنیم.
-    if(typeof navigator.share==='function'&&typeof navigator.canShare==='function'){
-      try{
-        const file=new File([blob],filename,{type:'application/json'});
-        if(navigator.canShare({files:[file]})){
-          await navigator.share({files:[file],title:'نسخه پشتیبان خودرو',text:'فایل بکاپ اطلاعات خودرو'});
-          toast('فایل پشتیبان آماده و ارسال شد ✓');
-          return;
-        }
-      }catch(err){
-        if(err&&err.name==='AbortError')return;
-        console.warn('Share backup failed; fallback to download:',err);
-      }
+    // نسخه APK: ذخیره مستقیم فایل JSON با پنجره ذخیره اندروید (بدون Share).
+    if(window.AndroidBackup&&typeof AndroidBackup.saveBackup==='function'){
+      AndroidBackup.saveBackup(filename,data);
+      return;
     }
 
+    // مرورگرهای پشتیبانی‌شده: انتخاب محل ذخیره فایل.
+    if(typeof window.showSaveFilePicker==='function'){
+      const handle=await window.showSaveFilePicker({
+        suggestedName:filename,
+        types:[{description:'JSON Backup',accept:{'application/json':['.json']}}]
+      });
+      const writable=await handle.createWritable();
+      await writable.write(new Blob([data],{type:'application/json;charset=utf-8'}));
+      await writable.close();
+      toast('فایل پشتیبان JSON ذخیره شد ✓');
+      return;
+    }
+
+    // fallback استاندارد مرورگر برای دانلود فایل JSON.
+    const blob=new Blob([data],{type:'application/json;charset=utf-8'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
     a.href=url;a.download=filename;a.rel='noopener';a.style.display='none';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),10000);
-    toast('در صورت باز نشدن دانلود، گزینه اشتراک‌گذاری فایل را از مرورگر استفاده کنید.');
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),15000);
+    toast('دانلود فایل پشتیبان JSON آغاز شد ✓');
   }catch(err){
+    if(err&&err.name==='AbortError')return;
     console.error('Backup export failed:',err);
-    toast('ساخت فایل پشتیبان ناموفق بود؛ دوباره تلاش کنید.');
+    toast('ذخیره فایل پشتیبان ناموفق بود؛ دوباره تلاش کنید.');
   }
 }
-
 function validateBackupData(data){
   if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('ساختار فایل پشتیبان نامعتبر است');
   if(!data.services||typeof data.services!=='object'||Array.isArray(data.services))throw new Error('بخش سرویس‌های فایل پشتیبان نامعتبر است');
@@ -2436,21 +2439,31 @@ function applyBackup(data){
   applyTheme();renderAll();
 }
 
-function importBackupFile(file){
-  const reader = new FileReader();
-  reader.onload = e => {
-    try{
-      const data = JSON.parse(e.target.result);
-      applyBackup(data);
-      toast('پشتیبان با موفقیت بازیابی شد ✓');
-    }catch(err){
-      toast('خطا: ' + err.message);
-    }
-  };
-  reader.onerror = () => toast('خطا در خواندن فایل');
-  reader.readAsText(file, 'utf-8');
+function importBackupText(text){
+  try{
+    const data=JSON.parse(text);
+    applyBackup(data);
+    toast('فایل JSON با موفقیت بازیابی شد ✓');
+  }catch(err){
+    console.error('Backup import failed:',err);
+    toast('فایل پشتیبان نامعتبر است: '+err.message);
+  }
 }
-
+function importBackupFile(file){
+  if(!file)return;
+  if(file.size>20*1024*1024){toast('حجم فایل پشتیبان بیش از حد مجاز است');return;}
+  const reader=new FileReader();
+  reader.onload=()=>importBackupText(String(reader.result||''));
+  reader.onerror=()=>toast('خواندن فایل JSON ناموفق بود');
+  reader.readAsText(file,'utf-8');
+}
+window.onNativeBackupImported=function(jsonText){
+  if(typeof jsonText==='string'&&jsonText)importBackupText(jsonText);
+};
+window.onNativeBackupSaved=function(success,message){
+  if(success)toast('فایل پشتیبان JSON ذخیره شد ✓');
+  else toast(message||'ذخیره فایل پشتیبان ناموفق بود');
+}
 /* ================================================================
    ۱۷) رویدادها
    ================================================================ */
@@ -2594,11 +2607,17 @@ $('#btnServiceSearch').addEventListener('click',openServiceSearch);
 
   /* --- پشتیبان آفلاین --- */
   $('#btnDownload').addEventListener('click', downloadBackup);
-  $('#btnImport').addEventListener('click', () => $('#fileInput').click());
+  $('#btnImport').addEventListener('click', () => {
+    if(window.AndroidBackup&&typeof AndroidBackup.openBackup==='function'){
+      AndroidBackup.openBackup();
+      return;
+    }
+    $('#fileInput').click();
+  });
   $('#fileInput').addEventListener('change', e => {
-    const file = e.target.files && e.target.files[0];
-    if (file) importBackupFile(file);
-    e.target.value = '';
+    const file=e.target.files&&e.target.files[0];
+    if(file)importBackupFile(file);
+    e.target.value='';
   });
 
   /* --- مدیریت داده --- */
