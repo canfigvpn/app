@@ -1240,14 +1240,16 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 /* کارت پشتیبانی تلگرام */
 .about-support{display:flex;align-items:center;gap:12px;width:100%;margin-top:14px;padding:14px;text-decoration:none;color:inherit;background:var(--surface-2);border:1px solid var(--border);border-radius:16px;transition:transform .2s ease,border-color .2s ease,background .2s ease,box-shadow .2s ease;}
 .about-support:hover{transform:translateY(-2px);border-color:#229ED9;box-shadow:0 8px 24px rgba(34,158,217,.12);}
-.about-support-icon{width:44px;height:44px;display:grid;place-items:center;flex:0 0 44px;border-radius:13px;background:#229ED9;color:#fff;}
-.about-support-icon svg{width:25px;height:25px;display:block;}
+.about-support-icon{width:24px;height:24px;display:inline-grid;place-items:center;flex:0 0 24px;border-radius:50%;background:#229ED9;color:#fff;vertical-align:middle;}
+.about-support-icon svg{width:14px;height:14px;display:block;}
+.about-support-copy strong{display:flex;align-items:center;gap:6px;}
+.about-support-copy{gap:5px;}
 .about-support-copy{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0;}
 .about-support-copy strong{font-size:13px;font-weight:800;color:var(--text);}
 .about-support-copy small{font-size:11px;line-height:1.7;color:var(--text-2);}
 .about-support-link{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border:1px solid rgba(34,158,217,.35);border-radius:9px;background:rgba(34,158,217,.08);font-size:12px;font-weight:800;color:#229ED9;direction:ltr;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.12);}
 .about-support-arrow{font-size:18px;color:var(--text-3);}
-@media(max-width:420px){.about-support{gap:9px;padding:11px}.about-support-icon{width:40px;height:40px;flex-basis:40px}.about-support-copy small{font-size:10px}.about-support-link{font-size:11px;padding:5px 8px}}
+@media(max-width:420px){.about-support{gap:9px;padding:11px}.about-support-icon{width:24px;height:24px;flex-basis:24px}.about-support-copy small{font-size:10px}.about-support-link{font-size:11px;padding:5px 8px}}
 
 
 /* ===== اصلاح نهایی اندازه عنوان سرویس‌ها و روان‌سازی حرکت‌ها ===== */
@@ -1255,7 +1257,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .s-name-fit .s-name,
 .s-item-heading .s-name,
 .status-card .s-name{
-  font-size:10px!important;
+  font-size:13px!important;
   font-weight:700!important;
   line-height:1.45!important;
   white-space:nowrap!important;
@@ -1267,7 +1269,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 }
 .s-name-fit{min-width:0!important;flex:1 1 0!important;overflow:hidden!important}
 .s-name-fit .s-name{display:block!important;max-width:100%!important}
-.s-item-heading .s-name{font-size:10px!important;white-space:nowrap!important}
+.s-item-heading .s-name{font-size:13px!important;white-space:nowrap!important}
 .s-item,.status-card,.h-item,.btn,.nav-item,.s-btn,.report-month-arrow{
   -webkit-tap-highlight-color:transparent;
 }
@@ -1401,10 +1403,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <p>اطلاعات خودرو و سوابق شما به‌صورت محلی روی دستگاه ذخیره می‌شود و بدون نیاز به حساب کاربری در دسترس است. فونت فارسی و تمام آیکون‌ها داخل خود اپ ذخیره شده‌اند و بدون اینترنت هم کار می‌کنند.</p>
 
       <a class="about-support" href="https://t.me/FLOKI000" target="_blank" rel="noopener noreferrer" aria-label="ارتباط با پشتیبانی تلگرام @FLOKI000">
-        <span class="about-support-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" role="img"><path fill="currentColor" d="M21.8 3.2 18.6 20c-.2 1.2-.9 1.5-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.2 9.5-8.6c.4-.4-.1-.6-.6-.2L6 13.5 1.2 12c-1-.3-1-1 .2-1.5L20 3.2c.9-.3 1.7.2 1.8 0Z"/></svg>
-        </span>
-        <span class="about-support-copy"><strong>پشتیبانی تلگرام</strong><small>برای پرسش، پیشنهاد یا گزارش مشکل، پیام دهید.</small></span>
+        <span class="about-support-copy"><strong><span class="about-support-icon" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path fill="currentColor" d="M21.8 3.2 18.6 20c-.2 1.2-.9 1.5-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.2 9.5-8.6c.4-.4-.1-.6-.6-.2L6 13.5 1.2 12c-1-.3-1-1 .2-1.5L20 3.2c.9-.3 1.7.2 1.8 0Z"/></svg></span> پشتیبانی تلگرام</strong><small>برای پرسش، پیشنهاد یا گزارش مشکل، پیام دهید.</small></span>
         <span class="about-support-link">@FLOKI000</span>
         <span class="about-support-arrow material-symbols-rounded" aria-hidden="true">arrow_outward</span>
       </a>
