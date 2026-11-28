@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import org.json.JSONObject;
 
 public class MainActivity extends Activity {
     private static final int REQUEST_SAVE_BACKUP = 7301;
@@ -78,7 +79,7 @@ public class MainActivity extends Activity {
 
     private void notifyJsSave(boolean success,String message){
         if(webView==null)return;
-        String safe=android.util.JSONObject.quote(message==null?"":message);
+        String safe=JSONObject.quote(message==null?"":message);
         webView.post(() -> webView.evaluateJavascript("window.onNativeBackupSaved&&window.onNativeBackupSaved("+success+","+safe+")",null));
     }
     private void notifyJsImportError(String message){
